@@ -1,0 +1,39 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build"
+    },
+    "devDependencies": {
+        "@iconify/vue": "^4.1.2",
+        "@inertiajs/vue3": "^1.0.0",
+        "@tailwindcss/forms": "^0.5.3",
+        "@vitejs/plugin-vue": "^5.0.0",
+        "autoprefixer": "^10.4.12",
+        "axios": "^1.6.4",
+        "laravel-echo": "^1.16.1",
+        "laravel-vite-plugin": "^1.0.0",
+        "postcss": "^8.4.31",
+        "sass": "^1.78.0",
+        "tailwindcss": "^3.2.1",
+        "vite": "^5.0.0",
+        "vue": "^3.4.0"
+    },
+    "dependencies": {
+        "@number-flow/vue": "^0.3.1",
+        "@sentry/vite-plugin": "^2.22.6",
+        "@sentry/vue": "^8.35.0",
+        "@vueuse/core": "^11.1.0",
+        "date-fns": "^4.1.0",
+        "gsap": "^3.12.5",
+        "include-media": "^2.0.0",
+        "pusher-js": "^8.4.0-rc2",
+        "qr-scanner": "^1.4.2",
+        "qrcode": "^1.5.4",
+        "vue-final-modal": "^4.5.5",
+        "vue-good-table-next": "^0.2.2",
+        "vue-number-animation": "^2.0.2",
+        "vue3-marquee": "^4.2.2"
+    }
+}

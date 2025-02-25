@@ -1,0 +1,59 @@
+/* Container */
+.container {
+  max-width: var(--container-max-width);
+  margin-inline: auto;
+
+  &.padded {
+    padding: var(--site-padding);
+  }
+
+  &.padded-x {
+    padding-inline: var(--site-padding);
+  }
+
+  &.padded-y {
+    padding-block: var(--site-padding);
+  }
+}
+
+.container-sm {
+  --container-max-width: 580px;
+}
+
+.container-lg {
+  --container-max-width: 980px;
+}
+
+.container-xl {
+  --container-max-width: 1580px;
+}
+
+.focus-black {
+  --focus-color: var(--egp-black);
+}
+
+.focus-green-pine {
+  --focus-color: var(--egp-green-pine);
+}
+
+.focus-red {
+  --focus-color: var(--egp-red);
+}
+
+@each $name, $color in $colors {
+  .color-#{$name} {
+    --color: #{$color};
+  }
+}
+
+.option-Yes {
+  --color: var(--egp-green);
+}
+
+.option-No {
+  --color: var(--egp-red);
+}
+
+.option-Abstain {
+  --color: var(--egp-orange);
+}

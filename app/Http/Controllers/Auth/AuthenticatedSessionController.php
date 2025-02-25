@@ -1,0 +1,77 @@
+<?php
+
+namespace App\Http\Controllers\Auth;
+
+use Carbon\Carbon;
+use App\Models\User;
+use Inertia\Inertia;
+use Inertia\Response;
+use App\Models\LoginToken;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Route;
+use App\Providers\RouteServiceProvider;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Notifications\LoginNotification;
+
+class AuthenticatedSessionController extends Controller
+{
+    /**
+     * Display the login view.
+     */
+    public function create(): Response
+    {
+        return Inertia::render('Auth/Login', [
+            'status' => session('status'),
+        ]);
+    }
+
+    /**
+     * Destroy an authenticated session.
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        Auth::guard('web')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/');
+    }
+
+    /**
+     * Login
+     */
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            $user->notify(new LoginNotification);
+        } else {
+            sleep(1);
+        }
+        return to_route('login')->with('status', 'sent');
+    }
+
+    /**
+     * Autologin links
+     */
+    public function autologin(Request $request, String $token): RedirectResponse
+    {
+        $loginToken = LoginToken::where('token', $token)
+            ->where('expires_at', '>', now())
+            ->first();
+
+        if (!$loginToken) {
+            return to_route('login')->with('message', 'This link has expired. Please enter your email address below to receive a new one.');
+        }
+
+        Auth::login($loginToken->user, true);
+        $request->session()->regenerate();
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
+}

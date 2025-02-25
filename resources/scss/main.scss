@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "variables";
+@import "node_modules/include-media/dist/_include-media.scss";
+@import "vue-good-table-next/dist/vue-good-table-next.css";
+@import "vue-final-modal/style.css";
+@import "fonts";
+@import "root";
+@import "global";
+@import "utils";
+@import "transitions";

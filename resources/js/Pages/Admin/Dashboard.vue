@@ -1,0 +1,63 @@
+<script setup>
+import { Head, Link } from '@inertiajs/vue3'
+import { Icon } from '@iconify/vue'
+import GrayLayout from '@/Layouts/GrayLayout.vue'
+
+defineOptions({ layout: GrayLayout })
+
+defineProps({
+  auth: { type: Object, required: true }
+})
+</script>
+
+<template>
+  <Head title="Admin dashboard" />
+
+  <div class="container container-lg padded">
+    <h1 class="font-headline uppercase text-2xl">Admin</h1>
+    <div class="grid md:grid-cols-3 gap-4 mt-5" v-if="auth.user.role === 'admin'">
+      <Link href="/admin/credentials" class="dashboard-link">
+        <Icon icon="carbon:credentials" class="text-xl" />
+        Access Control
+      </Link>
+      <Link href="/admin/tickets" class="dashboard-link">
+        <Icon icon="ri:ticket-2-line" class="text-xl" />
+        Tickets
+      </Link>
+      <Link href="/admin/invoicing" class="dashboard-link">
+        <Icon icon="ri:file-copy-2-line" class="text-xl" />
+        Invoicing
+      </Link>
+      <Link href="/admin/extras" class="dashboard-link">
+        <Icon icon="ri:function-add-fill" class="text-xl" />
+        Extras
+      </Link>
+      <Link href="/admin/votes" class="dashboard-link">
+        <Icon icon="ri:hand" class="text-xl" />
+        Vote manager
+      </Link>
+      <Link href="/admin/voters" class="dashboard-link">
+        <Icon icon="ri:hand" class="text-xl" />
+        Allocated votes
+      </Link>
+      <Link href="/admin/screen" class="dashboard-link">
+        <Icon icon="ri:fullscreen-line" class="text-xl" />
+        Screen
+      </Link>
+    </div>
+    <div class="grid md:grid-cols-3 gap-4 mt-5" v-if="auth.user.role === 'credentials'">
+      <Link href="/admin/scanner" class="dashboard-link">
+        <Icon icon="carbon:credentials" class="text-xl" />
+        Badge scanner
+      </Link>
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.dashboard-link {
+  @apply bg-white flex flex-col p-4 text-lg font-mono no-underline
+          font-bold min-h-44 justify-between hover:bg-yellow hover:text-green-pine
+          hover:ring-2 focus:ring-2 ring-green-pine leading-tight;
+}
+</style>

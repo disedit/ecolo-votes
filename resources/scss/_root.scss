@@ -1,0 +1,70 @@
+:root {
+  --egp-green: #{$egp-green};
+  --egp-white: #{$egp-white};
+  --egp-gray-50: #{$egp-gray-50};
+  --egp-gray-100: #{$egp-gray-100};
+  --egp-gray-200: #{$egp-gray-200};
+  --egp-gray-300: #{$egp-gray-300};
+  --egp-gray-400: #{$egp-gray-400};
+  --egp-gray-500: #{$egp-gray-500};
+  --egp-gray-600: #{$egp-gray-600};
+  --egp-gray-700: #{$egp-gray-700};
+  --egp-gray-800: #{$egp-gray-800};
+  --egp-gray-900: #{$egp-gray-900};
+  --egp-gray-950: #{$egp-gray-950};
+  --egp-green: #{$egp-green};
+  --egp-green-dark: #{$egp-green-dark};
+  --egp-green-pine: #{$egp-green-pine};
+  --egp-yellow: #{$egp-yellow};
+  --egp-pink: #{$egp-pink};
+  --egp-purple: #{$egp-purple};
+  --egp-black: #{$egp-black};
+  --egp-red: #{$egp-red};
+  --egp-orange: #{$egp-orange};
+  --egp-blue: #{$egp-blue};
+  --font-base: #{$font-base};
+  --font-headline: #{$font-headline};
+  --font-mono: #{$font-mono};
+  --container-max-width: #{$container-max-width};
+  --navbar-safe-area: #{$navbar-safe-area};
+  --footer-safe-area: #{$footer-safe-area};
+  --fill-space: calc(100vh - var(--navbar-safe-area) - var(--footer-safe-area));
+  --fill-space-svh: calc(100svh - var(--navbar-safe-area) - var(--footer-safe-area));
+  --spacer-1: .25rem;
+  --spacer-2: .5rem;
+  --spacer-3: .75rem;
+  --spacer-4: 1rem;
+  --spacer-5: 1.25rem;
+  --spacer-6: 1.5rem;
+  --spacer-7: 1.75rem;
+  --spacer-8: 2rem;
+  --spacer-9: 2.25rem;
+  --spacer-10: 2.5rem;
+  --spacer-11: 2.75rem;
+  --spacer-12: 3rem;
+  --spacer-14: 3.5rem;
+  --spacer-16: 4rem;
+  --spacer-20: 5rem;
+  --spacer-24: 6rem;
+  --spacer-28: 7rem;
+  --spacer-32: 8rem;
+  --spacer-40: 10rem;
+  --site-padding: var(--spacer-6);
+  --text-xs: .75rem;
+  --text-sm: clamp(0.8rem, 0.08vi + 0.78rem, 0.84rem);
+  --text-base: clamp(1rem, 0.23vi + 0.94rem, 1.13rem);
+  --text-md: clamp(1.25rem, 0.45vi + 1.14rem, 1.5rem);
+  --text-lg: clamp(1.56rem, 0.79vi + 1.36rem, 2rem);
+  --text-xl: clamp(1.95rem, 1.29vi + 1.63rem, 2.66rem);
+  --text-2xl: clamp(2.44rem, 2.02vi + 1.94rem, 3.55rem);
+  --text-3xl: clamp(3.05rem, 3.06vi + 2.29rem, 4.73rem);
+  --text-4xl: clamp(3.81rem, 4.54vi + 2.68rem, 6.31rem);
+  --text-5xl: clamp(4.77rem, 6.63vi + 3.11rem, 8.41rem);
+}
+
+@include media('<lg') {
+  :root {
+    --site-padding: var(--spacer-4);
+    --navbar-safe-area: 3.5rem;
+  }
+}

@@ -1,0 +1,142 @@
+<script setup>
+import { computed, watch } from 'vue'
+import { Link, usePage } from '@inertiajs/vue3'
+import { Icon } from '@iconify/vue'
+import { useWindowScroll } from '@vueuse/core'
+import EGPLogo from '@/Components/Global/EGPLogo.vue'
+import DropdownMenu from '@/Components/Inputs/DropdownMenu.vue'
+
+const props = defineProps({
+  details: { type: Boolean, default: false },
+  eager: { type: Boolean, default: false },
+  solid: { type: Boolean, default: false }
+})
+
+const page = usePage()
+const user = computed(() => page.props.auth.user)
+const edition = computed(() => page.props.edition)
+
+const { y } = useWindowScroll()
+const threshold = props.eager ? 0 : 50
+const scrolled = computed(() => y.value > threshold)
+
+watch(y, () => {
+  if (scrolled.value) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0F8A54')
+  } else {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#47B972')
+  }
+})
+</script>
+
+<template>
+  <nav :class="['nav flex items-center gap-4', { scrolled, solid, 'show-details': scrolled || details }]">
+    <Link href="/">
+      <EGPLogo class="nav-logo text-white" />
+    </Link>
+    <div class="reveal-on-scroll nav-title font-headline uppercase md:mx-6">
+      {{ edition.title }}
+    </div>
+    <div class="nav-details font-headline uppercase font-bold gap-6">
+      <div class="flex items-center gap-2 reveal-on-scroll" style="--delay: .15s">
+        <Icon icon="ri:map-pin-2-line" />
+        {{ edition.location }}
+      </div>
+      <div class="flex items-center gap-2 reveal-on-scroll" style="--delay: .25s">
+        <Icon icon="ri:calendar-line" />
+        {{ edition.dates }}
+      </div>
+    </div>
+    <div v-if="user" class="nav-user ms-auto">
+      <DropdownMenu class="nav-dropdown">
+        {{ user.first_name }}
+
+        <template #items>
+          <Link href="/badge">
+            <Icon icon="ri:account-box-line" />
+            Badge
+          </Link>
+          <Link href="/invoices">
+            <Icon icon="ri:file-copy-2-line" />
+            Invoices
+          </Link>
+          <Link v-if="['admin', 'credentials'].includes(user.role)" href="/admin">
+            <Icon icon="ri:lock-line" />
+            Admin
+          </Link>
+          <hr />
+          <Link href="/logout" method="post" as="button" type="button">
+            <Icon icon="ri:logout-box-r-line" />
+            Log out
+          </Link>
+        </template>
+      </DropdownMenu>
+    </div>
+  </nav>
+  <div class="h-safe-area" />
+</template>
+
+<style lang="scss" scoped>
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacer-2) var(--spacer-4);
+  color: var(--egp-white);
+  z-index: 1000;
+  transition: .25s ease;
+
+  &-logo {
+    height: 3.25rem;
+  }
+
+  &-details {
+    display: flex;
+  }
+
+  .reveal-on-scroll {
+    opacity: 0;
+    transition: .25s ease;
+    transition-delay: var(--delay, 0);
+    translate: 10% 0;
+  }
+
+  &.scrolled {
+    background-color: var(--egp-green-dark);
+  }
+
+  &.solid:not(.scrolled) {
+    background-color: var(--egp-green);
+  }
+
+  &.show-details {
+    .reveal-on-scroll {
+      opacity: 1;
+      translate: 0;
+    }
+  }
+}
+
+@include media('<lg') {
+  .nav {
+    &-logo {
+      height: 2.5rem;
+    }
+
+    &-details {
+      display: none;
+    }
+
+    &-title {
+      font-size: var(--text-sm);
+      line-height: 1;
+    }
+
+    &-user {
+      font-size: var(--text-sm);
+      margin-right: -.5rem;
+    }
+  }
+}
+</style>
