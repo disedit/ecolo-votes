@@ -16,7 +16,6 @@
         "laravel/tinker": "^2.8",
         "php-curl-class/php-curl-class": "^11.0",
         "pragmarx/google2fa-laravel": "^2.2",
-        "sentry/sentry-laravel": "^4.9",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

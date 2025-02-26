@@ -52,15 +52,9 @@ return [
     */
 
     'channels' => [
-        'sentry' => [
-            'driver' => 'sentry',
-            'level' => env('LOG_LEVEL', 'error'),
-            'bubble' => true
-        ],
-
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single', 'sentry'],
+            'channels' => ['single'],
             'ignore_exceptions' => false,
         ],
 
