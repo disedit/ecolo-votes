@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('regions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('attendee_id')->constrained();
-            $table->json('receipt');
-            $table->decimal('amount', total: 8, places: 2);
-            $table->enum('status', ['pending', 'paid', 'declined', 'refunded']);
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('regions');
     }
 };

@@ -1,6 +1,5 @@
 <?php
 
-use App\Console\Commands\SyncAttendees;
 use Illuminate\Support\Facades\Schedule;
 
 /*
@@ -13,5 +12,3 @@ use Illuminate\Support\Facades\Schedule;
 | simple approach to interacting with each command's IO methods.
 |
 */
-
-Schedule::command(SyncAttendees::class)->hourly();

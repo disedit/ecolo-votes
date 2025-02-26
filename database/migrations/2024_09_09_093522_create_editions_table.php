@@ -18,9 +18,6 @@ return new class extends Migration
             $table->date('date_start');
             $table->date('date_end');
             $table->boolean('current')->default(0);
-            $table->string('form_id')->nullable();
-            $table->string('press_form_id')->nullable();
-            $table->json('form_mappings')->nullable();
             $table->string('location')->nullable();
             $table->string('dates')->nullable();
             $table->timestamps();

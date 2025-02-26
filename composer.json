@@ -9,7 +9,7 @@
         "barryvdh/laravel-dompdf": "^3.0",
         "chiiya/passes": "^0.6.0",
         "guzzlehttp/guzzle": "^7.2",
-        "inertiajs/inertia-laravel": "^1.0",
+        "inertiajs/inertia-laravel": "^2.0",
         "laravel/framework": "^11.0",
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
@@ -17,7 +17,6 @@
         "php-curl-class/php-curl-class": "^11.0",
         "pragmarx/google2fa-laravel": "^2.2",
         "sentry/sentry-laravel": "^4.9",
-        "stripe/stripe-php": "^15.10",
         "tightenco/ziggy": "^2.0"
     },
     "require-dev": {

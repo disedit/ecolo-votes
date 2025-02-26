@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('attendees', function (Blueprint $table) {
-            $table->integer('votes')->default(0)->after('fee_id');
+            $table->integer('votes')->default(1)->after('qr_code');
             $table->datetime('first_checked_in')->nullable()->after('checked_in');
         });
     }

@@ -13,10 +13,6 @@ class HomeController extends Controller
      * Welcome page
      */
     public function welcome(Request $request) {
-        if (!$request->user()->hasPaid() && !$request->user()->isCheckedIn()) {
-            return redirect()->route('cart');
-        }
-
         if ($request->user()->canVote()) {
             return redirect()->route('vote');
         }

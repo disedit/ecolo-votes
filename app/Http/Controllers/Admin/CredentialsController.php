@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Fee;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Payment;
 use App\Models\Attendee;
 use Illuminate\Http\Request;
 use App\Notifications\CheckedIn;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use App\Notifications\PaidTicketIssued;
-use Illuminate\Support\Facades\Artisan;
 
 class CredentialsController extends Controller
 {
@@ -45,12 +41,7 @@ class CredentialsController extends Controller
      */
     public function checkIn(Attendee $attendee, Request $request): RedirectResponse
     {
-        $firstCheckIn = !$attendee->first_checked_in;
         $attendee->checkIn('LOOKUP');
-
-        if (!$request->input('silent') && $attendee->isVoter() && $firstCheckIn) {
-            $attendee->user->notify(new CheckedIn);
-        }
 
         return to_route('admin_credentials');
     }
@@ -123,17 +114,10 @@ class CredentialsController extends Controller
             return response()->json($response, 422);
         }
 
-        // If attendee has not paid
-        if (!$attendee->paid) {
-            $response['type'] = 'WARNING';
-            $response['message'] = 'Payment pending';
-            return response()->json($response, 422);
-        }
-
         // If attendee is not confirmed
-        if (!$attendee->paid || !$attendee->confirmed) {
+        if (!$attendee->confirmed) {
             $response['type'] = 'WARNING';
-            $response['message'] = 'Not confirmed or not paid';
+            $response['message'] = 'Not confirmed';
             return response()->json($response, 422);
         }
 
@@ -161,51 +145,5 @@ class CredentialsController extends Controller
         $attendee->fees = $attendee->fees();
 
         return response()->json($attendee);
-    }
-
-    /**
-     * Mark attendee as paid
-     */
-    public function pay(Attendee $attendee, Request $request): JsonResponse
-    {
-        $fee = $request->input('fee');
-        $pending = $request->input('pending');
-        $attendee->paid = 1;
-
-        $payment = new Payment;
-        $payment->attendee_id = $attendee->id;
-        $payment->receipt = [
-            'cart' => [[
-                'id' => $fee['id'],
-                'name' => $fee['name'],
-                'amount' => $fee['amount'],
-                'description' => $attendee->user->first_name . ' ' . $attendee->user->last_name
-            ]],
-            'invoice' => [
-                'vat' => '',
-                'name' => $attendee->user->first_name . ' ' . $attendee->user->last_name,
-                'type' => 'myself',
-                'address' => ''
-            ]
-        ];
-        $payment->amount = $fee['amount'];
-        $payment->status = ($pending) ? 'pending' : 'paid';
-        $payment->completed_checkout = 1;
-        $payment->save();
-
-        if($request->input('notify')) {
-            $attendee->ticket_notified = 1;
-            $attendee->user->notify(new PaidTicketIssued($payment));
-        }
-
-        $attendee->save();
-
-        return response()->json($payment);
-    }
-
-    public function sync()
-    {
-        Artisan::call('attendees:sync');
-        return response()->json(['synced' => true]);
     }
 }

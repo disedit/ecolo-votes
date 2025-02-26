@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('groups', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('country_code', length: 2)->nullable();
-            $table->enum('status', ['full', 'associate', 'other'])->default('other');
             $table->timestamps();
         });
     }

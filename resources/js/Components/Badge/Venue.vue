@@ -3,7 +3,6 @@ import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3'
 import { Icon } from '@iconify/vue'
 import Links from './Links.vue'
-import Extras from './Extras.vue'
 
 const page = usePage()
 const edition = computed(() => page.props.edition)

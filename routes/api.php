@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\VoteController;
-use App\Http\Controllers\Admin\InvoicingController;
 use App\Http\Controllers\Admin\CredentialsController;
 use App\Http\Controllers\Admin\VoteController as AdminVoteController;
 
@@ -24,17 +23,11 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
-    Route::get('/payments/status', [CartController::class, 'status']);
     Route::get('/votes/{vote}/results', [VoteController::class, 'results']);
 
     Route::middleware('admin')->group(function () {
         Route::get('/credential/{attendee}', [CredentialsController::class, 'credential']);
         Route::post('/credentials/scan', [CredentialsController::class, 'scan']);
-        Route::post('/credentials/sync', [CredentialsController::class, 'sync']);
-        Route::post('/credential/{attendee}/pay', [CredentialsController::class, 'pay']);
-        Route::get('/payment/{payment}', [InvoicingController::class, 'payment']);
-        Route::post('/payment/{payment}/update', [InvoicingController::class, 'update']);
-        Route::post('/payment/{payment}/delete', [InvoicingController::class, 'delete']);
         Route::post('/admin/votes/create', [AdminVoteController::class, 'create']);
         Route::get('/admin/votes/{vote}', [AdminVoteController::class, 'vote']);
         Route::get('/admin/votes_to_import', [AdminVoteController::class, 'votesToImport']);
@@ -43,12 +36,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/admin/votes/{vote}/debate/close', [AdminVoteController::class, 'closeDebate']);
         Route::post('/admin/votes/{vote}/close', [AdminVoteController::class, 'close']);
         Route::post('/admin/votes/{vote}/delete', [AdminVoteController::class, 'delete']);
-        Route::post('/admin/voters/reallocate', [AdminVoteController::class, 'reallocate']);
     });
 
-    Route::middleware(['paid', 'voter', 'checkedin'])->group(function() {
+    Route::middleware(['voter', 'checkedin'])->group(function() {
         Route::post('/vote/cast', [VoteController::class, 'cast'])->name('vote_cast');
     });
 });
-
-Route::post('/payments/fulfill', [CartController::class, 'fulfill']);

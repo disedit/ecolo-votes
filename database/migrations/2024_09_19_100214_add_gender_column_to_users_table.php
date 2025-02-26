@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('gender', ['M', 'F', 'O'])->nullable()->after('country');
-            $table->string('group_other')->after('gender')->nullable();
+            $table->enum('gender', ['M', 'F', 'O'])->nullable()->after('role');
         });
     }
 
@@ -24,7 +23,6 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn('gender');
-            $table->dropColumn('group_other');
         });
     }
 };

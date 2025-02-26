@@ -16,16 +16,9 @@ return new class extends Migration
             $table->foreignId('edition_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('type_id')->constrained();
-            $table->foreignId('fee_id')->nullable()->constrained();
             $table->string('qr_code');
             $table->datetime('checked_in')->nullable();
-            $table->foreignId('registered_by_user_id')->nullable()->constrained(table: 'users', indexName: 'registered_by_user_id');
-            $table->bigInteger('form_submission_id')->nullable();
-            $table->boolean('confirmed')->default(0);
-            $table->boolean('paid')->default(0);
-            $table->boolean('notifiable')->default(0);
             $table->boolean('notified')->default(0);
-            $table->boolean('ticket_notified')->default(0);
             $table->timestamps();
         });
     }

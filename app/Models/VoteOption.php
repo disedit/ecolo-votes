@@ -19,6 +19,13 @@ class VoteOption extends Model
     }
 
     /**
+     * Region
+     */
+    public function region(): BelongsTo {
+        return $this->belongsTo(Region::class);
+    }
+
+    /**
      * Ballots
      */
     public function ballots(): HasMany {

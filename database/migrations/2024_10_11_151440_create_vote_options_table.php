@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->enum('gender', ['F', 'M', 'O'])->nullable();
+            $table->foreignId('region_id')->nullable()->constrained();
             $table->boolean('disabled')->default(0);
             $table->timestamps();
         });

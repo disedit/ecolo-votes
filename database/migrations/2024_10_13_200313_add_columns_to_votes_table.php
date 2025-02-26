@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('votes', function (Blueprint $table) {
             $table->boolean('secret')->default(0)->after('majority');
-            $table->enum('type', ['yesno', 'options'])->after('secret');
         });
     }
 
@@ -24,7 +23,6 @@ return new class extends Migration
     {
         Schema::table('votes', function (Blueprint $table) {
             $table->dropColumn('secret');
-            $table->dropColumn('type');
         });
     }
 };
