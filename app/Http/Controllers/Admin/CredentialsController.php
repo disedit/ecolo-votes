@@ -17,10 +17,7 @@ class CredentialsController extends Controller
      */
     public function credentials(): Response
     {
-        $attendees = Attendee::with([
-            'user' => function ($query) { $query->with('group'); },
-            'type'
-        ])->get();
+        $attendees = Attendee::with(['group', 'type'])->get();
 
         return Inertia::render('Admin/Credentials', [
             'attendees' => $attendees
@@ -38,7 +35,7 @@ class CredentialsController extends Controller
     /**
      * Check in
      */
-    public function checkIn(Attendee $attendee, Request $request): RedirectResponse
+    public function checkIn(Attendee $attendee): RedirectResponse
     {
         $attendee->checkIn('LOOKUP');
 
@@ -81,9 +78,9 @@ class CredentialsController extends Controller
 
         $response['attendee'] = [
             'id' => $attendee->id,
-            'first_name' => $attendee->user->first_name,
-            'last_name' => $attendee->user->last_name,
-            'group' => $attendee->user->group->name,
+            'first_name' => $attendee->first_name,
+            'last_name' => $attendee->last_name,
+            'group' => $attendee->group->name,
             'type' => $attendee->type->name,
             'color' => $attendee->type->color
         ];
@@ -126,9 +123,7 @@ class CredentialsController extends Controller
      */
     public function credential(Attendee $attendee): JsonResponse
     {
-        $attendee->load(['details', 'accessLog', 'user']);
-        $attendee->loginToken = $attendee->user->currentLoginToken();
-
+        $attendee->load(['details', 'accessLog']);
         return response()->json($attendee);
     }
 }

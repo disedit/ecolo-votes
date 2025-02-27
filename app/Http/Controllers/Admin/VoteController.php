@@ -185,32 +185,6 @@ class VoteController extends Controller
         ]);
     }
 
-    /**
-     * Reallocate votes
-     */
-    public function reallocate(Request $request): JsonResponse
-    {
-        $validated = $request->validate([
-            'reallocate_from' => 'required',
-            'reallocate_to' => 'required'
-        ]);
-
-        $reallocateFrom = Attendee::findOrFail($validated['reallocate_from']);
-        $reallocateTo = Attendee::findOrFail($validated['reallocate_to']);
-
-        DB::transaction(function () use ($reallocateFrom, $reallocateTo) {
-            $reallocateTo->votes += $reallocateFrom->votes;
-            $reallocateFrom->votes = 0;
-            $reallocateTo->save();
-            $reallocateFrom->save();
-        });
-
-        return response()->json([
-            'reallocate_from' => $reallocateFrom->only('votes'),
-            'reallocate_to' => $reallocateTo->only('votes'),
-        ]);
-    }
-
     /* Reorder vote */
     public function reorder(Vote $vote, Request $request): RedirectResponse
     {

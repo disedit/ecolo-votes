@@ -20,7 +20,7 @@ onMounted(async () => {
 <template>
   <GlobalModal v-if="attendee" :width="600" @close="emit('close')">
     <template #title>
-      <h1>{{ attendee.user.first_name }} {{ attendee.user.last_name }} / Access Log</h1>
+      <h1>{{ attendee.first_name }} {{ attendee.last_name }} / Access Log</h1>
     </template>
     <table class="table w-full mt-6">
       <colgroup>

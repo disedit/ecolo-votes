@@ -51,10 +51,10 @@ const columns = [
 
 const rows = computed(() => props.attendees.map(attendee => ({
   id: attendee.id,
-  first_name: attendee.user.first_name,
-  last_name: attendee.user.last_name,
-  type: attendee.type.name,
-  group: attendee.user.group_other ? `Other: ${attendee.user.group_other}` : attendee.user.group.name,
+  first_name: attendee.first_name,
+  last_name: attendee.last_name,
+  type: attendee.type?.name,
+  group: attendee.group?.name,
   checked_in: attendee.checked_in,
   first_checked_in: attendee.first_checked_in
 })))

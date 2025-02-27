@@ -21,17 +21,16 @@ use App\Http\Controllers\Admin\VoteController as AdminVoteController;
 |
 */
 
+Route::middleware('guest')->group(function () {
+    Route::get('/badge/{token}', [BadgeController::class, 'badge'])->name('badge');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'welcome'])->name('welcome');
-    Route::get('/awaiting', [HomeController::class, 'awaiting'])->name('awaiting');
-
-    Route::get('/badge', [BadgeController::class, 'badge'])->name('badge');
-    Route::get('/pass/{attendee}/apple', [PassController::class, 'apple']);
-    Route::get('/pass/{attendee}/google', [PassController::class, 'google']);
-    Route::get('/votes', [VoteController::class, 'votes'])->name('votes');
 
     Route::middleware(['voter'])->group(function() {
         Route::get('/vote', [VoteController::class, 'vote'])->name('vote');
+        Route::get('/votes', [VoteController::class, 'votes'])->name('votes');
     });
 
     Route::middleware('admin')->group(function () {

@@ -5,7 +5,6 @@ import { usePage, Link } from '@inertiajs/vue3'
 import { Icon } from '@iconify/vue'
 
 const page = usePage()
-const user = computed(() => page.props.user)
 const attendee = computed(() => page.props.attendee)
 const QrCode = ref()
 
@@ -27,16 +26,13 @@ onMounted(() => {
     </div>
     <div class="badge-name leading-tight">
       <div class="text-xl font-bold">
-        {{ user.first_name }}
+        {{ attendee.first_name }}
       </div>
       <div class="text-xl font-bold">
-        {{ user.last_name }}
+        {{ attendee.last_name }}
       </div>
-      <div v-if="user.group_other" class="text-gray-700 mt-2">
-        {{ user.group_other }}
-      </div>
-      <div v-else class="text-gray-700 mt-2">
-        {{ user.group.name }}
+      <div v-if="attendee.group" class="text-gray-700 mt-2">
+        {{ attendee.group.name }}
       </div>
     </div>
     <div class="badge-qrcode" aria-hidden="true">

@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('Attendee.Status.{id}', function (User $user, int $attendeeId) {
-    return $user->attendee()->id === $attendeeId || $user->hasRole('credentials');
-});
+Broadcast::channel('Attendee.Status.{id}', fn () => true);
 
 Broadcast::channel('Attendees.List', function (User $user) {
     return $user->hasRole('credentials');

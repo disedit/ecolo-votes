@@ -2,16 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Fee;
-use App\Models\User;
 use App\Models\Edition;
-use App\Models\Payment;
 use App\Models\AccessLog;
 use App\Models\AttendeeDetail;
 use App\Models\Scopes\EditionScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -21,30 +17,10 @@ class Attendee extends Model
     use HasFactory, SoftDeletes;
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'subdelegates' => 'object'
-    ];
-
-    protected $fillable = [
-        'paid'
-    ];
-
-    /**
      * Edition
      */
     public function edition(): BelongsTo {
         return $this->belongsTo(Edition::class);
-    }
-
-    /**
-     * User
-     */
-    public function user(): BelongsTo {
-        return $this->belongsTo(User::class);
     }
 
     /**
@@ -58,7 +34,7 @@ class Attendee extends Model
      * Group
      */
     public function group(): BelongsTo {
-        return $this->user->group();
+        return $this->belongsTo(Group::class);
     }
 
     /**
