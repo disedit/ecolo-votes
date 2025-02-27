@@ -13,36 +13,14 @@ class HomeController extends Controller
      * Welcome page
      */
     public function welcome(Request $request) {
-        if ($request->user()->canVote()) {
+        if ($request->user()->isCode()) {
             return redirect()->route('vote');
         }
 
-        if ($request->user()->isCheckedIn()) {
-            return redirect()->route('info');
+        if ($request->user()->hasAdminRole()) {
+            return redirect()->route('admin_dashboard');
         }
 
         return redirect()->route('badge');
-    }
-
-    /**
-     * Awaiting page
-     */
-    public function awaiting(Request $request): Response | RedirectResponse {
-        if ($request->user()->isConfirmed()) {
-            return redirect()->route('welcome');
-        }
-
-        return Inertia::render('Awaiting', [
-            'user' => $request->user()
-        ]);
-    }
-
-    /**
-     * Info page
-     */
-    public function info(Request $request): Response {
-        return Inertia::render('Info', [
-            'attendee' => $request->user()->attendee()->only('votes'),
-        ]);
     }
 }

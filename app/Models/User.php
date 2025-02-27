@@ -61,22 +61,15 @@ class User extends Authenticatable
     /**
      * Attendee
      */
-    public function attendee(): Attendee {
+    public function attendee(): ?Attendee {
         return Attendee::where('user_id', $this->id)->first();
     }
 
     /**
      * Code
      */
-    public function code(): Attendee {
+    public function code(): ?Code {
         return Code::where('user_id', $this->id)->first();
-    }
-
-    /**
-     * Payments
-     */
-    public function payments(): HasManyThrough {
-        return $this->hasManyThrough(Payment::class, Attendee::class);
     }
 
     /**
@@ -104,25 +97,18 @@ class User extends Authenticatable
     }
 
     /**
-     * Return true if user has paid for current edition
+     * Is QR code
      */
-    public function hasPaid(): bool {
-        return $this->attendee() && !!$this->attendee()->paid;
-    }
-
-    /**
-     * Check if a user has been confirmed for current edition
-     */
-    public function isConfirmed(): bool {
-        return !!$this->attendee()->confirmed;
+    public function isCode(): bool {
+        return !!$this->code();
     }
 
     /**
      * Can vote
      */
     public function canVote(): bool {
-        $attendee = $this->attendee();
-        return $attendee->isVoter() && $attendee->hasCheckedIn();
+        $code = $this->code();
+        return $code && $code->wasPickedUp();
     }
 
     /**
@@ -130,52 +116,7 @@ class User extends Authenticatable
      */
     public function isCheckedIn(): bool {
         $attendee = $this->attendee();
-        return $attendee->hasCheckedIn();
-    }
-
-    /**
-     * Check if user has a payment beings processed
-     */
-    public function openPayments(): Collection {
-        $payments = $this->attendee()->payments()->where('completed_checkout', 1)->whereNot('status', 'paid')->whereNot('status', 'declined')->whereNot('status', 'refunded')->get();
-        return $payments;
-    }
-
-    public function syncPaymentStatus() {
-        $user = ($this->attendee()->registered_by_user_id) ? User::find($this->attendee()->registered_by_user_id) : $this;
-        $hasValidPayment = $user->attendee()->payments()
-            ->where(function ($query) {
-                $query->where('status', 'paid')
-                    ->orWhere('status', 'pending');
-            })
-            ->where('completed_checkout', 1)
-            ->exists();
-
-        if (($hasValidPayment && !$this->hasPaid()) || (!$this->hasFees() && !$this->hasPaid())) {
-          $this->attendee()->update([
-            'paid' => 1
-          ]);
-        }
-  
-        if (!$hasValidPayment && $this->hasPaid() && $this->hasFees()) {
-          $this->attendee()->update([
-            'paid' => 0
-          ]);
-        }
-    }
-
-    /**
-     * Fees
-     */
-    public function fees($prepend = null): array {
-        return $this->attendee()->fees($prepend);
-    }
-
-    /**
-     * Has fees
-     */
-    public function hasFees(): bool {
-        return count($this->fees()) > 0;
+        return $attendee && $attendee->hasCheckedIn();
     }
 
     /**

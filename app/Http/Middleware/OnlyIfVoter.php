@@ -17,8 +17,8 @@ class OnlyIfVoter
     {
         $user = $request->user();
 
-        if (!$user->attendee()->isVoter()) {
-            abort(403, 'You don\'t have access to this area');
+        if (!$user->canVote()) {
+            abort(403, 'This code is not enabled');
         }
 
         return $next($request);

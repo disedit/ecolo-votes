@@ -10,12 +10,6 @@ defineProps({
 <template>
   <div class="sticky flex bottom-6 justify-center z-[1000]">
     <ul class="menu bg-white flex divide-x border">
-      <li v-if="show.includes('badge')">
-        <Link href="/badge">
-          <Icon icon="ri:account-box-line" class="shrink-0" />
-          Badge
-        </Link>
-      </li>
       <li v-if="show.includes('vote')">
         <Link href="/vote">
           <Icon icon="ri:hand" class="shrink-0" />
@@ -25,13 +19,7 @@ defineProps({
       <li v-if="show.includes('votes')">
         <Link href="/votes">
           <Icon icon="ri:file-list-3-line" class="shrink-0" />
-          Votes
-        </Link>
-      </li>
-      <li v-if="show.includes('menu')">
-        <Link href="/info">
-          <Icon icon="ri:menu-fill" class="shrink-0" />
-          Menu
+          Results
         </Link>
       </li>
     </ul>

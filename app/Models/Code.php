@@ -27,6 +27,13 @@ class Code extends Model
     }
 
     /**
+     * Check if code is enabled
+     */
+    public function wasPickedUp(): bool {
+        return !!$this->pickedup_at;
+    }
+
+    /**
      * The "booting" method of the model.
      */
     protected static function boot(): void

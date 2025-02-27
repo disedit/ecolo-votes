@@ -20,25 +20,9 @@ defineProps({
         <Icon icon="carbon:credentials" class="text-xl" />
         Access Control
       </Link>
-      <Link href="/admin/tickets" class="dashboard-link">
-        <Icon icon="ri:ticket-2-line" class="text-xl" />
-        Tickets
-      </Link>
-      <Link href="/admin/invoicing" class="dashboard-link">
-        <Icon icon="ri:file-copy-2-line" class="text-xl" />
-        Invoicing
-      </Link>
-      <Link href="/admin/extras" class="dashboard-link">
-        <Icon icon="ri:function-add-fill" class="text-xl" />
-        Extras
-      </Link>
       <Link href="/admin/votes" class="dashboard-link">
         <Icon icon="ri:hand" class="text-xl" />
         Vote manager
-      </Link>
-      <Link href="/admin/voters" class="dashboard-link">
-        <Icon icon="ri:hand" class="text-xl" />
-        Allocated votes
       </Link>
       <Link href="/admin/screen" class="dashboard-link">
         <Icon icon="ri:fullscreen-line" class="text-xl" />

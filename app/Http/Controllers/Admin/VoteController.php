@@ -46,7 +46,7 @@ class VoteController extends Controller
         $request->validate([
             'name' => 'required',
             'subtitle' => '',
-            'majority' => 'in:simple,absolute,2/3_all,3/4_all,2/3_cast,3/4_cast',
+            'majority' => 'in:simple,50_with_abs,50_without_abs,2/3_with_abs,2/3_without_abs',
             'type' => 'in:yesno,options',
             'secret' => 'boolean',
             'abstain' => 'boolean',
@@ -54,6 +54,7 @@ class VoteController extends Controller
             'options.*.name' => 'required_if:type,options',
             'options.*.description' => 'nullable',
             'options.*.gender' => 'nullable|in:M,F,O',
+            'options.*.region' => 'nullable',
             'options.*.enabled' => 'nullable|boolean'
         ]);
 
@@ -76,15 +77,15 @@ class VoteController extends Controller
 
             if ($request->input('type') === 'yesno') {
                 $options = [
-                    ['name' => 'Yes', 'description' => null, 'gender' => null, 'enabled' => true],
-                    ['name' => 'No', 'description' => null, 'gender' => null, 'enabled' => true]
+                    ['name' => 'Yes', 'description' => null, 'gender' => null, 'region' => null, 'enabled' => true],
+                    ['name' => 'No', 'description' => null, 'gender' => null, 'region' => null, 'enabled' => true]
                 ];
             } else {
                 $options = $request->input('options');
             }
 
             if ($request->input('abstain') || $request->input('type') === 'yesno') {
-                $options[] = ['name' => 'Abstain', 'description' => null, 'gender' => null, 'is_abstain' => true, 'enabled' => true];
+                $options[] = ['name' => 'Abstain', 'description' => null, 'gender' => null, 'region' => null, 'is_abstain' => true, 'enabled' => true];
             }
 
             // Insert options
@@ -95,6 +96,7 @@ class VoteController extends Controller
                 $newOption->name = $option['name'];
                 $newOption->description = $option['description'];
                 $newOption->gender = $option['gender'];
+                $newOption->region = $option['region'];
                 $newOption->is_abstain = isset($option['is_abstain']) ? $option['is_abstain'] : 0;
                 $newOption->save();
             }

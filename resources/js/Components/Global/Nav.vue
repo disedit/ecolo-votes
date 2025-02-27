@@ -52,14 +52,6 @@ watch(y, () => {
         {{ user.first_name }}
 
         <template #items>
-          <Link href="/badge">
-            <Icon icon="ri:account-box-line" />
-            Badge
-          </Link>
-          <Link href="/invoices">
-            <Icon icon="ri:file-copy-2-line" />
-            Invoices
-          </Link>
           <Link v-if="['admin', 'credentials'].includes(user.role)" href="/admin">
             <Icon icon="ri:lock-line" />
             Admin

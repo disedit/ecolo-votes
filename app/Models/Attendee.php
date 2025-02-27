@@ -62,20 +62,6 @@ class Attendee extends Model
     }
 
     /**
-     * Fee
-     */
-    public function fee(): HasOne {
-        return $this->hasOne(Fee::class);
-    }
-
-    /**
-     * Payments
-     */
-    public function payments(): HasMany {
-        return $this->hasMany(Payment::class);
-    }
-
-    /**
      * Details
      */
     public function details(): HasMany {
@@ -87,38 +73,6 @@ class Attendee extends Model
      */
     public function accessLog(): HasMany {
         return $this->hasMany(AccessLog::class);
-    }
-
-    /**
-     * Fees
-     */
-    public function fees($prepend = null): array {
-        if ($this->custom_fee === '0.00') return [];
-
-        $fees = $this->type->fees->filter(function ($fee) {
-            return (!$fee->member_parties) ? true : in_array($this->user->group->id, $fee->member_parties);
-        })->sortBy('amount')->values()->all();
-
-        if ($this->custom_fee || $prepend) {
-            array_unshift($fees, ['id' => 'custom', 'name' => 'Participant fee', 'amount' => $this->custom_fee ?? $prepend]);
-        }
-
-        return $fees;
-    }
-
-    /**
-     * Check if attendee has subdelegates
-     */
-    public function hasSubdelegates(): bool {
-        if (!$this->subdelegates) return false;
-        return count($this->subdelegates) > 0;
-    }
-
-    /**
-     * Has fees
-     */
-    public function hasFees(): bool {
-        return count($this->fees()) > 0;
     }
 
     /**
@@ -155,31 +109,11 @@ class Attendee extends Model
     }
 
     /**
-     * Fees attribute
-     */
-    public function getFeesAttribute(): array {
-        return $this->fees();
-    }
-
-    /**
      * Filter voters
      */
     public function scopeVoters($query)
     {
         return $query->where('votes', '>=', 1);
-    }
-
-    /**
-     * Filter voters
-     */
-    public function scopeDelegates($query)
-    {
-        return $query->withoutGlobalScopes()
-            ->select('attendees.*')
-            ->join('types', 'types.id', '=', 'attendees.type_id')
-            ->where('is_delegates', 1)
-            ->where('attendees.edition_id', config('edition_id'))
-            ->whereNull('deleted_at');
     }
 
     /**

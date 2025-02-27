@@ -75,10 +75,10 @@ class Vote extends Model
 
         // Insert or reset ballots
         VoteBallot::where('vote_id', $this->id)->update(['votes' => 0]);
-        $ballots = Attendee::voters()->get()->map(function ($voter) {
-            return ['vote_id' => $this->id, 'attendee_id' => $voter->id, 'votes' => $voter->votes, 'checked_in' => ($voter->checked_in) ? 1 : 0];
+        $ballots = Code::all()->map(function ($code) {
+            return ['vote_id' => $this->id, 'code_id' => $code->id, 'votes' => 1, 'checked_in' => ($code->pickedup_at) ? 1 : 0];
         })->toArray();
-        VoteBallot::upsert($ballots, uniqueBy: ['vote_id', 'attendee_id'], update: ['votes', 'checked_in']);
+        VoteBallot::upsert($ballots, uniqueBy: ['vote_id', 'code_id'], update: ['votes', 'checked_in']);
 
         return $this->save();
     }
@@ -166,8 +166,8 @@ class Vote extends Model
             ->orderBy('vote_options.id', 'asc')
             ->get();
 
-        $rollcall = VoteBallot::select('vote_ballots.vote_id', 'attendees.id as attendee_id', 'users.first_name', 'users.last_name', 'attendees.votes', 'vote_ballots.voted_at', 'vote_ballots.checked_in')
-            ->join('attendees', 'attendees.id', '=', 'vote_ballots.attendee_id')
+        $rollcall = VoteBallot::select('vote_ballots.vote_id', 'codes.id as code_id', 'users.first_name', 'users.last_name', 'codes.votes', 'vote_ballots.voted_at', 'vote_ballots.checked_in')
+            ->join('codes', 'codes.id', '=', 'vote_ballots.code_id')
             ->join('users', 'users.id', '=', 'attendees.user_id')
             ->where('vote_ballots.vote_id', $this->id)
             ->where('vote_ballots.votes', '>', '0')
@@ -175,7 +175,7 @@ class Vote extends Model
             ->get();
 
         $checkedIn = $rollcall->sum('checked_in');
-        $turnout = $rollcall->sum(fn ($delegate) => ($delegate->voted_at) ? 1 : 0);
+        $turnout = $rollcall->sum(fn ($code) => ($code->voted_at) ? 1 : 0);
         $allocatedVotes = $this->getAllocatedVotes();
         $votesCast = $this->getVotesCast($results);
         $resultsWithPercentages = $this->addPercentages($results, $votesCast, $allocatedVotes);

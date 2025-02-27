@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use Carbon\Carbon;
+use App\Models\Code;
 use App\Models\User;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
+use App\Http\Requests\Auth\CodeRequest;
 use App\Providers\RouteServiceProvider;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Notifications\LoginNotification;
@@ -24,6 +26,16 @@ class AuthenticatedSessionController extends Controller
     public function create(): Response
     {
         return Inertia::render('Auth/Login', [
+            'status' => session('status'),
+        ]);
+    }
+
+     /**
+     * Display the QR Code login view.
+     */
+    public function create_code(): Response
+    {
+        return Inertia::render('Auth/Code', [
             'status' => session('status'),
         ]);
     }
@@ -54,6 +66,24 @@ class AuthenticatedSessionController extends Controller
             sleep(1);
         }
         return to_route('login')->with('status', 'sent');
+    }
+
+    /**
+     * QR CodeLogin
+     */
+    public function store_code(CodeRequest $request): RedirectResponse
+    {
+        $request->authenticate();
+        $code = Code::where('code', $request->code)->first();
+        
+        if (!$code) {
+            return to_route('code_login')->with('message', 'This is not a valid code.');
+        }
+
+        Auth::login($code->user, true);
+        $request->session()->regenerate();
+
+        return redirect()->intended(RouteServiceProvider::HOME);
     }
 
     /**
