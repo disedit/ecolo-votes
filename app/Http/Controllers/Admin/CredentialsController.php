@@ -6,7 +6,6 @@ use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Attendee;
 use Illuminate\Http\Request;
-use App\Notifications\CheckedIn;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
@@ -109,28 +108,15 @@ class CredentialsController extends Controller
 
         // If attendee had checked in
         if ($attendee->checked_in !== null) {
-            $response['type'] = 'DOUBLE';
-            $response['message'] = 'Already checked in';
-            return response()->json($response, 422);
-        }
-
-        // If attendee is not confirmed
-        if (!$attendee->confirmed) {
-            $response['type'] = 'WARNING';
-            $response['message'] = 'Not confirmed';
+            $response['type'] = 'FAIL';
+            $response['message'] = 'Already picked up code';
             return response()->json($response, 422);
         }
 
         // Check attendee in
         $attendee->checkIn($client);
         $response['type'] = 'OK';
-
-        if (in_array($client, ['APPLEPASS', 'GOOGLEPASS']) && $attendee->isVoter() && $firstCheckIn) {
-            $attendee->user->notify(new CheckedIn);
-            $response['message'] = 'Checked in and notified';
-        } else {
-            $response['message'] = 'Checked in';
-        }
+        $response['message'] = 'Checked in';
 
         return response()->json($response);
     }
@@ -142,7 +128,6 @@ class CredentialsController extends Controller
     {
         $attendee->load(['details', 'accessLog', 'user']);
         $attendee->loginToken = $attendee->user->currentLoginToken();
-        $attendee->fees = $attendee->fees();
 
         return response()->json($attendee);
     }

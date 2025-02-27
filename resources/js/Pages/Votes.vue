@@ -16,7 +16,7 @@ const props = defineProps({
     auth: { type: Object, required: true },
     flash: { type: Object, default: () => null },
     votes: { type: Array, required: true },
-    attendee: { type: Object, required: true }
+    code: { type: Object, required: true }
 })
 
 onMounted(() => {
@@ -47,7 +47,7 @@ function showVote (vote) {
           VOTE
         </div>
         <div>
-          <template v-if="attendee.votes">MY VOTE</template>
+          MY VOTE
         </div>
         <div>
           RESULT
@@ -100,7 +100,7 @@ function showVote (vote) {
           </button>
         </li>
       </ul>
-      <GlobalMenu :show="attendee.votes > 0 ? ['badge', 'vote', 'menu'] : ['badge', 'menu']" />
+      <GlobalMenu :show="['vote']" />
     </div>
 </template>
 

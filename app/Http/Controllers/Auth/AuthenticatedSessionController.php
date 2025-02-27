@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Carbon\Carbon;
 use App\Models\Code;
 use App\Models\User;
 use Inertia\Inertia;
@@ -12,7 +11,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Route;
 use App\Http\Requests\Auth\CodeRequest;
 use App\Providers\RouteServiceProvider;
 use App\Http\Requests\Auth\LoginRequest;
@@ -100,6 +98,23 @@ class AuthenticatedSessionController extends Controller
         }
 
         Auth::login($loginToken->user, true);
+        $request->session()->regenerate();
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
+
+    /**
+     * Autocode links
+     */
+    public function autocode(Request $request, String $token): RedirectResponse
+    {
+        $code = Code::where('code', $token)->first();
+
+        if (!$code) {
+            return to_route('code_login')->with('message', 'This code is not valid.');
+        }
+
+        Auth::login($code->user, true);
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);

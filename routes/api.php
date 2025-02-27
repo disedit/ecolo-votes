@@ -38,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/admin/votes/{vote}/delete', [AdminVoteController::class, 'delete']);
     });
 
-    Route::middleware(['voter', 'checkedin'])->group(function() {
+    Route::middleware(['voter'])->group(function() {
         Route::post('/vote/cast', [VoteController::class, 'cast'])->name('vote_cast');
     });
 });
