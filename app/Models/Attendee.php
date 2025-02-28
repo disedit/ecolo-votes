@@ -7,6 +7,7 @@ use App\Models\AccessLog;
 use App\Models\AttendeeDetail;
 use App\Models\Scopes\EditionScope;
 use Illuminate\Database\Eloquent\Model;
+use App\Events\AttendeeCheckinStatusChanged;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -59,6 +60,7 @@ class Attendee extends Model
         if (!$this->first_checked_in) $this->first_checked_in = now();
         $this->save();
         AccessLog::log(attendee: $this, type: 'IN', client: $client);
+        AttendeeCheckinStatusChanged::dispatch($this, 'in');
     }
 
     /**
@@ -68,6 +70,7 @@ class Attendee extends Model
         $this->checked_in = null;
         $this->save();
         AccessLog::log(attendee: $this, type: 'OUT', client: $client);
+        AttendeeCheckinStatusChanged::dispatch($this, 'out');
     }
 
     /**

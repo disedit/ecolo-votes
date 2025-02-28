@@ -73,10 +73,18 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
         $code = Code::where('code', $request->code)->first();
-        
+    
         if (!$code) {
             return to_route('code_login')->with('message', 'This is not a valid code.');
         }
+
+        if (!$code->wasPickedUp()) {
+            return to_route('code_login')->with('message', 'This code has not been enabled.');
+        }
+
+        // Register code as used
+        $code->used_at = now();
+        $code->save();
 
         Auth::login($code->user, true);
         $request->session()->regenerate();
@@ -113,6 +121,14 @@ class AuthenticatedSessionController extends Controller
         if (!$code) {
             return to_route('code_login')->with('message', 'This code is not valid.');
         }
+
+        if (!$code->wasPickedUp()) {
+            return to_route('code_login')->with('message', 'This code has not been enabled.');
+        }
+
+        // Register code as used
+        $code->used_at = now();
+        $code->save();
 
         Auth::login($code->user, true);
         $request->session()->regenerate();

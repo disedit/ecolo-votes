@@ -20,6 +20,10 @@ defineProps({
         <Icon icon="carbon:credentials" class="text-xl" />
         Access Control
       </Link>
+      <Link href="/admin/codes" class="dashboard-link">
+        <Icon icon="ri:fullscreen-line" class="text-xl" />
+        QR Codes
+      </Link>
       <Link href="/admin/votes" class="dashboard-link">
         <Icon icon="ri:hand" class="text-xl" />
         Vote manager

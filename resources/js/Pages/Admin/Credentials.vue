@@ -61,19 +61,13 @@ const rows = computed(() => props.attendees.map(attendee => ({
 
 const totalCheckedIn = computed(() => props.attendees.filter(attendee => attendee.checked_in).length)
 
-function checkIn(id, silent) {
-  router.post(`/admin/credentials/${id}/check_in`, { silent }, { only: ['attendees'], preserveScroll: true })
-  window.Echo.private(`Attendee.Status.${id}`).whisper('checked_in', { checked_in: true })
+function checkIn(id) {
+  router.post(`/admin/credentials/${id}/check_in`, null, { only: ['attendees'], preserveScroll: true })
   window.Echo.private('Attendees.List').whisper('attendees_list_changed')
-}
-
-function checkInSilently(id) {
-  checkIn(id, true)
 }
 
 function checkOut(id) {
   router.post(`/admin/credentials/${id}/check_out`, null, { only: ['attendees'], preserveScroll: true })
-  window.Echo.private(`Attendee.Status.${id}`).whisper('checked_out', { checked_in: false })
   window.Echo.private('Attendees.List').whisper('attendees_list_changed')
 }
 

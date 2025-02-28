@@ -39,22 +39,21 @@ onMounted(() => {
         showCheckedIn.value = true
     }
 
-    window.Echo.private(`Attendee.Status.${props.attendee.id}`)
-        .listenForWhisper('checked_in', () => {
-            showWelcome.value = true
-            showCheckedIn.value = true
-            throwConfetti()
+    window.Echo.channel(`Attendee.Status.${props.attendee.id}`)
+        .listen('.attendee.checked_in_status_changed', ({ mode }) => {
+            if (mode === 'in') {
+                showWelcome.value = true
+                showCheckedIn.value = true
+                throwConfetti()
 
-            setTimeout(() => {
+                setTimeout(() => {
+                    showWelcome.value = false
+                    router.visit('/code')
+                }, 6000)
+            } else {
+                showCheckedIn.value = false
                 showWelcome.value = false
-                router.visit('/code')
-            }, 6000)
-        })
-
-    window.Echo.private(`Attendee.Status.${props.attendee.id}`)
-        .listenForWhisper('checked_out', () => {
-            showCheckedIn.value = false
-            showWelcome.value = false
+            }
         })
 })
 

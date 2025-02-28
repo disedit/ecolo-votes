@@ -48,6 +48,7 @@ class CredentialsController extends Controller
     public function checkOut(Attendee $attendee): RedirectResponse
     {
         $attendee->checkOut('LOOKUP');
+
         return to_route('admin_credentials');
     }
 
