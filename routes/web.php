@@ -2,9 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PassController;
 use App\Http\Controllers\VoteController;
 use App\Http\Controllers\BadgeController;
+use App\Http\Controllers\Admin\CodeController;
 use App\Http\Controllers\Admin\ScreenController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CredentialsController;
@@ -39,6 +39,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/credentials/{attendee}/check_in', [CredentialsController::class, 'checkIn'])->name('admin_check_in');
         Route::post('/admin/credentials/{attendee}/check_out', [CredentialsController::class, 'checkOut'])->name('admin_check_out');
         Route::get('/admin/scanner', [CredentialsController::class, 'scanner'])->name('admin_scanner');
+        Route::get('/admin/codes', [CodeController::class, 'codes'])->name('admin_codes');
+        Route::post('/admin/codes/{code}/pickup', [CodeController::class, 'pickUp'])->name('admin_code_pickup');
+        Route::post('/admin/codes/{code}/leavedown', [CodeController::class, 'leaveDown'])->name('admin_code_leavedown');
         Route::get('/admin/votes', [AdminVoteController::class, 'votes'])->name('admin_votes');
         Route::post('/admin/votes/{vote}/reorder', [AdminVoteController::class, 'reorder'])->name('admin_votes_reorder');
         Route::get('/admin/screen', [ScreenController::class, 'screen'])->name('screen');

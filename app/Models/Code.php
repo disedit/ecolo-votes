@@ -34,6 +34,22 @@ class Code extends Model
     }
 
     /**
+     * Pick up and activate a code
+     */
+    public function pickUp() {
+        $this->pickedup_at = now();
+        $this->save();
+    }
+
+    /**
+     * Deactivate a code
+     */
+    public function leaveDown() {
+        $this->pickedup_at = null;
+        $this->save();
+    }
+
+    /**
      * The "booting" method of the model.
      */
     protected static function boot(): void

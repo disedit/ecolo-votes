@@ -3,6 +3,11 @@ import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import QrScanner from 'qr-scanner'
 import { Icon } from '@iconify/vue'
 
+const props = defineProps({
+  label: { type: String, default: 'Scan QR codes' },
+  scanning: { type: String, default: 'credentials' }
+})
+
 const emit = defineEmits(['close'])
 
 let qrScanner
@@ -28,7 +33,7 @@ onUnmounted(() => {
 
 watch(qrCode, async (newQrCode) => {
   if (newQrCode) card.value = null
-  updateCheckInStatus(newQrCode)
+  updateStatus(newQrCode)
 })
 
 function openCamera () {
@@ -51,19 +56,22 @@ function closeCamera () {
   emit('close')
 }
 
-async function updateCheckInStatus (code) {
+async function updateStatus (code) {
   if (loading.value || !code) return false
   clearTimeout(timeout)
   clearTimeout(cardTimeout)
   loadingTimeout = setTimeout(() => loading.value = true, 500)
   
   try {
-    const { data } = await window.axios.post('/api/credentials/scan', { mode: mode.value, qr_code: code })
+    const endpoint = props.scanning === 'credentials' ? '/api/credentials/scan' : '/api/codes/scan'
+    const { data } = await window.axios.post(endpoint, { mode: mode.value, qr_code: code })
     card.value = data
-    window.Echo.private('Attendees.List').whisper('attendees_list_changed')
 
-    if (mode.value === 'IN') {
+    if (mode.value === 'IN' && props.scanning === 'credentials') {
+      window.Echo.private('Attendees.List').whisper('attendees_list_changed')
       window.Echo.private(`Attendee.Status.${data.attendee.id}`).whisper('checked_in', { checked_in: true })
+    } else {
+      window.Echo.private('Codes.List').whisper('codes_list_changed')
     }
   } catch (error) {
     card.value = error.response.data
@@ -91,6 +99,10 @@ function clearCard () {
     <Teleport to="#teleports">
       <div v-if="cameraOpen" class="scanner-window">
         <div class="scanner-tools bg-black/50">
+          <select class="scanner-mode bg-transparent text-white border-white focus:border-yellow focus:ring-yellow focus:ring-2 font-mono" disabled>
+            <option value="credentials" :selected="scanning === 'credenials'">Badges</option>
+            <option value="codes" :selected="scanning === 'codes'">Vote codes</option>
+          </select>
           <select v-model="mode" name="mode" class="scanner-mode bg-transparent text-white border-white focus:border-yellow focus:ring-yellow focus:ring-2 font-mono">
             <option value="IN">IN</option>
             <option value="OUT">OUT</option>
@@ -138,7 +150,7 @@ function clearCard () {
   </Transition>
   <div v-if="hasCamera">
     <InputButton @click="openCamera" icon="ri:qr-scan-2-line">
-      Scan Badges
+      {{ label }}
     </InputButton>
   </div>
 </template>

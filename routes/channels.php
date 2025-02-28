@@ -20,6 +20,10 @@ Broadcast::channel('Attendees.List', function (User $user) {
     return $user->hasRole('credentials');
 });
 
+Broadcast::channel('Codes.List', function (User $user) {
+    return $user->hasRole('credentials');
+});
+
 Broadcast::channel('Votes', function (User $user) {
     return $user->canVote() || $user->hasRole('vote_manager');
 });

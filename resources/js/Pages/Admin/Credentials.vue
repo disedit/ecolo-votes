@@ -110,7 +110,7 @@ function reload () {
 
     <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
       <div class="container padded-x py-4 flex gap-4 items-center">  
-        <QrScanner @close="reload" />
+        <QrScanner label="Scan badges" scanning="credentials" @close="reload" />
         <span class="font-mono text-sm uppercase ms-auto md:ms-0">
           <strong>{{ rows.length }}</strong> total, <strong>{{ totalCheckedIn }}</strong> checked in
         </span>

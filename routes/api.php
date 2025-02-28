@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\VoteController;
+use App\Http\Controllers\Admin\CodeController;
 use App\Http\Controllers\Admin\CredentialsController;
 use App\Http\Controllers\Admin\VoteController as AdminVoteController;
 
@@ -28,6 +29,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('admin')->group(function () {
         Route::get('/credential/{attendee}', [CredentialsController::class, 'credential']);
         Route::post('/credentials/scan', [CredentialsController::class, 'scan']);
+        Route::post('/codes/scan', [CodeController::class, 'scan']);
+        Route::post('/admin/codes/create', [CodeController::class, 'create']);
         Route::post('/admin/votes/create', [AdminVoteController::class, 'create']);
         Route::get('/admin/votes/{vote}', [AdminVoteController::class, 'vote']);
         Route::get('/admin/votes_to_import', [AdminVoteController::class, 'votesToImport']);
