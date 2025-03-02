@@ -23,7 +23,7 @@ const form = useForm({
 function login() {
     form.post('/login', {
         preserveScroll: true,
-        //onSuccess: () => form.reset('email'),
+        onSuccess: () => form.reset('email'),
     })
 }
 
@@ -40,12 +40,12 @@ const inboxUrl = computed(() => {
     <GlobalCard title="Log in" class="container-sm">
         <div v-if="flash.status === 'sent'">
             <p>
-                If the email address was on our database, you will receive an email with a link to access the platform.
+                {{ $t('login.submited') }}
             </p>
             <p v-if="inboxUrl" class="mt-2 font-bold">
                 <a :href="inboxUrl" target="_blank" rel="noopener" class="flex items-center gap-2 underline text-green-pine">
                     <Icon icon="ri:mail-send-line" />
-                    Check your inbox
+                    {{ $t('login.check_inbox') }}
                 </a>
             </p>
         </div>
@@ -54,13 +54,13 @@ const inboxUrl = computed(() => {
                 {{ flash.message }}
             </p>
             <p v-else class="text-base">
-                If you have registered for the congress, enter your email below to access the platform.
+                {{ $t('login.instructions') }}
             </p>
             <TextInput
                 type="email"
                 name="email"
-                label="Email address"
-                placeholder="Email address"
+                :label="$t('login.email')"
+                :placeholder="$t('login.email_placeholder')"
                 variant="gray"
                 label-sr-only
                 size="lg"
@@ -72,10 +72,10 @@ const inboxUrl = computed(() => {
 
             <div class="flex justify-end">
                 <ButtonInput type="submit" size="md" :loading="form.processing" :disabled="form.processing">
-                    Send me a link -&gt;
+                    {{ $t('login.button') }} -&gt;
 
                     <template #loading>
-                        Submitting request...
+                        {{ $t('login.submitting') }}
                     </template>
                 </ButtonInput>
             </div>

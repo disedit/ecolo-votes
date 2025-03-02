@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
+import { useI18n } from 'vue-i18n'
 import { VueGoodTable } from 'vue-good-table-next'
 import { Icon } from '@iconify/vue'
 import { useModal } from 'vue-final-modal'
@@ -24,6 +25,8 @@ const props = defineProps({
   regions: { type: Array, required: true }
 })
 
+const { t } = useI18n()
+
 const columns = [
   {
     label: '#',
@@ -31,33 +34,33 @@ const columns = [
     width: '50px'
   },
   {
-    label: 'Name',
+    label: t('admin.votes.columns.name'),
     field: 'name',
   },
   {
-    label: 'Majority',
+    label: t('admin.votes.columns.name'),
     field: 'majority',
     width: '200px'
   },
   {
-    label: 'Select',
+    label: t('admin.votes.columns.max'),
     field: 'max_votes',
     width: '100px'
   },
   {
-    label: 'Result',
+    label: t('admin.votes.columns.result'),
     field: 'result',
     width: '200px'
   },
   {
-    label: 'Closed at',
+    label: t('admin.votes.columns.closed_at'),
     field: 'closed_at',
     dateInputFormat: 'yyyy-MM-dd HH:mm:ss',
     dateOutputFormat: 'EEE HH:mm',
     width: '140px'
   },
   {
-    label: 'Actions',
+    label: t('admin.votes.columns.actions'),
     field: 'actions',
     width: '120px'
   },
@@ -147,7 +150,7 @@ function openDetails(voteId) {
 }
 
 function reopenVote(id) {
-  if (confirm('Reopening a vote will recalculate vote allocation and may alter the results.') === true) {
+  if (confirm(t('admin.votes.warning')) === true) {
     openVote(id)
   }
 }
@@ -175,12 +178,14 @@ function move(voteId, move) {
 <template>
   <Head title="Votes" />
   <div class="container-xl">
-    <AdminNavigation>Vote manager</AdminNavigation>
+    <AdminNavigation>
+      {{ $t('admin.votes.nav.title') }}
+    </AdminNavigation>
 
     <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
       <div class="container padded-x py-4 flex items-center gap-2">  
         <InputButton @click="createVote" icon="ri:add-large-fill">
-          Create vote
+          {{ $t('admin.votes.actions.create') }}
         </InputButton>
       </div>
     </div>
@@ -202,7 +207,7 @@ function move(voteId, move) {
           enabled: true,
           trigger: 'enter',
           skipDiacritics: true,
-          placeholder: 'Search this table'
+          placeholder: $t('admin.votes.search.placeholder')
         }"
         :sort-options="{
           enabled: true,
@@ -212,60 +217,60 @@ function move(voteId, move) {
         <span v-if="props.column.field == 'actions' && !reordering" class="-m-1 block w-32">
           <ButtonOptions>
             <InputButton v-if="props.row.closed_at && props.row.debate" @click="closeDebate(props.row.id)" size="sm" variant="red" flat block class="whitespace-nowrap">
-              Stop
+              {{ $t('admin.votes.actions.stop') }}
             </InputButton>
             <InputButton v-else-if="props.row.closed_at && !props.row.open" @click="openDetails(props.row.id)" size="sm" variant="gray" flat block class="whitespace-nowrap">
-              Results
+              {{ $t('admin.votes.actions.results') }}
             </InputButton>
             <InputButton v-else-if="!props.row.open && !props.row.debate" @click="openDebate(props.row.id)" size="sm" variant="yellow" flat block class="whitespace-nowrap">
-              Next Up
+              {{ $t('admin.votes.actions.next_up') }}
             </InputButton>
             <InputButton v-else-if="!props.row.open && props.row.debate" @click="openVote(props.row.id)" size="sm" variant="green" flat block class="whitespace-nowrap">
-              Vote
+              {{ $t('admin.votes.actions.open') }}
             </InputButton>
             <InputButton v-else @click="closeVote(props.row.id)" size="sm" variant="red" flat block class="whitespace-nowrap">
-              Close
+              {{ $t('admin.votes.actions.close') }}
             </InputButton>
             <template #options>
               <button @click="openVote(props.row.id)" v-if="!props.row.debate && !props.row.closed_at">
                 <Icon icon="ri:hand" />
-                Open vote
+                {{ $t('admin.votes.actions.open_vote') }}
               </button>
               <button @click="closeDebate(props.row.id)" v-if="props.row.debate">
                 <Icon icon="ri:stop-circle-line" />
-                {{ props.row.closed_at ? 'Stop highlighting' : 'Close debate' }}
+                {{ props.row.closed_at ? $t('admin.votes.actions.stop_highlighting') : $t('admin.votes.actions.close_debate') }}
               </button>
               <button @click="openDebate(props.row.id)" v-if="!props.row.debate && props.row.closed_at">
                 <Icon icon="ri:slideshow-3-line" />
-                Highlight
+                {{ $t('admin.votes.actions.highlight') }}
               </button>
               <button @click="reopenVote(props.row.id)" v-if="!!props.row.closed_at">
                 <Icon icon="ri:hand" />
-                Reopen vote
+                {{ $t('admin.votes.actions.reopen') }}
               </button>
               <button @click="cloneVote(props.row.id)" v-if="props.row.type === 'options'">
                 <Icon icon="ri:file-copy-2-line" />
-                Clone this vote
+                {{ $t('admin.votes.actions.duplicate') }}
               </button>
               <button @click="reorder(props.row.id)">
                 <Icon icon="nrk:reorder" />
-                Reorder
+                {{ $t('admin.votes.actions.reorder') }}
               </button>
               <button @click="deleteVote(props.row)" class="text-red">
                 <Icon icon="ri:delete-bin-2-line" />
-                Delete vote
+                {{ $t('admin.votes.actions.delete') }}
               </button>
             </template>
         </ButtonOptions>
         </span>
         <span v-if="props.column.field == 'actions' && reordering == props.row.id" class="-m-1 flex gap-2 w-32">
-          <InputButton @click="move(props.row.id, 'up')" title="Move up" flat variant="gray">
+          <InputButton @click="move(props.row.id, 'up')" :title="$t('admin.votes.actions.move_up')" flat variant="gray">
             <Icon icon="ri:arrow-up-line" />
           </InputButton>
-          <InputButton @click="move(props.row.id, 'down')" title="Move down" flat variant="gray">
+          <InputButton @click="move(props.row.id, 'down')" :title="$t('admin.votes.actions.move_down')" flat variant="gray">
             <Icon icon="ri:arrow-down-line" />
           </InputButton>
-          <InputButton @click="reordering = null" title="Finish reordering" flat variant="green">
+          <InputButton @click="reordering = null" :title="$t('admin.votes.actions.finish_reordering')" flat variant="green">
             <Icon icon="ri:check-fill" />
           </InputButton>
         </span>
@@ -276,7 +281,9 @@ function move(voteId, move) {
           </template>
           <template v-else-if="props.row.closed_at">
             <span :class="['result-color', 'color-gray']" />
-            <span class="text-gray-600">No winner</span>
+            <span class="text-gray-600">
+              {{ $t('admin.votes.results.no_winner') }}
+            </span>
           </template>
         </span>
         <span v-else-if="props.column.field == 'name'" class="flex gap-2 items-center">
@@ -292,10 +299,10 @@ function move(voteId, move) {
             {{ formatWeekTime(props.formattedRow[props.column.field]) }}
           </span>
           <span v-else-if="props.row.debate" class="text-center block text-green-dark font-bold">
-            Debating...
+            {{ $t('admin.votes.status.debating') }}
           </span>
           <span v-else-if="props.row.open" class="text-center block text-green-dark font-bold">
-            Ongoing...
+            {{ $t('admin.votes.status.ongoing') }}
           </span>
         </span>
         <span v-else>

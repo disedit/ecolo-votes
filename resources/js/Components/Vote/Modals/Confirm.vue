@@ -52,10 +52,10 @@ function updateReveal (status) {
 <template>
   <GlobalModal @close="emit('close')" @opened="focusCode" bottom swipe-to-close="down">
     <template #title>
-      <h1>Confirm your vote</h1>
+      <h1>{{ $t('voter.confirm.title') }}</h1>
     </template>
     <div v-if="!ballot">
-      Please select an option
+      {{ $t('voter.confirm.empty') }}
     </div>
     <form v-else @submit.prevent="submit" class="flex flex-col gap-4 mt-6">
       <div
@@ -63,7 +63,7 @@ function updateReveal (status) {
         :class="[
           'option-block py-6 flex flex-col items-center font-bold',
           { secret: vote.secret || !revealed, 'text-lg': vote.type !== 'yesno', 'text-xl': vote.type === 'yesno' },
-          { 'option-no': ballot[0].is_no, 'option-abstain': ballot[0].is_abstain, 'option-yes': vote.type === 'yesno' && !ballot[0].is_no && !ballot[0].is_abstain }
+          optionClasses(ballot[0], vote)
         ]"
       >
         <div class="flex">
@@ -81,10 +81,12 @@ function updateReveal (status) {
         </ul>
       </div>
       <div v-else class="bg-pink p-2 font-bold">
-        Select at least one option to vote
+        {{ $t('voter.confirm.empty') }}
       </div>
       <div v-if="!codeException && ballot.length > 0">
-        <p class="mb-2">Enter the code displayed on screen</p>
+        <p class="mb-2">
+          {{ $t('voter.confirm.code') }}
+        </p>
         <div class="relative">
           <Icon icon="icons8:key" class="absolute text-xl top-3 left-2" />
           <TextInput
@@ -106,9 +108,9 @@ function updateReveal (status) {
         </div>
       </div>
       <InputButton v-if="ballot.length > 0" type="submit" size="lg" :loading="submitting" :disabled="submitting" flat>
-        Cast Vote <span v-if="vote.votes > 1">&times; {{ vote.votes }}</span>
+        {{ $t('voter.confirm.button') }} <span v-if="vote.votes > 1">&times; {{ vote.votes }}</span>
         <template #loading>
-          Submitting...
+          {{ $t('voter.confirm.submitting') }}
         </template>
       </InputButton>
     </form>

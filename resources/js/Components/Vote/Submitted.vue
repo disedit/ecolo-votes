@@ -14,7 +14,7 @@ defineProps({
       <Icon icon="line-md:circle-to-confirm-circle-transition" class="text-5xl" />
     </div>
     <p class="text-lg my-6 text-center">
-      Your vote has been submitted.
+      {{ $t('form.submitted.title') }}
     </p>
     <div :class="['flex flex-col gap-4', { 'text-xl': vote.type === 'yesno', 'text-lg': vote.type !== 'yesno' }]">
       <RevealSecret

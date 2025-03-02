@@ -13,13 +13,13 @@ defineProps({
       <li v-if="show.includes('vote')">
         <Link href="/vote">
           <Icon icon="ri:hand" class="shrink-0" />
-          Vote
+          {{ $t('menu.vote') }}
         </Link>
       </li>
       <li v-if="show.includes('votes')">
         <Link href="/votes">
           <Icon icon="ri:file-list-3-line" class="shrink-0" />
-          Results
+          {{ $t('menu.results') }}
         </Link>
       </li>
     </ul>

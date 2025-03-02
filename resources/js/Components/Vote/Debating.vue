@@ -16,7 +16,7 @@ defineProps({
     </p>
 
     <p class="mt-6 mb-3">
-      Available options:
+      {{ $t('voter.debate.available_options') }}
     </p>
     <div class="flex gap-2 flex-wrap">
       <span v-for="option in vote.options" :key="option.id" :class="['flex items-center gap-2 bg-white py-1 px-2 font-bold', optionClasses(option, vote)]">
@@ -26,10 +26,10 @@ defineProps({
     </div>
 
     <p class="mt-12 opacity-50" v-if="!vote.closed_at">
-      Voting will open shortly...
+      {{ $t('voter.debate.vote_will_open') }}
     </p>
     <p class="mt-12 opacity-50" v-else>
-      Voting concluded.
+      {{ $t('voter.debate.vote_will_open') }}
     </p>
   </div>
 </template>

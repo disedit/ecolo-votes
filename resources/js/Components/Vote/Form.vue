@@ -50,11 +50,8 @@ function openConfirmModal() {
     <p class="opacity-75 mb-2" v-if="vote.subtitle">
       {{ vote.subtitle }}
     </p>
-    <p class="opacity-75 mb-2" v-if="vote.max_votes > 1">
-      Select up to {{ vote.max_votes }} options
-    </p>
-    <p class="opacity-75 mb-2" v-else>
-      Select one option
+    <p class="opacity-75 mb-2">
+      {{ $t('voter.form.select_max', vote.max_votes, { max: vote.max_votes }) }}
     </p>
     <form @submit.prevent="openConfirmModal" class="flex flex-col">
       <VoteOptions
@@ -64,7 +61,8 @@ function openConfirmModal() {
       />
       <div :class="[{ 'sticky bottom-site shadow-mario': ballotIsGoodToGo }]">
         <InputButton type="submit" variant="yellow" block size="lg" class="mt-auto" flat>
-          Vote <span v-if="vote.votes > 1">&times; {{ vote.votes }}</span>
+          {{ $t('voter.form.button') }}
+          <span v-if="vote.votes > 1">&times; {{ vote.votes }}</span>
         </InputButton>
       </div>
     </form>

@@ -62,7 +62,7 @@ const { x, y, style } = useDraggable(draggable, {
         <h2 class="font-mono font-bold uppercase px-4 grow cursor-move">
           <span v-if="vote.open" class="flex items-center gap-2">
             <Icon icon="svg-spinners:ring-resize" />
-            Ongoing vote
+            {{ $t('admin.votes.ongoing.title') }}
             <span v-if="minimized">
               &gt;
               {{ vote.name }}
@@ -71,15 +71,15 @@ const { x, y, style } = useDraggable(draggable, {
           <span v-else>Just closed</span>
         </h2>
         <div class="ms-auto flex gap-1">
-          <button @click="minimized = !minimized" :title="minimized ? 'Maximize' : 'Minimize'" class="text-lg">
+          <button @click="minimized = !minimized" :title="minimized ? $t('admin.votes.actions.maximize') : $t('admin.votes.actions.minimize')" class="text-lg">
             <Icon v-if="!minimized" icon="la:window-minimize" />
             <Icon v-else icon="la:window-maximize" />
           </button>
           <InputButton v-if="vote.open" variant="red" @click="emit('close', vote.id)" flat>
-            Close vote
+            {{ $t('admin.votes.actions.close_vote') }}
           </InputButton>
           <InputButton v-else variant="yellow" @click="emit('hide')" flat>
-            Hide
+            {{ $t('admin.votes.actions.hide') }}
           </InputButton>
         </div>
       </div>

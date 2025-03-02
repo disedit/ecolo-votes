@@ -70,7 +70,10 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
 <template>
   <div>
     <label for="voteOptions" class="font-mono uppercase text-gray-900 flex gap-2 items-center">
-      Options <span class="ms-auto text-gray-600">(required)</span>
+      {{ $t('admin.votes.create.options') }}
+      <span class="ms-auto text-gray-600">
+        {{ $t('inputs.required') }}
+      </span>
     </label>
     <div class="flex flex-col gap-2 my-2">
       <div v-for="(option, i) in options" :key="i" class="flex gap-2">
@@ -125,13 +128,19 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
           :disabled="!option.enabled"
         />
         <InputButton :disabled="i === 0" type="button" icon="ri:arrow-up-line" variant="gray" flat @click="moveUp(i)" title="Move up">
-          <span class="sr-only">Move up</span>
+          <span class="sr-only">
+            {{ $t('admin.votes.actions.move_up') }}
+          </span>
         </InputButton>
         <InputButton :disabled="i === options.length - 1" type="button" icon="ri:arrow-down-line" variant="gray" flat @click="moveDown(i)" title="Move down">
-          <span class="sr-only">Move down</span>
+          <span class="sr-only">
+            {{ $t('admin.votes.actions.move_down') }}
+          </span>
         </InputButton>
         <InputButton :disabled="options.length === 1" type="button" icon="ri:delete-bin-2-line" variant="soft-red" flat @click="removeOption(i)" title="Remove">
-          <span class="sr-only">Remove</span>
+          <span class="sr-only">
+            {{ $t('admin.votes.actions.remove') }}
+          </span>
         </InputButton>
       </div>
       <div class="flex gap-2">
@@ -143,7 +152,7 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
           label-class="px-4 bg-gray-200"
         />
         <div class="border border-gray-500 p-2 bg-gray-100 grow">
-          No
+          {{ $t('options.no') }}
         </div>
       </div>
       <div class="flex gap-2">
@@ -155,16 +164,16 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
           label-class="px-4 bg-gray-200"
         />
         <div class="border border-gray-500 p-2 bg-gray-100 grow">
-          Abstain
+          {{ $t('options.abstain') }}
         </div>
       </div>
     </div>
     <div class="flex gap-4 justify-between">
       <InputButton type="button" size="sm" variant="gray" flat icon="ri:add-fill" @click="addOption">
-        Add option
+        {{ $t('admin.votes.actions.add_option') }}
       </InputButton>
       <InputButton @click="openOptionsModal" type="button" size="sm" variant="gray" flat icon="ri:folder-upload-line">
-        Load options
+        {{ $t('admin.votes.actions.load_options') }}
       </InputButton>
     </div>
   </div>

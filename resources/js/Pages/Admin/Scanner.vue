@@ -8,9 +8,11 @@ defineOptions({ layout: GrayLayout })
 </script>
 
 <template>
-  <Head title="Badge scanner" />
+  <Head :title="$t('admin.scanner.title')" />
   <div class="container-xl">
-    <AdminNavigation>Badge scanner</AdminNavigation>
+    <AdminNavigation>
+      {{ $t('admin.scanner.title') }}
+    </AdminNavigation>
 
     <div class="container padded-x py-4 flex gap-4 items-center">  
       <QrScanner />

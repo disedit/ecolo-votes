@@ -1,18 +1,26 @@
 <script setup>
+import { computed } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import { Icon } from '@iconify/vue'
 
-defineProps({
+const props = defineProps({
   variant: { type: String, default: 'yellow' },
   size: { type: String, default: 'md' },
   flat: { type: Boolean, default: false },
   block: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
-  icon: { type: String, default: null }
+  icon: { type: String, default: null },
+  href: { type: String, default: null }
 })
+
+const tag = computed(() => props.href ? Link : 'button')
 </script>
 
 <template>
-  <button :class="[
+  <Component
+    :is="tag"
+    :href="href"
+    :class="[
     'button',
     'font-mono uppercase',
     `button-${variant}`,
@@ -30,7 +38,7 @@ defineProps({
     <template v-else>
       <slot />
     </template>
-  </button>
+  </Component>
 </template>
 
 <style lang="scss" scoped>
@@ -41,6 +49,7 @@ defineProps({
   font-size: var(--btn-text-size, var(--text-base));
   font-weight: bold;
   transition: .25s ease;
+  text-decoration: none;
 
   &:hover:not(:disabled) {
     background: var(--btn-bg-color-hover, var(--btn-bg-color, var(--egp-gray-200)));

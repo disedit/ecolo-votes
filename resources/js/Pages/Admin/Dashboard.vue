@@ -11,32 +11,34 @@ defineProps({
 </script>
 
 <template>
-  <Head title="Admin dashboard" />
+  <Head :title="$t('admin.title')" />
 
   <div class="container container-lg padded">
-    <h1 class="font-headline uppercase text-2xl">Admin</h1>
+    <h1 class="font-headline uppercase text-2xl">
+      {{ $t('admin.title') }}
+    </h1>
     <div class="grid md:grid-cols-3 gap-4 mt-5" v-if="auth.user.role === 'admin'">
       <Link href="/admin/credentials" class="dashboard-link">
         <Icon icon="carbon:credentials" class="text-xl" />
-        Access Control
+        {{ $t('admin.dashboard.access_control') }}
       </Link>
       <Link href="/admin/codes" class="dashboard-link">
-        <Icon icon="ri:fullscreen-line" class="text-xl" />
-        QR Codes
+        <Icon icon="ri:qr-code-line" class="text-xl" />
+        {{ $t('admin.dashboard.codes') }}
       </Link>
       <Link href="/admin/votes" class="dashboard-link">
         <Icon icon="ri:hand" class="text-xl" />
-        Vote manager
+        {{ $t('admin.dashboard.vote_manager') }}
       </Link>
       <Link href="/admin/screen" class="dashboard-link">
         <Icon icon="ri:fullscreen-line" class="text-xl" />
-        Screen
+        {{ $t('admin.dashboard.screen') }}
       </Link>
     </div>
     <div class="grid md:grid-cols-3 gap-4 mt-5" v-if="auth.user.role === 'credentials'">
       <Link href="/admin/scanner" class="dashboard-link">
         <Icon icon="carbon:credentials" class="text-xl" />
-        Badge scanner
+        {{ $t('admin.dashboard.badge_scanner') }}
       </Link>
     </div>
   </div>

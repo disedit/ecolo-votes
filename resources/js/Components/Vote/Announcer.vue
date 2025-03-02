@@ -2,16 +2,19 @@
 import { ref, watch, onUnmounted } from 'vue'
 import { Icon } from '@iconify/vue'
 import { Vue3Marquee } from 'vue3-marquee'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
   vote: { type: Object, default: null }
 })
 
+const { t } = useI18n()
+
 watch(() => props.vote, (newVote, prevVote) => {
   if ((newVote && newVote.open && !prevVote) || (newVote && prevVote && !prevVote.open && newVote.open)) {
-    announce([['mdi:vote-outline', 'New vote just opened']], 5000)
+    announce([['mdi:vote-outline', t('voter.announcer.new_vote')]], 5000)
   } else if (prevVote && !newVote) {
-    announce([['ri:hand', 'Vote just closed'], ['ri:bar-chart-horizontal-fill', 'Check the screen for results']], 10000)
+    announce([['ri:hand', t('voter.announcer.vote_closed')], ['ri:bar-chart-horizontal-fill', t('voter.announcer.check-results')]], 10000)
   }
 }, { deep: true })
 

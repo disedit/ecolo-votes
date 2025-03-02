@@ -28,7 +28,7 @@ const offline = computed(() => ['disconnected', 'unavailable'].includes(status.v
   }]" aria-live="assertive">
     <PulseIcon v-if="!loading" :color="offline ? 'red' : 'green'" :still="offline" />
     <Icon v-else icon="line-md:loading-loop" />
-    {{ loading ? 'Loading...' : status }}
+    {{ loading ? $t('global.loading') : $t('voter.status.' + status) }}
     <button @click="emit('refresh')" class="ms-auto" title="Refresh" aria-label="Refresh">
       <Icon icon="ooui:reload" />
     </button>

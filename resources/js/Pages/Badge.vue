@@ -74,11 +74,11 @@ function throwConfetti () {
             <Vue3Marquee v-if="showCheckedIn" clone class="bg-yellow font-bold">
                 <div class="flex gap-2 items-center p-2 lg:p-4">
                     <Icon icon="tabler:confetti" />
-                    Welcome
+                    {{ $t('badge.welcome.O') }}
                 </div>
                 <div class="flex gap-2 items-center p-2 lg:p-4">
                     <Icon icon="mdi:emoji-excited-outline" />
-                    You have checked in
+                    {{ $t('badge.welcome.checked_in') }}
                 </div>
             </Vue3Marquee>
         </Transition>
@@ -87,8 +87,7 @@ function throwConfetti () {
     <Transition name="swipe">
         <div v-if="showWelcome" class="fixed bg-pink inset-0 z-10 p-site" @click="showWelcome = false">
             <h2 class="font-headline uppercase pt-28 text-3xl text-balance  leading-tight">
-                Welcome to the 39th Congress
-                of the European Green Party
+                {{ $t('badge.welcome_long.O') }}
             </h2>
         </div>
     </Transition>
@@ -96,7 +95,7 @@ function throwConfetti () {
     <div class="lg:min-h-fill bg-gray-200 flex flex-col items-center justify-center p-4">
         <Transition name="slide">
             <div v-if="!attendee.checked_in && !showCheckedIn" :class="['px-site pb-4 text-sm opacity-75', { '-mt-10': !showCheckedIn }]">
-                Show this ticket at the entrance to check in
+                {{ $t('badge.show_ticket') }}
             </div>
         </Transition>
         <div class="grid grid-cols-1 gap-4 w-full max-w-[1000px]">

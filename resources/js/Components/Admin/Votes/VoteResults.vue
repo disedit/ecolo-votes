@@ -26,14 +26,24 @@ const percentage = computed(() => {
       <table class="table table-data w-full">
         <tbody>
           <tr>
-            <th width="12%">Codes in use</th>
-            <td width="8%">{{ vote.results.in_use }} / {{ vote.results.codes }}</td>
-            <th width="13%">Codes voted</th>
-            <td width="7%">{{ vote.results.totals.turnout }}</td>
-            <th width="13%">Percentage</th>
-            <td width="7%">{{ formatPercentage(percentage) }}</td>
-            <th width="13%">Votes cast</th>
-            <td width="7%">{{ vote.results.totals.votes_cast }}</td>
+            <th width="25%">
+              {{ $t('results.stats.codes_in_use') }}
+            </th>
+            <td width="15%">
+              {{ vote.results.in_use }} / {{ vote.results.codes }}
+            </td>
+            <th width="25%">
+              {{ $t('results.stats.codes_voted') }}
+            </th>
+            <td width="15%">
+              {{ vote.results.totals.turnout }} ({{ formatPercentage(percentage) }})
+            </td>
+            <th width="25%">
+              {{ $t('results.stats.votes_cast') }}
+            </th>
+            <td width="15%">
+              {{ vote.results.totals.votes_cast }}
+            </td>
           </tr>
         </tbody>
       </table>
@@ -44,9 +54,9 @@ const percentage = computed(() => {
     <table class="table table-data w-full">
       <tbody>
         <tr>
-          <th>Majority needed</th>
+          <th>{{ $t('results.stats.majority_needed') }}</th>
           <td>{{ majorityName(vote) }}</td>
-          <th>To select</th>
+          <th>{{ $t('results.stats.to_select') }}</th>
           <td>{{ vote.max_votes }}</td>
         </tr>
       </tbody>

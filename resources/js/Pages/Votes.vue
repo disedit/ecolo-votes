@@ -41,13 +41,15 @@ function showVote (vote) {
 <template>
     <Head title="Vote record" />
     <div class="container padded">
-      <h1 class="font-headline uppercase text-xl mb-12">Votes</h1>
-      <div class="votes-header">
+      <h1 class="font-headline uppercase text-xl mb-12">
+        {{ $t('results.page.title') }}
+      </h1>
+      <div class="votes-header uppercase">
         <div>
-          VOTE
+          {{ $t('results.page.columns.vote') }}
         </div>
         <div>
-          RESULT
+          {{ $t('results.page.columns.vote') }}
         </div>
         <div />
       </div>
@@ -67,14 +69,15 @@ function showVote (vote) {
                 --
               </div>
               <div v-else-if="vote.open" class="option ongoing">
-                Ongoing
+                {{ $t('voter.status.ongoing_short') }}
               </div>
               <div v-else class="option upcoming">
-                Upcoming
+                {{ $t('voter.status.upcoming_short') }}
               </div>
             </div>
             <div class="vote-more">
               +
+              <span class="sr-only">{{ $t('results.page.more') }}</span>
             </div>
           </button>
         </li>

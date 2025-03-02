@@ -32,13 +32,13 @@ function focusNumberInput () {
 <template>
   <GlobalModal :width="700" @close="emit('close')" @opened="focusNumberInput">
     <template #title>
-      <h1>Create codes</h1>
+      <h1>{{ $t('admin.codes.create.title') }}</h1>
     </template>
     <form @submit.prevent="createCodes" class="flex flex-col gap-4 text-rbase">
       <TextInput
         type="number"
         name="name"
-        label="Amount of codes to generate"
+        :label="$t('admin.codes.create.amount')"
         required
         v-model="form.amount"
         input-class="text-lg"
@@ -48,7 +48,7 @@ function focusNumberInput () {
         <li v-for="error in errors.errors">{{ error[0] }}</li>
       </ul>
       <InputButton type="submit" flat :disabled="submitting">
-        {{ submitting ? 'Generating codes... ' : 'Generate codes' }}
+        {{ submitting ? $t('admin.codes.create.generating') : $t('admin.codes.create.generate') }}
       </InputButton>
     </form>
   </GlobalModal>

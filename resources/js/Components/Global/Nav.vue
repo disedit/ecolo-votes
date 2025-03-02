@@ -5,6 +5,7 @@ import { Icon } from '@iconify/vue'
 import { useWindowScroll } from '@vueuse/core'
 import EGPLogo from '@/Components/Global/EGPLogo.vue'
 import DropdownMenu from '@/Components/Inputs/DropdownMenu.vue'
+import Language from './Language.vue'
 
 const props = defineProps({
   details: { type: Boolean, default: false },
@@ -35,7 +36,8 @@ watch(y, () => {
       <EGPLogo class="nav-logo text-white" />
     </Link>
     <div class="reveal-on-scroll nav-title font-headline uppercase md:mx-6">
-      {{ edition.title }}
+      <span class="hidden md:inline">{{ edition.title }}</span>
+      <span class="md:hidden">{{ edition.title_short }}</span>
     </div>
     <div class="nav-details font-headline uppercase font-bold gap-6">
       <div class="flex items-center gap-2 reveal-on-scroll" style="--delay: .15s">
@@ -47,30 +49,22 @@ watch(y, () => {
         {{ edition.dates }}
       </div>
     </div>
-    <div class="ms-auto">
-      <DropdownMenu class="nav-dropdown">
-        Français
-
-        <template #items>
-          <Link href="/admin">
-            Deutsch
-          </Link>
-        </template>
-      </DropdownMenu>
+    <div class="nav-lang ms-auto">
+      <Language />
     </div>
     <div v-if="user" class="nav-user">
       <DropdownMenu class="nav-dropdown">
-        User
+        {{ $t('nav.user') }}
 
         <template #items>
           <Link v-if="['admin', 'credentials'].includes(user.role)" href="/admin">
             <Icon icon="ri:lock-line" />
-            Admin
+            {{ $t('admin.title') }}
           </Link>
           <hr />
           <Link href="/logout" method="post" as="button" type="button">
             <Icon icon="ri:logout-box-r-line" />
-            Log out
+            {{ $t('nav.logout') }}
           </Link>
         </template>
       </DropdownMenu>
@@ -136,7 +130,8 @@ watch(y, () => {
       line-height: 1;
     }
 
-    &-user {
+    &-user,
+    &-lang {
       font-size: var(--text-sm);
       margin-right: -.5rem;
     }

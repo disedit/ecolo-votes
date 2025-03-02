@@ -37,7 +37,7 @@ function login() {
                 {{ flash.message }}
             </p>
             <p v-else class="text-base">
-                Enter code
+                {{ $t('code_login.label') }}
             </p>
             <TextInput
                 type="text"
@@ -55,10 +55,10 @@ function login() {
 
             <div class="flex justify-end">
                 <ButtonInput type="submit" size="md" :loading="form.processing" :disabled="form.processing">
-                    Enter -&gt;
+                    {{ $t('code_login.button') }} -&gt;
 
                     <template #loading>
-                        Submitting request...
+                        {{ $t('code_login.submitting') }}
                     </template>
                 </ButtonInput>
             </div>

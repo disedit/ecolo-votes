@@ -34,7 +34,7 @@ const isDisabled = (option) => {
   <div :class="['vote-options', `type-${vote.type}`, { multiple, secret: vote.secret, 'max-votes-reached': maxVotesReached }]">
     <ul class="flex flex-col gap-2">
       <li v-for="option in vote.options" :key="option.id" :class="['vote-option', { selected: isSelected(option.id), disabled: isDisabled(option), ...optionClasses(option, vote) }]">
-        <label :title="isDisabled(option) ? 'Unselect an option to select this option' : null">
+        <label :title="isDisabled(option) ? $t('voter.form.unselect') : null">
           <input
             :type="multiple ? 'checkbox' : 'radio'"
             name="voteOptions"

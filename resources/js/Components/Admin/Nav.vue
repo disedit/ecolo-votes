@@ -1,9 +1,9 @@
 <script setup>
-import { Head, Link, router } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3'
 </script>
 
 <template>
   <div class="container padded">
-    <Link href="/admin" class="font-bold">Admin</Link> / <slot />
+    <Link href="/admin" class="font-bold">{{ $t('admin.title') }}</Link> / <slot />
   </div>
 </template>

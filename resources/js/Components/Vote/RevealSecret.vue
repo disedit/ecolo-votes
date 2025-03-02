@@ -26,7 +26,7 @@ watch(hideIcon, () => emit('update', { revealed: reveal.value, hideIcon: hideIco
 </script>
 
 <template>
-  <Tooltip :text="reveal ? 'Click to hide' : 'Click to reveal'" centered class="block">
+  <Tooltip :text="reveal ? $t('voter.reveal.hide') : $t('voter.reveal.reveal')" centered class="block">
     <button
       @click="reveal = !reveal; hideIcon = false"
       type="button"

@@ -41,7 +41,7 @@ function onBeforeClose() {
     <div class="base-modal-card">
       <div class="base-modal-title flex gap-2 justify-between mb-4">
         <slot name="title" />
-        <button @click="emit('close')" title="Close modal" class="base-modal-close text-lg hover:text-red">
+        <button @click="emit('close')" :title="$t('global.close_modal')" class="base-modal-close text-lg hover:text-red">
           <Icon icon="ri:close-fill" />
         </button>
       </div>

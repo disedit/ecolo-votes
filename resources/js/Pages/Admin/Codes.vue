@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
+import { useI18n } from 'vue-i18n'
 import { VueGoodTable } from 'vue-good-table-next'
 import { Icon } from '@iconify/vue'
 import { useModal } from 'vue-final-modal'
@@ -12,17 +13,20 @@ import HoverButton from '@/Components/Inputs/HoverButton.vue'
 import CreateCodes from '@/Components/Admin/Codes/Modals/CreateCodes.vue'
 
 defineOptions({ layout: GrayLayout })
+
 const props = defineProps({
   codes: { type: Array, required: true }
 })
 
+const { t } = useI18n()
+
 const columns = [
   {
-    label: 'Code',
+    label: t('admin.codes.columns.code'),
     field: 'code',
   },
   {
-    label: 'Picked up at',
+    label: t('admin.codes.columns.pickedup_at'),
     field: 'pickedup_at',
     type: 'date',
     dateInputFormat: 'yyyy-MM-dd HH:mm:ss',
@@ -30,7 +34,7 @@ const columns = [
     width: '200px',
   },
   {
-    label: 'Used at',
+    label: t('admin.codes.columns.used_at'),
     field: 'used_at',
     type: 'date',
     dateInputFormat: 'yyyy-MM-dd HH:mm:ss',
@@ -38,7 +42,7 @@ const columns = [
     width: '200px',
   },
   {
-    label: 'Actions',
+    label: t('admin.codes.columns.actions'),
     field: 'actions',
     width: '100px',
   },
@@ -83,19 +87,23 @@ const { open, close, patchOptions } = useModal({
 <template>
   <Head title="Voting Codes" />
   <div class="container-xl">
-    <AdminNavigation>Vote Codes</AdminNavigation>
+    <AdminNavigation>
+      {{ $t('admin.codes.title') }}
+    </AdminNavigation>
 
     <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
       <div class="container padded-x py-4 flex gap-4 items-center">  
         <QrScanner scanning="codes" @close="reload" />
         <span class="font-mono text-sm uppercase ms-auto md:ms-0">
-          <strong>{{ codes.length }}</strong> total, <strong>{{ totalPickedUp }}</strong> picked up, <strong>{{ totalUsed }}</strong> used
+          <strong>{{ codes.length }}</strong> {{ $t('admin.codes.stats.total') }},
+          <strong>{{ totalPickedUp }}</strong> {{ $t('admin.codes.stats.picked_up') }},
+          <strong>{{ totalUsed }}</strong> {{ $t('admin.codes.stats.used') }}
         </span>
         <InputButton @click="open" icon="ri:add-large-fill" class="ms-auto">
-          Create codes
+          {{ $t('admin.codes.actions.create') }}
         </InputButton>
-        <InputButton @click="print" icon="ri:printer-line">
-          Print codes
+        <InputButton href="/admin/codes/print" icon="ri:printer-line">
+          {{ $t('admin.codes.actions.print') }}
         </InputButton>
       </div>
     </div>
@@ -108,22 +116,25 @@ const { open, close, patchOptions } = useModal({
           enabled: true,
           trigger: 'enter',
           skipDiacritics: true,
-          placeholder: 'Search this table'
+          placeholder: $t('admin.codes.search.placeholder')
         }"
         :sort-options="{
           enabled: true,
         }"
       >
       <template #table-row="props">
-        <span v-if="props.column.field == 'actions'" class="-m-1 block w-32">
+        <span v-if="props.column.field == 'code'" class="font-mono">
+          {{ props.formattedRow[props.column.field] }}
+        </span>
+        <span v-else-if="props.column.field == 'actions'" class="-m-1 block w-32">
           <InputButton v-if="!props.row.pickedup_at" @click="pickup(props.row.id)" size="sm" variant="green" flat block class="whitespace-nowrap">
-            Activate
+            {{ $t('admin.codes.actions.activate') }}
           </InputButton>
           <HoverButton
             v-else
             @click="leavedown(props.row.id)"
             :variant="{ default: 'pine', hover: 'red' }"
-            :label="{ default: 'Activate', hover: 'Deactivate' }"
+            :label="{ default: 'Activate', hover: $t('admin.codes.actions.deactivate') }"
             size="sm"
             flat
             block

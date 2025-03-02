@@ -100,8 +100,8 @@ function clearCard () {
       <div v-if="cameraOpen" class="scanner-window">
         <div class="scanner-tools bg-black/50">
           <select class="scanner-mode bg-transparent text-white border-white focus:border-yellow focus:ring-yellow focus:ring-2 font-mono" disabled>
-            <option value="credentials" :selected="scanning === 'credenials'">Badges</option>
-            <option value="codes" :selected="scanning === 'codes'">Vote codes</option>
+            <option value="credentials" :selected="scanning === 'credenials'">{{ $t('admin.scanner.badges') }}</option>
+            <option value="codes" :selected="scanning === 'codes'">{{ $t('admin.scanner.codes') }}</option>
           </select>
           <select v-model="mode" name="mode" class="scanner-mode bg-transparent text-white border-white focus:border-yellow focus:ring-yellow focus:ring-2 font-mono">
             <option value="IN">IN</option>
@@ -116,7 +116,7 @@ function clearCard () {
           <div v-if="loading" class="scanner-card loading">
             <div class="scanner-card-status">
               <div class="scanner-card-message">
-                Loading...
+                {{ $t('global.loading') }}
               </div>
             </div>
           </div>

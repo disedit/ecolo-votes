@@ -31,24 +31,26 @@ const emit = defineEmits(['close'])
 
     <div v-if="!fullVote" class="text-lg text-gray-500 flex gap-2 items-center">
       <Icon icon="line-md:loading-loop" />
-      Loading...
+      {{ $t('global.loading') }}
     </div>
     <div v-else-if="fullVote.open">
       <div class="text-lg text-green-dark flex gap-2 items-center">
         <Icon icon="line-md:loading-loop" />
-        Vote ongoing...
+        {{ $t('voter.status.ongoing') }}
       </div>
       <div>
-        <Link href="/vote">Cast your vote</Link>
+        <Link href="/vote">
+          {{ $t('voter.form.button_long') }}
+        </Link>
       </div>
     </div>
     <div v-else-if="!fullVote.closed_at">
       <p class="text-lg text-gray-500 flex gap-2 items-center">
-        Vote pending...
+        {{ $t('voter.status.pending') }}
       </p>
 
       <p class="mt-6 mb-3">
-      Available options:
+        {{ $t('voter.debate.available_options') }}
       </p>
       <div class="flex gap-2 flex-wrap">
         <span v-for="option in fullVote.options" :key="option.id" :class="['flex items-center gap-2 bg-gray-100 py-1 px-2 font-bold', optionClasses(option, fullVote)]">

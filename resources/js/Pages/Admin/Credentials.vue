@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
+import { useI18n } from 'vue-i18n'
 import { VueGoodTable } from 'vue-good-table-next'
 import { Icon } from '@iconify/vue'
 import { useModal } from 'vue-final-modal'
@@ -15,36 +16,39 @@ import LogModal from '@/Components/Admin/Credentials/Modals/Log.vue'
 import DetailsModal from '@/Components/Admin/Credentials/Modals/Details.vue'
 
 defineOptions({ layout: GrayLayout })
+
 const props = defineProps({
   attendees: { type: Object, required: true }
 })
 
+const { t } = useI18n()
+
 const columns = [
   {
-    label: 'First Name',
+    label: t('admin.credentials.columns.first_name'),
     field: 'first_name',
   },
   {
-    label: 'Last Name',
+    label: t('admin.credentials.columns.last_name'),
     field: 'last_name',
   },
   {
-    label: 'Type',
+    label: t('admin.credentials.columns.type'),
     field: 'type',
   },
   {
-    label: 'Group',
+    label: t('admin.credentials.columns.group'),
     field: 'group',
   },
   {
-    label: 'CheckedIn',
+    label: t('admin.credentials.columns.checked_in'),
     field: 'checked_in',
     type: 'date',
     dateInputFormat: 'yyyy-MM-dd HH:mm:ss',
     dateOutputFormat: 'EEE HH:mm',
   },
   {
-    label: 'Actions',
+    label: t('admin.credentials.columns.actions'),
     field: 'actions'
   },
 ]
@@ -104,15 +108,18 @@ function reload () {
 </script>
 
 <template>
-  <Head title="Credentials" />
+  <Head :title="$t('admin.credentials.title')" />
   <div class="container-xl">
-    <AdminNavigation>Access control</AdminNavigation>
+    <AdminNavigation>
+      {{ $t('admin.credentials.title') }}
+    </AdminNavigation>
 
     <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
       <div class="container padded-x py-4 flex gap-4 items-center">  
-        <QrScanner label="Scan badges" scanning="credentials" @close="reload" />
+        <QrScanner :label="$t('admin.credentials.actions.scan')" scanning="credentials" @close="reload" />
         <span class="font-mono text-sm uppercase ms-auto md:ms-0">
-          <strong>{{ rows.length }}</strong> total, <strong>{{ totalCheckedIn }}</strong> checked in
+          <strong>{{ rows.length }}</strong> {{ $t('admin.credentials.stats.total') }},
+          <strong>{{ totalCheckedIn }}</strong> {{ $t('admin.credentials.stats.checked_in') }}
         </span>
       </div>
     </div>
@@ -125,7 +132,7 @@ function reload () {
           enabled: true,
           trigger: 'enter',
           skipDiacritics: true,
-          placeholder: 'Search this table'
+          placeholder: $t('admin.credentials.search.placeholder')
         }"
         :sort-options="{
           enabled: true,
@@ -136,7 +143,7 @@ function reload () {
           <ButtonOptions>
             <Tooltip v-if="!props.row.checked_in" :text="props.row.votes > 0 && !props.row.first_checked_in ? 'Will be notified' : null">
               <InputButton @click="checkIn(props.row.id)" size="sm" variant="green" flat block class="whitespace-nowrap">
-                Check in
+                {{ $t('admin.credentials.actions.check_in') }}
               </InputButton>
             </Tooltip>
             <HoverButton
@@ -152,11 +159,11 @@ function reload () {
             <template #options>
               <button @click="openDetails(props.row.id)">
                 <Icon icon="ri:user-add-line" />
-                Details
+                {{ $t('admin.credentials.actions.details') }}
               </button>
               <button v-if="props.row.first_checked_in" @click="openLog(props.row.id)">
                 <Icon icon="ri:file-shield-2-line" />
-                Access log
+                {{ $t('admin.credentials.actions.access_log') }}
               </button>
             </template>
         </ButtonOptions>
