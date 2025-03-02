@@ -6,13 +6,18 @@ import SelectInput from '@/Components/Inputs/SelectInput.vue'
 import CheckboxInput from '@/Components/Inputs/CheckboxInput.vue'
 import CloneVote from '@/Components/Admin/Votes/Modals/CloneVote.vue'
 
+const props = defineProps({
+  regions: { type: Array, required: true }
+})
+
 const options = defineModel()
 const optionRefs = ref(null)
 const optionDescRefs = ref(null)
+const no = defineModel('no')
 const abstain = defineModel('abstain')
 
 function addOption() {
-  options.value.push({ name: '', description: '', gender: null, enabled: true })
+  options.value.push({ name: '', description: '', gender: null, region: null, enabled: true })
   nextTick(() => {
     optionRefs.value[optionRefs.value.length - 1].$refs.input.focus()
   })
@@ -52,12 +57,14 @@ const { open: openOptionsModal, close } = useModal({
       close()
     },
     onClone (newOptions) {
-      options.value = newOptions.filter(option => !option.is_abstain)
-        .map(option => ({ name: option.name, description: option.description, gender: option.gender, enabled: true }))
+      options.value = newOptions.filter(option => !option.is_abstain && !option.is_no)
+        .map(option => ({ name: option.name, description: option.description, gender: option.gender, region: option.region, enabled: true }))
       close()
     }
   }
 })
+
+const regionDropdown = props.regions.map(region => ({ value: region.id, label: region.name }))
 </script>
 
 <template>
@@ -83,6 +90,7 @@ const { open: openOptionsModal, close } = useModal({
           class="grow"
           ref="optionRefs"
           @keydown="handleKeydown($event, i, 'name')"
+          placeholder="Name"
         />
         <TextInput
           :name="`voteOptionDescription[${i}]`"
@@ -93,6 +101,15 @@ const { open: openOptionsModal, close } = useModal({
           class="grow"
           ref="optionDescRefs"
           @keydown="handleKeydown($event, i, 'description')"
+          placeholder="Description"
+        />
+        <SelectInput
+          :name="`voteOptionRegion[${i}]`"
+          :label="`Vote option ${i + 1} Region`"
+          label-sr-only
+          v-model="option.region"
+          :options="regionDropdown"
+          :disabled="!option.enabled"
         />
         <SelectInput
           :name="`voteOptionGender[${i}]`"
@@ -116,6 +133,18 @@ const { open: openOptionsModal, close } = useModal({
         <InputButton :disabled="options.length === 1" type="button" icon="ri:delete-bin-2-line" variant="soft-red" flat @click="removeOption(i)" title="Remove">
           <span class="sr-only">Remove</span>
         </InputButton>
+      </div>
+      <div class="flex gap-2">
+        <CheckboxInput
+          :name="`voteOptionDisabled[No]`"
+          :label="`No is enabled`"
+          label-sr-only
+          v-model="no"
+          label-class="px-4 bg-gray-200"
+        />
+        <div class="border border-gray-500 p-2 bg-gray-100 grow">
+          No
+        </div>
       </div>
       <div class="flex gap-2">
         <CheckboxInput

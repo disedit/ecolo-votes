@@ -5,7 +5,8 @@ import { VueGoodTable } from 'vue-good-table-next'
 import { Icon } from '@iconify/vue'
 import { useModal } from 'vue-final-modal'
 import { formatWeekTime } from '@/Composables/useDate.js'
-import { majorities } from '@/Components/Admin/Votes/majorities.js'
+import { majorityName } from '@/Components/Admin/Votes/majorities.js'
+import { optionClasses } from '@/Composables/useColors.js'
 import AdminNavigation from '@/Components/Admin/Nav.vue'
 import GrayLayout from '@/Layouts/GrayLayout.vue'
 import GlobalCard from '@/Components/Global/Card.vue'
@@ -19,7 +20,8 @@ defineOptions({ layout: GrayLayout })
 
 const props = defineProps({
   votes: { type: Array, required: true },
-  ongoing: { type: Object, default: null }
+  ongoing: { type: Object, default: null },
+  regions: { type: Array, required: true }
 })
 
 const columns = [
@@ -36,6 +38,11 @@ const columns = [
     label: 'Majority',
     field: 'majority',
     width: '200px'
+  },
+  {
+    label: 'Select',
+    field: 'max_votes',
+    width: '100px'
   },
   {
     label: 'Result',
@@ -62,6 +69,7 @@ const hideRecentlyClosedVote = ref(false)
 const { open, close, patchOptions } = useModal({
   component: CreateVote,
   attrs: {
+    regions: props.regions,
     onClose () { close() },
     onRefresh () {
       window.Echo.private('Votes').whisper('refreshVotes')
@@ -102,13 +110,15 @@ function createVote() {
 
 async function cloneVote(voteId) {
   const { data } = await window.axios.get(`/api/admin/votes/${voteId}`)
-  const options = data.options.filter(option => !option.is_abstain)
+  const options = data.options.filter(option => !option.is_abstain && !option.is_no)
         .map(option => ({
           name: option.name,
           description: option.description,
           gender: option.gender,
+          region: option.region_id,
           enabled: true 
         }))
+
   patchOptions({
     component: CreateVote,
     attrs: {
@@ -116,7 +126,9 @@ async function cloneVote(voteId) {
         name: data.name,
         subtitle: data.subtitle,
         majority: data.majority,
-        secret: data.secret,
+        with_abstentions: !!data.with_abstentions,
+        relative_to: data.relative_to,
+        max_votes: data.max_votes,
         options
       }
     }
@@ -259,11 +271,11 @@ function move(voteId, move) {
         </span>
         <span v-else-if="props.column.field == 'result'" class="flex gap-2 items-center">
           <template v-if="props.row.winner">
-            <span :class="['result-color', `result-${props.row.winner.name}`]" />
+            <span :class="['result-color', optionClasses(props.row.winner, props.row)]" />
             {{ props.row.winner.name }}
           </template>
           <template v-else-if="props.row.closed_at">
-            <span :class="['result-color', 'result-None']" />
+            <span :class="['result-color', 'color-gray']" />
             <span class="text-gray-600">No winner</span>
           </template>
         </span>
@@ -272,7 +284,7 @@ function move(voteId, move) {
           <span v-if="props.row.subtitle" class="text-gray-600">({{ props.row.subtitle }})</span>
         </span>
         <span v-else-if="props.column.field == 'majority'">
-          {{ majorities[props.formattedRow[props.column.field]] }}
+          {{ majorityName(props.row) }}
         </span>
         <span v-else-if="props.column.field == 'closed_at'">
           <span v-if="props.row.closed_at" class="bg-gray-100 text-green-dark py-[0.5em] px-2 -m-1 text-sm font-mono uppercase flex gap-2 items-center justify-between font-bold whitespace-nowrap">
@@ -300,19 +312,7 @@ function move(voteId, move) {
   height: 1.5em;
   width: 1.5em;
   border-radius: 100%;
-  background-color: var(--egp-purple);
+  background-color: var(--color, var(--egp-pink));
   flex-shrink: 0;
-
-  &.result-Yes {
-    background-color: var(--egp-green);
-  }
-
-  &.result-No {
-    background-color: var(--egp-red);
-  }
-
-  &.result-None {
-    background-color: var(--egp-gray-400);
-  }
 }
 </style>

@@ -47,9 +47,20 @@ watch(y, () => {
         {{ edition.dates }}
       </div>
     </div>
-    <div v-if="user" class="nav-user ms-auto">
+    <div class="ms-auto">
       <DropdownMenu class="nav-dropdown">
-        {{ user.first_name }}
+        Français
+
+        <template #items>
+          <Link href="/admin">
+            Deutsch
+          </Link>
+        </template>
+      </DropdownMenu>
+    </div>
+    <div v-if="user" class="nav-user">
+      <DropdownMenu class="nav-dropdown">
+        User
 
         <template #items>
           <Link v-if="['admin', 'credentials'].includes(user.role)" href="/admin">

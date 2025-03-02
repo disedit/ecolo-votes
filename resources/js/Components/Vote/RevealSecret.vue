@@ -5,7 +5,8 @@ import Tooltip from '@/Components/Global/Tooltip.vue'
 
 const props = defineProps({
   name: { type: String, required: true },
-  secret: { type: Boolean, default: false }
+  secret: { type: Boolean, default: false },
+  optionClasses: { type: Object, default: {} }
 })
 
 const emit = defineEmits(['update'])
@@ -29,7 +30,7 @@ watch(hideIcon, () => emit('update', { revealed: reveal.value, hideIcon: hideIco
     <button
       @click="reveal = !reveal; hideIcon = false"
       type="button"
-      :class="['vote px-4 py-3 text-center font-bold leading-min flex items-center w-full gap-2', `option-${name.replaceAll(' ','-')}`, { secret, hide: !reveal }]">
+      :class="['vote px-4 py-3 text-center font-bold leading-min flex items-center w-full gap-2', { secret, hide: !reveal, ...optionClasses }]">
       <Icon icon="ri:eye-close-line" v-if="!reveal" class="shrink-0" />
       <Icon icon="ri:eye-line" v-else-if="!hideIcon" class="shrink-0" />
       <span v-if="reveal" class="mx-auto text-center min-w-0">

@@ -19,7 +19,6 @@ class Edition extends Model
      * @var array<string, string>
      */
     protected $casts = [
-        'form_mappings' => 'object',
         'links' => 'object'
     ];
 

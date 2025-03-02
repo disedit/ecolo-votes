@@ -57,7 +57,7 @@ const { x, y, style } = useDraggable(draggable, {
 
 <template>
   <Teleport to="#teleports">
-    <div ref="draggable" :style="style" :class="['fixed z-[1000] w-[90vw] max-w-[1600px] bg-white border-4 shadow-window', { 'border-green-dark': vote.open, 'border-gray-700': !vote.open }]">
+    <div ref="draggable" :style="style" :class="['fixed z-[1000] w-[70vw] max-w-[1200px] bg-white border-4 shadow-window', { 'border-green-dark': vote.open, 'border-gray-700': !vote.open }]">
       <div :class="['flex items-center text-white', { 'bg-green-dark': vote.open, 'bg-gray-700': !vote.open }]">
         <h2 class="font-mono font-bold uppercase px-4 grow cursor-move">
           <span v-if="vote.open" class="flex items-center gap-2">
@@ -85,8 +85,7 @@ const { x, y, style } = useDraggable(draggable, {
       </div>
 
       <div v-if="!minimized" :class="['bg-white border-t-4', {'border-green-dark': vote.open, 'border-gray-700': !vote.open}]">
-        
-        <VoteResults v-if="results" :vote="results" />
+        <VoteResults v-if="results" :vote="results" :open="!!vote.open" />
       </div>
     </div>
   </Teleport>

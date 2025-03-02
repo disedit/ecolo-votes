@@ -2,6 +2,7 @@
 import { computed, onMounted, onUnmounted } from 'vue'
 import gsap from 'gsap'
 import { percentages } from '@/Components/Admin/Votes/majorities.js'
+import { optionClasses } from '@/Composables/useColors.js'
 import { Icon } from '@iconify/vue'
 import VueNumberAnimation from 'vue-number-animation'
 
@@ -58,7 +59,7 @@ onUnmounted(() => {
 <template>
   <div :class="['multiple-options relative', `majority-${vote.majority}`, { 'no-winner': !vote.winner_id }]">
     <div :class="['options', `options-${options.length}`]">
-      <div v-for="option in options" :key="option.id" :class="['option', `option-${option.name.replaceAll(' ','-')}`, `votes-${option.votes_cast}`, { winner: isWinner(option) }]">
+      <div v-for="option in options" :key="option.id" :class="['option', `votes-${option.votes_cast}`, { winner: isWinner(option), ...optionClasses(option, vote) }]">
         <span class="flex items-center gap-[.1em]">
           <span class="truncate">{{ option.name }}</span>
           <Icon icon="ri:check-line" v-if="isWinner(option)" />

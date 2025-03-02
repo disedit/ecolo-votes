@@ -20,21 +20,27 @@ class VoteController extends Controller
         $code = $request->user()->code();
 
         $vote = Vote::select(
-            'votes.id', 'votes.name', 'votes.subtitle', 'votes.majority',
-            'votes.secret', 'votes.type', 'votes.open', 'votes.debate',
-            'votes.closed_at', 'vote_ballots.voted_at', 'vote_ballots.vote_option_id',
-            'vote_ballots.votes', 'vote_options.name as voted_for'
+            'votes.id', 'votes.name', 'votes.subtitle', 'votes.majority', 'votes.secret',
+            'votes.max_votes', 'votes.type', 'votes.open', 'votes.debate',
+            'votes.closed_at', 'vote_ballots.voted_at', 'vote_ballots.vote_option_ids',
+            'vote_ballots.votes',
         )
             ->leftJoin('vote_ballots', function ($join) use ($code) {
                 $join->on('vote_ballots.vote_id', '=', 'votes.id')
                      ->where('vote_ballots.code_id', '=', $code->id);
             })
-            ->leftJoin('vote_options', 'vote_options.id', '=', 'vote_ballots.vote_option_id')
             ->where('open', 1)
             ->orWhere('debate', 1)
-            ->with(['options' => fn ($query) => $query->select('id', 'vote_id', 'name', 'description', 'gender', 'is_abstain')])
+            ->with(['options' => fn ($query) => $query->select('id', 'vote_id', 'name', 'description', 'gender', 'is_abstain', 'is_no')])
             ->orderBy('open', 'desc')
             ->first();
+
+        if ($vote && $vote->vote_option_ids) {
+            $vote->vote_option_ids = json_decode($vote->vote_option_ids);
+            $vote->voted_for = collect($vote->vote_option_ids)->map(function ($id) use ($vote) {
+                return $vote->options->filter(fn ($option) => $option->id === $id)->first();
+            });
+        }
 
         return Inertia::render('Vote', [
             'vote' => $vote
@@ -47,7 +53,7 @@ class VoteController extends Controller
     public function cast(VoteRequest $request): JsonResponse
     {
         $ballot = VoteBallot::where('vote_id', $request->input('vote_id'))->where('code_id', $request->user()->code()->id)->firstOrFail();
-        $ballot->vote_option_id = $request->input('option_id');
+        $ballot->vote_option_ids = $request->input('option_ids');
         $ballot->voted_at = now();
         $ballot->save();
 
@@ -62,15 +68,7 @@ class VoteController extends Controller
         $code = $request->user()->code();
 
         $votes = Vote::select('id', 'name', 'subtitle', 'secret', 'type', 'open', 'debate', 'closed_at', 'winner_id')
-            ->with([
-                'winner',
-                'ballots' => function ($query) use ($code) {
-                    $query
-                        ->select('vote_ballots.id', 'vote_ballots.vote_id', 'vote_options.name', 'vote_ballots.votes')
-                        ->join('vote_options', 'vote_ballots.vote_option_id', '=', 'vote_options.id')
-                        ->where('code_id', $code->id);
-                }
-            ])
+            ->with('winner')
             ->orderBy('order', 'asc')
             ->orderBy('id', 'asc')
             ->get();
@@ -88,7 +86,7 @@ class VoteController extends Controller
         $vote->load('options');
 
         if (!$vote->open && $vote->closed_at) {            
-            $vote->append('abridgedResults');
+            $vote->append('results');
         }
 
         return response()->json($vote);

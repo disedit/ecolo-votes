@@ -3,10 +3,10 @@ import { onMounted } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 import { Icon } from '@iconify/vue'
 import { useModal } from 'vue-final-modal'
+import { optionClasses } from '@/Composables/useColors.js'
 import GrayLayout from '@/Layouts/GrayLayout.vue'
 import GlobalMenu from '@/Components/Global/Menu.vue'
 import ResultsModal from '@/Components/Votes/Modals/Results.vue'
-import Tooltip from '@/Components/Global/Tooltip.vue'
 
 defineOptions({
     layout: GrayLayout
@@ -47,9 +47,6 @@ function showVote (vote) {
           VOTE
         </div>
         <div>
-          MY VOTE
-        </div>
-        <div>
           RESULT
         </div>
         <div />
@@ -61,26 +58,8 @@ function showVote (vote) {
               <span class="font-bold">{{ vote.name }}</span>
               <span v-if="vote.subtitle" class="text-gray-600 ms-2">{{ vote.subtitle }}</span>
             </div>
-            <div class="vote-ballot">
-              <div v-if="vote.ballots.length > 0" :class="[`option voted option-${vote.ballots[0].name.replaceAll(' ', '-')}`]">
-                <Tooltip v-if="vote.secret" text="Can't show secret votes" centered class="flex gap-2 justify-start grow">
-                  <span class="option-circle" />
-                  <span class="font-mono font-normal">*****</span>
-                  <span v-if="vote.ballots[0].votes > 1" class="ms-auto">&times; {{ vote.ballots[0].votes }}</span>
-                </Tooltip>
-                <span v-else class="flex gap-2 justify-start grow">
-                  <span class="option-circle" />
-                  <span>{{ vote.ballots[0].name }}</span>
-                  <span v-if="vote.ballots[0].votes > 1" class="ms-auto">&times; {{ vote.ballots[0].votes }}</span>
-                </span>
-              </div>
-              <div v-else-if="vote.closed_at && attendee.votes > 0" class="option not-voted">
-                <span class="option-circle" />
-                Vote not cast
-              </div>
-            </div>
             <div class="vote-result">
-              <div v-if="vote.winner" :class="[`option winner option-${vote.winner.name.replaceAll(' ', '-')}`]">
+              <div v-if="vote.winner" :class="['option winner', optionClasses(vote.winner, vote)]">
                 <Icon icon="ri:check-fill" class="shrink-0" />
                 <span>{{ vote.winner.name }}</span>
               </div>
@@ -118,7 +97,7 @@ function showVote (vote) {
 .vote,
 .votes-header {
   display: grid;
-  grid-template-columns: auto 175px 175px 40px;
+  grid-template-columns: auto 175px 40px;
   gap: var(--spacer-4);
   align-items: center;
 }
@@ -171,7 +150,7 @@ function showVote (vote) {
   &-circle {
     width: 1.25em;
     height: 1.25em;
-    background: var(--option-color, var(--egp-pink));
+    background: var(--color, var(--egp-pink));
     border-radius: 100%;
     flex-shrink: 0;
     margin-block-start: -.1em;
@@ -180,7 +159,7 @@ function showVote (vote) {
 }
 
 .vote.secret .vote-ballot .option:not(.not-voted) {
-  --option-color: var(--egp-pink);
+  --color: var(--egp-pink);
 }
 
 .vote-result .option.winner {
@@ -188,7 +167,7 @@ function showVote (vote) {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  background-color: var(--option-color, var(--egp-pink));
+  background-color: var(--color, var(--egp-pink));
 
   span {
     flex-grow: 1;
@@ -205,18 +184,6 @@ function showVote (vote) {
   font-weight: bold;
 }
 
-.option-Yes {
-  --option-color: var(--egp-green);
-}
-
-.option-No {
-  --option-color: var(--egp-red);
-}
-
-.option-Abstain {
-  --option-color: var(--egp-orange);
-}
-
 .ongoing {
   color: var(--egp-green-dark);
   font-weight: bold;
@@ -225,7 +192,7 @@ function showVote (vote) {
 .upcoming,
 .not-voted,
 .no-winner {
-  --option-color: var(--egp-gray-400);
+  --color: var(--egp-gray-400);
   color: var(--egp-gray-700);
 }
 

@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue'
 import { Icon } from '@iconify/vue'
-import { majorities, percentages } from './majorities'
 import { formatPercentage } from '@/Composables/usePercentage.js'
+import { optionClasses } from '@/Composables/useColors.js'
 
 const props = defineProps({
   vote: { type: Object, required: true },
@@ -13,14 +13,14 @@ function isWinner(option) {
   return props.vote.results.winner.id === option.id
 }
 
-const highestPercentage = computed(() => {
-  const highest = props.vote.results.results
-    .reduce((highestOption, option) => option.percentage.votes_cast > highestOption.percentage.votes_cast ? option : highestOption, props.vote.results.results[0])
-  return highest.percentage.votes_cast
+const absKey = computed(() => {
+  return props.vote.with_abstentions ? 'with_abstentions' : 'without_abstentions'
 })
 
-const typeOfPercentage = computed(() => {
-  return percentages[props.vote.majority]
+const highestPercentage = computed(() => {
+  const highest = Object.values(props.vote.results.options)
+    .reduce((highestOption, option) => option.percentages[absKey.value][props.vote.relative_to] > highestOption.percentages[absKey.value][props.vote.relative_to] ? option : highestOption, props.vote.results.options[0])
+    return highest.percentages[absKey.value][props.vote.relative_to]
 })
 
 function relativePercentage(percentage) {
@@ -30,14 +30,6 @@ function relativePercentage(percentage) {
 </script>
 
 <template>
-  <table class="table table-data w-full">
-    <tbody>
-      <tr>
-        <th>Majority needed</th>
-        <td>{{ majorities[vote.majority] }}</td>
-      </tr>
-    </tbody>
-  </table>
   <div :class="[`vote-${vote.type}`, { 'has-winner': !!vote.results.winner }]">
     <table class="w-full table table-results">
       <colgroup>
@@ -47,8 +39,8 @@ function relativePercentage(percentage) {
       </colgroup>
       <tbody>
         <tr
-          v-for="option in vote.results.results"
-          :class="{ winner: isWinner(option) }"
+          v-for="option in vote.results.options"
+          :class="{ winner: isWinner(option), ...optionClasses(option, vote) }"
         >
           <td class="relative align-middle">
             <div class="relative z-10 flex items-center gap-2">
@@ -57,22 +49,25 @@ function relativePercentage(percentage) {
                 <span v-if="option.gender" class="gender">
                   {{ option.gender }}
                 </span>
+                <span v-if="option.region" class="region">
+                  {{ option.region }}
+                </span>
               </span>
               <Icon v-if="isWinner(option)" icon="ri:check-fill" class="shrink-0" />
             </div>
             <div class="result-bar">
-              <div class="result-bar-fill" :style="{ width: relativePercentage(option.percentage.votes_cast) }" />
+              <div class="result-bar-fill" :style="{ width: relativePercentage(option.percentages[absKey][vote.relative_to]) }" />
             </div>
           </td>
           <td class="text-right">
-            {{ option.votes_cast }}
+            {{ option.votes }}
           </td>
           <td class="text-right">
-            <span v-if="option.is_abstain">
+            <span v-if="option.is_abstain && !vote.with_abstentions">
               --
             </span>
             <span v-else>
-              {{ formatPercentage(option.percentage[typeOfPercentage]) }}
+              {{ formatPercentage(option.percentages[absKey][vote.relative_to]) }}
             </span>
           </td>
         </tr>
@@ -100,7 +95,8 @@ function relativePercentage(percentage) {
     font-weight: bold;
   }
 
-  .gender {
+  .gender,
+  .region {
     font-family: var(--font-mono);
     text-transform: uppercase;
     font-size: .5em;
@@ -111,6 +107,10 @@ function relativePercentage(percentage) {
 .vote-options {
   .winner .result-bar-fill {
     background-color: var(--egp-green);
+  }
+
+  .winner.option-no .result-bar-fill {
+    background-color: var(--egp-red);
   }
 }
 
@@ -125,15 +125,8 @@ function relativePercentage(percentage) {
     }
 
     tr:nth-child(3) .result-bar-fill {
-      background-color: var(--egp-yellow);
+      background-color: var(--egp-orange);
     }
-  }
-}
-
-.vote-options:not(.has-winner) {
-  tr:first-child .result-bar-fill,
-  tr:nth-child(2) .result-bar-fill {
-    background-color: var(--egp-yellow);
   }
 }
 </style>

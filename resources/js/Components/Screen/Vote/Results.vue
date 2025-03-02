@@ -9,30 +9,30 @@ const props = defineProps({
 
 const showResults = ref(false)
 onMounted(() => setTimeout(() => showResults.value = true, 500))
-const results = computed(() => props.vote.abridgedResults)
+const results = computed(() => props.vote.results)
 </script>
 
 <template>
   <div class="results">
     <Transition name="reveal">
       <div v-if="showResults">
-        <ResultsTwoOptions v-if="results.results.length === 3" :vote="vote" />
-        <ResultsMultipleOptions v-else :vote="vote" />
+        <!--<ResultsTwoOptions v-if="results.results.length === 3" :vote="vote" />-->
+        <!--<ResultsMultipleOptions v-else :vote="vote" />-->
       </div>
     </Transition>
     <Transition name="swipe-bottom">
       <div v-if="showResults" class="vote-participation">
         <div>
           Votes submitted
-          <span>{{ results.votes_cast_with_abstentions }}</span>
+          <span></span>
         </div>
         <div>
           Abstained
-          <span>{{ results.votes_cast_with_abstentions - results.votes_cast }}</span>
+          <span></span>
         </div>
         <div>
           Votes not cast
-          <span>{{ results.allocated_votes - results.votes_cast_with_abstentions }}</span>
+          <span></span>
         </div>
       </div>
     </Transition>

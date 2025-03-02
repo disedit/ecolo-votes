@@ -12,6 +12,11 @@ class Group extends Model
     use HasFactory;
 
     /**
+     * The attributes that should be hidden for arrays.
+     */
+    protected $hidden = ['created_at', 'updated_at'];
+
+    /**
      * Users
      */
     public function users(): HasMany {

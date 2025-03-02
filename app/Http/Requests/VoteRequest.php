@@ -14,7 +14,7 @@ class VoteRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->attendee()->isVoter() && $this->user()->attendee()->hasCheckedIn(); 
+        return $this->user()->code()->wasPickedUp(); 
     }
 
     /**
@@ -29,7 +29,7 @@ class VoteRequest extends FormRequest
                 'required',
                 new VoteIsOpen(),
             ],
-            'option_id' => [
+            'option_ids' => [
                 'required',
                 new ValidVote()
             ],

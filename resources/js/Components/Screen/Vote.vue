@@ -34,13 +34,14 @@ const ongoing = computed(() => ['debate', 'voting'].includes(status.value))
 const showCode = ref(false)
 
 onMounted(() => setTimeout(() => showCode.value = true, 250))
-
+/*
 const requiredVotes = computed(() => {
   const relativeTo = percentages[props.vote.majority]
   const total = props.vote.abridgedResults[relativeTo]
   const minimum = Math.ceil(total * thresholds[props.vote.majority])
   return (props.vote.majority === 'absolute' && total % 2 == 0) ? minimum + 1 : minimum
 })
+*/
 </script>
 
 <template>
@@ -66,12 +67,12 @@ const requiredVotes = computed(() => {
         <Transition name="interchange" mode="out-in">
           <span v-if="status === 'voting'" key="particiption" class="flex items-center gap-[.5em] tabular-nums">
             <Icon icon="ri:user-line" />
-            <NumberFlow :value="vote.abridgedResults.turnout" continuous />
+            <!--<NumberFlow :value="vote.abridgedResults.turnout" continuous />-->
           </span>
-          <span v-else-if="status === 'results'" key="majority" class="flex">
+          <!--<span v-else-if="status === 'results'" key="majority" class="flex">
             {{ majoritiesOnScreen[vote.majority] }}
             <span v-if="vote.majority !== 'simple'" class="ms-2">(≥{{ requiredVotes }} votes) </span>
-          </span>
+          </span>-->
         </Transition>
       </div>
     </div>

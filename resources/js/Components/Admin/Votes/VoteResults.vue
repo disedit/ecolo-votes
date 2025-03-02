@@ -1,82 +1,58 @@
 <script setup>
-import { ref } from 'vue'
-import { Icon } from '@iconify/vue'
-import CheckboxInput from '@/Components/Inputs/CheckboxInput.vue'
+import { computed } from 'vue'
+import { formatPercentage } from '@/Composables/usePercentage.js'
+import { majorityName } from './majorities'
 import VoteResultsChart from './VoteResultsChart.vue'
 
 const props = defineProps({
   vote: { type: Object, required: true },
+  open: { type: Boolean, default: false }
 })
 
-const hideNotCheckedIn = ref(false)
+const percentage = computed(() => {
+  return props.vote.results.in_use > 0 ? props.vote.results.totals.turnout / props.vote.results.in_use : 0
+})
 </script>
 
 <template>
-  <div v-if="vote" :class="{ 'hide-not-checked-in': hideNotCheckedIn }">
+  <div v-if="vote">
+    <div class="p-4 border-b">
+      <h3 class="font-bold text-md">
+        {{ vote.name }}
+      </h3>
+      <p v-if="vote.subtitle" class="opacity-75">{{ vote.subtitle }}</p>
+    </div>
     <div class="border-b">
       <table class="table table-data w-full">
         <tbody>
           <tr>
-            <th width="20%">Checked in</th>
-            <td width="5%">{{ vote.results.checked_in }}</td>
-            <th width="20%">Delegates voted</th>
-            <td width="5%">{{ vote.results.turnout }}</td>
-            <th width="20%">Allocated votes</th>
-            <td width="5%">{{ vote.results.allocated_votes }}</td>
-            <th width="20%">Votes cast</th>
-            <td width="5%">{{ vote.results.votes_cast_with_abstentions }}</td>
+            <th width="12%">Codes in use</th>
+            <td width="8%">{{ vote.results.in_use }} / {{ vote.results.codes }}</td>
+            <th width="13%">Codes voted</th>
+            <td width="7%">{{ vote.results.totals.turnout }}</td>
+            <th width="13%">Percentage</th>
+            <td width="7%">{{ formatPercentage(percentage) }}</td>
+            <th width="13%">Votes cast</th>
+            <td width="7%">{{ vote.results.totals.votes_cast }}</td>
           </tr>
         </tbody>
       </table>
-      <div class="p-4">
-        <h3 class="font-bold text-md">
-          {{ vote.name }}
-        </h3>
-        <p v-if="vote.subtitle" class="opacity-75">{{ vote.subtitle }}</p>
+      <div class="bg-gray-200">
+        <div :class="['h-4', { 'bg-pink': open, 'bg-gray-400': !open }]" :style="{ width: `${percentage * 100}%` }"></div>
       </div>
     </div>
-    <div class="grid grid-cols-2">
-      <div class="rollcall-grid border-r grid h-[60vh]">
-        <ul class="rollcall p-4">
-          <li
-            v-for="delegate in vote.results.rollcall"
-            :key="delegate.attendee_id"
-            :class="{ voted: !!delegate.voted_at, disabled: !delegate.checked_in }"
-          >
-          </li>
-        </ul>
-        <div class="border-t overflow-auto">
-          <ul class="rollcall-full">
-            <li
-              v-for="delegate in vote.results.rollcall"
-              :key="delegate.attendee_id"
-              :class="{ voted: !!delegate.voted_at, disabled: !delegate.checked_in }"
-            >
-              <span>
-                {{ delegate.last_name }},
-                {{ delegate.first_name }}
-                <span v-if="delegate.votes > 1">
-                  &times; {{ delegate.votes }}
-                </span>
-              </span>
-              <Icon v-if="!!delegate.voted_at" icon="ri:check-fill" />
-              <span v-if="!delegate.checked_in">
-                Not checked in
-              </span>
-            </li>
-          </ul>
-          <div class="border-t p-4">
-            <CheckboxInput
-              name="hideNotCheckedIn"
-              label="Hide not checked in"
-              v-model="hideNotCheckedIn"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="overflow-auto h-[60vh]">
-        <VoteResultsChart :vote="vote" />
-      </div>
+    <table class="table table-data w-full">
+      <tbody>
+        <tr>
+          <th>Majority needed</th>
+          <td>{{ majorityName(vote) }}</td>
+          <th>To select</th>
+          <td>{{ vote.max_votes }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div v-if="!open" class="overflow-auto max-h-[60vh]">
+      <VoteResultsChart :vote="vote" />
     </div>
   </div>
 </template>

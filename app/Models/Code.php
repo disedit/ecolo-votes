@@ -13,6 +13,11 @@ class Code extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * The attributes that should be hidden for arrays.
+     */
+    protected $hidden = ['created_at', 'updated_at'];
+
+    /**
      * Edition
      */
     public function edition(): BelongsTo {

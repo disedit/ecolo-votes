@@ -1,6 +1,5 @@
 <script setup>
 import { reactive, ref, watch, onMounted } from 'vue'
-import { useRemember } from '@inertiajs/vue3'
 import { majorities } from '@/Components/Admin/Votes/majorities'
 import GlobalModal from '@/Components/Global/Modal.vue'
 import TextInput from '@/Components/Inputs/TextInput.vue'
@@ -9,7 +8,8 @@ import CheckboxInput from '@/Components/Inputs/CheckboxInput.vue'
 import VoteOptions from '@/Components/Inputs/VoteOptions.vue'
 
 const props = defineProps({
-  cloneVote: { type: Object, default: null }
+  cloneVote: { type: Object, default: null },
+  regions: { type: Array, required: true }
 })
 
 const emit = defineEmits(['close', 'refresh', 'loadOptions'])
@@ -18,23 +18,22 @@ const form = reactive({
   name: '',
   subtitle: '',
   type: 'yesno',
-  secret: 0,
   options: [
-    { name: '', description: '', gender: null, enabled: true }
+    { name: '', description: '', gender: null, region: null, enabled: true }
   ],
   abstain: true,
-  majority: 'absolute',
+  no: true,
+  majority: '50',
+  with_abstentions: true,
+  relative_to: 'turnout',
+  max_votes: 1,
+  secret: false,
   open_immediately: true
 })
 
 watch(() => form.type, (newType) => {
   form.secret = newType !== 'yesno'
 })
-
-const timer = useRemember({
-  enabled: true,
-  time: '00:30'
-}, 'Vote/Timer')
 
 const errors = ref(null)
 const submitting = ref(false)
@@ -55,9 +54,25 @@ onMounted(() => {
     form.type = 'options'
     form.name = props.cloneVote.name
     form.subtitle = props.cloneVote.subtitle
-    form.secret = props.cloneVote.secret
     form.majority = props.cloneVote.majority
+    form.with_abstentions = props.cloneVote.with_abstentions
+    form.relative_to = props.cloneVote.relative_to
+    form.max_votes = props.cloneVote.max_votes
+    form.secret = props.cloneVote.secret
     form.options = props.cloneVote.options
+  } else {
+    form.name = ''
+    form.subtitle = ''
+    form.type = 'yesno'
+    form.options = [{ name: '', description: '', gender: null, region: null, enabled: true }]
+    form.abstain = true
+    form.no = true
+    form.majority = '50'
+    form.with_abstentions = true
+    form.relative_to = 'turnout'
+    form.max_votes = 1
+    form.secret = false
+    form.open_immediately = true
   }
 })
 
@@ -89,36 +104,69 @@ function focusVoteNameInput () {
         placeholder="For example, 2nd round"
         v-model="form.subtitle"
       />
-      <div class="flex gap-4">
+      <div class="grid grid-cols-3 gap-4">
         <SelectInput
           name="voteType"
           label="Type of vote"
           required
           :options="[
-            { value: 'yesno', label: 'Yes / No / Abstain' },
+            { value: 'yesno', label: 'Oui / Non / Abstention' },
             { value: 'options', label: 'Candidates / Custom options' },
           ]"
           v-model="form.type"
-          class="grow"
         />
         <SelectInput
           name="majority"
-          label="Type of majority"
+          label="Threshold"
           required
           :options="majorityOptions"
-          class="grow"
           v-model="form.majority"
+        />
+        <SelectInput
+          v-if="form.majority !== 'simple'"
+          name="voteType"
+          label="Abstentions"
+          required
+          :options="[
+            { value: true, label: 'avec abstentions' },
+            { value: false, label: 'sans les abstentions' },
+          ]"
+          v-model="form.with_abstentions"
+        />
+      </div>
+      <div v-if="form.type === 'options'" class="grid grid-cols-3 gap-4">
+        <TextInput
+          name="maxVotes"
+          label="Max. to select"
+          type="number"
+          min="1"
+          v-model="form.max_votes"
+          required
+        />
+        <SelectInput
+          v-if="form.majority !== 'simple'"
+          name="voteType"
+          label="Majority relative to"
+          required
+          :options="[
+            { value: 'turnout', label: 'Personnes qui ont voté' },
+            { value: 'votes_cast', label: 'Voix reçues' },
+          ]"
+          v-model="form.relative_to"
+          class="col-span-2"
         />
       </div>
       <VoteOptions
         v-if="form.type === 'options'"
         v-model="form.options"
+        v-model:no="form.no"
         v-model:abstain="form.abstain"
+        :regions="regions"
         @load-options="emit('loadOptions')"
       />
       <CheckboxInput
-        name="secretVote"
-        label="Vote is secret"
+        name="openVote"
+        label="Hide selected option"
         v-model="form.secret"
       />
       <CheckboxInput
@@ -126,23 +174,6 @@ function focusVoteNameInput () {
         label="Open vote immediately upon creation"
         v-model="form.open_immediately"
       />
-      <div v-if="form.open_immediately" class="flex items-center gap-4 -mt-1">
-        <CheckboxInput
-          name="timer"
-          label="Set a timer"
-          v-model="timer.enabled"
-        />
-        <TextInput
-          type="time"
-          name="timer"
-          label="Timer"
-          required
-          label-sr-only
-          v-model="timer.time"  
-          input-class="p-1 w-32"
-          :disabled="!timer.enabled"
-        />
-      </div>
       <ul v-if="errors" class="text-red font-bold mb-4">
         <li v-for="error in errors.errors">{{ error[0] }}</li>
       </ul>

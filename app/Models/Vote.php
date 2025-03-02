@@ -76,7 +76,7 @@ class Vote extends Model
         // Insert or reset ballots
         VoteBallot::where('vote_id', $this->id)->update(['votes' => 0]);
         $ballots = Code::all()->map(function ($code) {
-            return ['vote_id' => $this->id, 'code_id' => $code->id, 'votes' => 1, 'checked_in' => ($code->pickedup_at) ? 1 : 0];
+            return ['vote_id' => $this->id, 'code_id' => $code->id, 'votes' => 1, 'checked_in' => ($code->used_at) ? 1 : 0];
         })->toArray();
         VoteBallot::upsert($ballots, uniqueBy: ['vote_id', 'code_id'], update: ['votes', 'checked_in']);
 
@@ -137,13 +137,6 @@ class Vote extends Model
     /**
      * Results attribute
      */
-    public function getAbridgedResultsAttribute(): array {
-        return $this->results(abridged: true);
-    }
-
-    /**
-     * Results attribute
-     */
     public function getResultsAttribute(): array {
         return $this->results();
     }
@@ -158,135 +151,120 @@ class Vote extends Model
     /**
      * Calculate results
      */
-    public function results(bool $abridged = false): array {
-        $results = VoteOption::selectRaw('vote_options.id, SUM(votes) AS votes_cast, vote_options.name, vote_options.gender, vote_options.is_abstain')
-            ->leftJoin('vote_ballots', 'vote_ballots.vote_option_id', '=', 'vote_options.id')
-            ->where('vote_options.vote_id', $this->id)
-            ->groupBy('vote_options.id', 'vote_options.name', 'vote_options.gender', 'vote_options.is_abstain')
-            ->orderBy('vote_options.id', 'asc')
-            ->get();
+    public function results(): array {
+        $ballots = $this->ballots()->get();
+        $options = $this->options()->get();
+        
+        // Results tally
+        $totals = ['turnout' => 0, 'votes_cast' => 0];
+        $abstentions = 0;
+        $noes = 0;
+        $tally = $options->mapWithKeys(fn ($option) => [$option->id => 0]);
+        
+        // Add votes to tally
+        foreach($ballots as $ballot) {
+            $votedFor = $ballot->vote_option_ids;
+            if ($votedFor === null) continue;
+            foreach ($votedFor as $optionId) {
+                $option = $options->first(fn ($option) => $option->id === $optionId);
+                $tally[$optionId] += $ballot->votes;
+                $totals['votes_cast'] += $ballot->votes;
+                $abstentions += $option->is_abstain ? $ballot->votes : 0;
+                $noes += $option->is_no ? $ballot->votes : 0;
+            }
+            $totals['turnout']++;
+        }
 
-        $rollcall = VoteBallot::select('vote_ballots.vote_id', 'codes.id as code_id', 'users.first_name', 'users.last_name', 'codes.votes', 'vote_ballots.voted_at', 'vote_ballots.checked_in')
-            ->join('codes', 'codes.id', '=', 'vote_ballots.code_id')
-            ->join('users', 'users.id', '=', 'attendees.user_id')
-            ->where('vote_ballots.vote_id', $this->id)
-            ->where('vote_ballots.votes', '>', '0')
-            ->orderBy('users.last_name', 'asc')
-            ->get();
-
-        $checkedIn = $rollcall->sum('checked_in');
-        $turnout = $rollcall->sum(fn ($code) => ($code->voted_at) ? 1 : 0);
-        $allocatedVotes = $this->getAllocatedVotes();
-        $votesCast = $this->getVotesCast($results);
-        $resultsWithPercentages = $this->addPercentages($results, $votesCast, $allocatedVotes);
+        // Add percentages and winner
+        $results = $this->addPercentagesAndSort($options, $tally, $abstentions, $totals);
+        $winner = $this->getWinnerFrom($results);
 
         return [
-            'checked_in' => $checkedIn,
-            'turnout' => $turnout,
-            'votes_cast' => $votesCast,
-            'votes_cast_with_abstentions' => $results->sum('votes_cast'),
-            'allocated_votes' => $allocatedVotes,
-            'winner' => $this->getWinnerFrom($resultsWithPercentages),
-            'results' => $resultsWithPercentages,
-            'rollcall' => (!$abridged) ? $rollcall : null
+            'codes' => $ballots->count(),
+            'in_use' => $ballots->sum('checked_in'),
+            'totals' => $totals,
+            'noes' => $noes,
+            'abstentions' => $abstentions,
+            'options' => $results,
+            'winner' => $winner,
         ];
+    }
+
+    /**
+     * Format results with percentages
+     */
+    private function addPercentagesAndSort(Collection $options, Collection $tally, int $abstentions, array $totals): Collection {
+        $results = $options->map(function ($option) use ($tally, $abstentions, $totals) {
+            $option->votes = $tally[$option->id];
+            $option->percentages = [
+                'with_abstentions' => [
+                    'turnout' => ($totals['turnout'] === 0) ? 0 : $option->votes / $totals['turnout'],
+                    'votes_cast' => ($totals['votes_cast'] === 0) ? 0 : $option->votes / $totals['votes_cast']
+                ],
+                'without_abstentions' => [
+                    'turnout' => ($totals['turnout'] - $abstentions === 0) ? 0 : $option->votes / ($totals['turnout'] - $abstentions),
+                    'votes_cast' => ($totals['votes_cast'] - $abstentions === 0) ? 0 : $option->votes / ($totals['votes_cast'] - $abstentions)
+                ]
+            ];
+            return $option;
+        });
+
+        if ($this->type === 'options') {
+            $resultsWithoutNoAbs = $results->filter(fn ($option) => $option->is_abstain === 0 && $option->is_no === 0);
+            $absKey = $this->with_abstentions ? 'with_abstentions' : 'without_abstentions';
+            $sortByKey = 'percentages.' . $absKey . '.' . $this->relative_to;
+            $sortedResults = collect($resultsWithoutNoAbs)->sortByDesc($sortByKey)->values();
+            // Add back noes and abstentions
+            $results->each(function ($option) use ($sortedResults) {
+                if ($option->is_no || $option->is_abstain) {
+                    $sortedResults->push($option);
+                }
+            });
+            return $sortedResults;
+        }
+
+        return $results;
     }
 
     /**
      * Declare winner
      */
-    private function getWinnerFrom(Collection $resultsWithAbstentions): object | string | null {
-        // Remove abstentions and sort by votes
-        $results = $resultsWithAbstentions->filter(function (object $result) {
-            return !$result->is_abstain;
-        })->sortByDesc('percentage.votes_cast')->values()->all();
-
+    private function getWinnerFrom(Collection $results): object | string | null {
         if (count($results) === 0) return null;
 
-        // Get winner depending on type of majority
-        switch($this->majority){
-            case 'absolute':
-                return $this->aboveThreshold($results, 0.5, 'votes_cast');
-                break;
-            case '2/3_all':
-                return $this->aboveOrEqualThreshold($results, 2/3, 'allocated_votes');
-                break;
-            case '3/4_all':
-                return $this->aboveOrEqualThreshold($results, 3/4, 'allocated_votes');
-                break;
-            case '2/3_cast':
-                return $this->aboveOrEqualThreshold($results, 2/3, 'votes_cast');
-                break;
-            case '3/4_cast':
-                return $this->aboveOrEqualThreshold($results, 3/4, 'votes_cast');
-                break;
-            default: // Simple majority
-                if ($results[0]->votes_cast === 0) return null;
-                if ($results[0]->votes_cast === $results[1]->votes_cast) return 'tie';
-                return $results[0];
-                break;
+        $absKey = $this->with_abstentions ? 'with_abstentions' : 'without_abstentions';
+        $sortByKey = 'percentages.' . $absKey . '.' . $this->relative_to;
+        $sortedResults = $results->filter(fn ($option) => !$option->is_abstain)->sortByDesc($sortByKey)->values();
+
+        if ($this->majority === 'simple') {
+            if ($sortedResults[0]->votes === 0) return null;
+            if ($sortedResults[0]->votes === $sortedResults[1]->votes) return 'tie';
+            return $sortedResults[0];
         }
+
+        return $this->aboveThreshold($sortedResults);
     }
 
     /**
      * Calculate threshold
      */
-    private function aboveThreshold(array $results, float $threshold, string $type, bool $equal = false): object | null {
-        if ($equal) {
-            $winner = ($results[0]->percentage[$type] >= $threshold) ? $results[0] : null;
+    private function aboveThreshold(Collection $sortedResults): object | string | null {
+        $absKey = $this->with_abstentions ? 'with_abstentions' : 'without_abstentions';
+
+        if ($sortedResults[0]->percentages[$absKey][$this->relative_to] === $sortedResults[1]->percentages[$absKey][$this->relative_to]) return 'tie';
+
+        if ($this->majority === '50') {
+            $winner = ($sortedResults[0]->percentages[$absKey][$this->relative_to] > .5) ? $sortedResults[0] : null;
         } else {
-            $winner = ($results[0]->percentage[$type] > $threshold) ? $results[0] : null;
+            $winner = ($sortedResults[0]->percentages[$absKey][$this->relative_to] >= 2/3) ? $sortedResults[0] : null;
         }
-        
-        
+
+        // If no winner in Yes/No/Abstain vote, No wins by default
         if ($this->type === 'yesno' && !$winner) {
-            return collect($results)->first(fn ($result) => $result->name === 'No');
+            return $sortedResults->first(fn ($option) => $option->is_no);
         }
 
         return $winner;
-    }
-
-    /**
-     * Calculate threshold, including equal
-     */
-    private function aboveOrEqualThreshold(array $results, float $threshold, string $type): object | null {
-        return $this->aboveThreshold(results: $results, threshold: $threshold, type: $type, equal: true);
-    }
-
-    /**
-     * Get votes cast, ignoring abstentions
-     */
-    private function getVotesCast(Collection $results): int {
-        return $results->sum(function (object $result) {
-            return ($result->is_abstain) ? 0 : $result->votes_cast;
-        });
-    }
-
-    /**
-     * Calculate allocated votes
-     */
-    private function getAllocatedVotes(): int {
-        return VoteBallot::where('vote_id', $this->id)->get()->sum('votes');
-    }
-
-    /**
-     * Format results with percentages, ignoring abstentions
-     */
-    private function addPercentages(Collection $results, int $votesCast, int $allocatedVotes): Collection {
-        $resultsWithPercentages = $results->map(function (object $result) use ($votesCast, $allocatedVotes) {
-            $result->votes_cast = intval($result->votes_cast) ?? 0;
-            $result->percentage = [
-                'votes_cast' => ($result->is_abstain || $votesCast === 0) ? 0 : $result->votes_cast / $votesCast,
-                'allocated_votes' => ($result->is_abstain || $allocatedVotes === 0) ? 0 : $result->votes_cast / $allocatedVotes
-            ];
-            return $result;
-        });
-
-        if ($this->type === 'options') {
-            return collect($resultsWithPercentages->sortByDesc('percentage.votes_cast')->values()->all());
-        }
-
-        return $resultsWithPercentages;
     }
 
     /**

@@ -7,7 +7,7 @@ import RevealSecret from '../RevealSecret.vue'
 
 const props = defineProps({
   vote: { type: Object, required: true },
-  ballot: { type: Object, required: true },
+  ballot: { type: Array, required: true },
   codeException: { type: Boolean, default: false }
 })
 
@@ -22,7 +22,7 @@ async function submit() {
   try {
     await window.axios.post('/api/vote/cast', {
       vote_id: props.vote.id,
-      option_id: props.ballot.id,
+      option_ids: props.ballot.map(option => option.id),
       code: code.value
     })
 
@@ -58,15 +58,32 @@ function updateReveal (status) {
       Please select an option
     </div>
     <form v-else @submit.prevent="submit" class="flex flex-col gap-4 mt-6">
-      <div :class="['option-block py-6 flex flex-col items-center font-bold', `option-${ballot.name}`, { secret: vote.secret || !revealed, 'text-lg': vote.type !== 'yesno', 'text-xl': vote.type === 'yesno' }]">
+      <div
+        v-if="ballot.length === 1"
+        :class="[
+          'option-block py-6 flex flex-col items-center font-bold',
+          { secret: vote.secret || !revealed, 'text-lg': vote.type !== 'yesno', 'text-xl': vote.type === 'yesno' },
+          { 'option-no': ballot[0].is_no, 'option-abstain': ballot[0].is_abstain, 'option-yes': vote.type === 'yesno' && !ballot[0].is_no && !ballot[0].is_abstain }
+        ]"
+      >
         <div class="flex">
           <div class="w-[2.6rem]" v-if="!hideIcon" />
           <Icon v-if="!vote.secret" icon="ri:hand" class="vote-icon" />
           <Icon v-else icon="mdi:vote-outline" class="vote-icon secret" />
         </div>
-        <RevealSecret :secret="!!vote.secret" :name="ballot.name" @update="updateReveal" class="w-full" />
+        <RevealSecret :secret="!!vote.secret" :name="ballot[0].name" @update="updateReveal" class="w-full" />
       </div>
-      <div v-if="!codeException">
+      <div v-else-if="ballot.length > 1">
+        <ul class="flex flex-wrap gap-4 text-md">
+          <li v-for="option in ballot" :key="option.id">
+            <RevealSecret :secret="!!vote.secret" :name="option.name" />
+          </li>
+        </ul>
+      </div>
+      <div v-else class="bg-pink p-2 font-bold">
+        Select at least one option to vote
+      </div>
+      <div v-if="!codeException && ballot.length > 0">
         <p class="mb-2">Enter the code displayed on screen</p>
         <div class="relative">
           <Icon icon="icons8:key" class="absolute text-xl top-3 left-2" />
@@ -88,7 +105,7 @@ function updateReveal (status) {
           />
         </div>
       </div>
-      <InputButton type="submit" size="lg" :loading="submitting" :disabled="submitting" flat>
+      <InputButton v-if="ballot.length > 0" type="submit" size="lg" :loading="submitting" :disabled="submitting" flat>
         Cast Vote <span v-if="vote.votes > 1">&times; {{ vote.votes }}</span>
         <template #loading>
           Submitting...

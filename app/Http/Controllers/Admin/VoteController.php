@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Vote;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Region;
 use App\Models\Edition;
-use App\Models\Attendee;
-use App\Models\Vote;
 use App\Models\VoteOption;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -24,6 +24,7 @@ class VoteController extends Controller
         $ongoingVote = Vote::currentOrRecentlyClosed();
         return Inertia::render('Admin/Votes', [
             'votes' => Vote::with('winner')->orderBy('order', 'asc')->orderBy('id', 'asc')->get(),
+            'regions' => Region::all(),
             'ongoing' => ($ongoingVote) ? $ongoingVote->append(['results', 'recentlyClosed']) : null
         ]);
     }
@@ -46,10 +47,14 @@ class VoteController extends Controller
         $request->validate([
             'name' => 'required',
             'subtitle' => '',
-            'majority' => 'in:simple,50_with_abs,50_without_abs,2/3_with_abs,2/3_without_abs',
             'type' => 'in:yesno,options',
-            'secret' => 'boolean',
+            'majority' => 'in:simple,50,2/3',
+            'with_abstentions' => 'boolean',
+            'relative_to' => 'in:turnout,votes_cast',
             'abstain' => 'boolean',
+            'no' => 'boolean',
+            'max_votes' => 'nullable|integer',
+            'secret' => 'boolean',
             'open_immediately' => 'boolean',
             'options.*.name' => 'required_if:type,options',
             'options.*.description' => 'nullable',
@@ -65,8 +70,11 @@ class VoteController extends Controller
             $vote->edition_id = Edition::current()->first()->id;
             $vote->name = $request->input('name');
             $vote->subtitle = $request->input('subtitle');
-            $vote->majority = $request->input('majority');
             $vote->type = $request->input('type');
+            $vote->majority = $request->input('majority');
+            $vote->with_abstentions = $request->input('with_abstentions');
+            $vote->relative_to = $request->input('relative_to');
+            $vote->max_votes = $request->input('max_votes');
             $vote->secret = $request->input('secret');
             $vote->order = ($lastVote) ? $lastVote->order + 1 : 1;
             $vote->save();
@@ -76,16 +84,17 @@ class VoteController extends Controller
             }
 
             if ($request->input('type') === 'yesno') {
-                $options = [
-                    ['name' => 'Yes', 'description' => null, 'gender' => null, 'region' => null, 'enabled' => true],
-                    ['name' => 'No', 'description' => null, 'gender' => null, 'region' => null, 'enabled' => true]
-                ];
+                $options = [['name' => 'Oui', 'description' => null, 'gender' => null, 'region' => null, 'enabled' => true]];
             } else {
                 $options = $request->input('options');
             }
 
+            if ($request->input('no') || $request->input('type') === 'yesno') {
+                $options[] = ['name' => 'Non', 'description' => null, 'gender' => null, 'region' => null, 'is_no' => true, 'enabled' => true];
+            }
+
             if ($request->input('abstain') || $request->input('type') === 'yesno') {
-                $options[] = ['name' => 'Abstain', 'description' => null, 'gender' => null, 'region' => null, 'is_abstain' => true, 'enabled' => true];
+                $options[] = ['name' => 'Abstention', 'description' => null, 'gender' => null, 'region' => null, 'is_abstain' => true, 'enabled' => true];
             }
 
             // Insert options
@@ -95,8 +104,9 @@ class VoteController extends Controller
                 $newOption->vote_id = $vote->id;
                 $newOption->name = $option['name'];
                 $newOption->description = $option['description'];
-                $newOption->gender = $option['gender'];
-                $newOption->region = $option['region'];
+                $newOption->gender = $option['gender'] ?? null;
+                $newOption->region_id = $option['region'] ?? null;
+                $newOption->is_no = isset($option['is_no']) ? $option['is_no'] : 0;
                 $newOption->is_abstain = isset($option['is_abstain']) ? $option['is_abstain'] : 0;
                 $newOption->save();
             }
@@ -157,32 +167,6 @@ class VoteController extends Controller
     {
         $votes = Vote::with('options')->where('type', 'options')->get();
         return response()->json(['votes' => $votes]);
-    }
-
-    /**
-     * Get list of delegates
-     */
-    public function voters(): Response
-    {
-        $voters = Attendee::delegates()
-            ->orWhere('votes', '>', 0)
-            ->with(['user' => fn ($query) => $query->with('group')])->get()
-            ->map(function ($row) {
-                return [
-                    'id' => $row->id,
-                    'attendee' => $row->user->fullName(),
-                    'organisation' => $row->user->group_other ?? $row->group->name,
-                    'votes' => $row->votes,
-                    'checked_in' => $row->checked_in
-                ];
-            })
-            ->sortBy('organisation')
-            ->values()
-            ->all();
-
-        return Inertia::render('Admin/Voters', [
-            'voters' => $voters,
-        ]);
     }
 
     /* Reorder vote */

@@ -1,19 +1,25 @@
-export const majorities = {
+const majorityDictionary = {
+  '50': '>50% absolue',
+  '2/3': '≥2/3 deux tiers',
   simple: 'Simple',
-  '50_with_abs': '50% with abstentions',
-  '50_without_abs': '50% without abstentions',
-  '2/3_with_abs': '2/3 with abstentions',
-  '2/3_without_abs': '2/3 without abstentions',
 }
+
+export const majorities = majorityDictionary
 
 export const majoritiesOnScreen = {
-  simple: 'Simple majority',
-  '50_with_abs': '50% with abstentions',
-  '50_without_abs': '50% without abstentions',
-  '2/3_with_abs': '2/3 with abstentions',
-  '2/3_without_abs': '2/3 without abstentions',
+  '50': '>50%',
+  '2/3': '≥2/3',
+  simple: 'Simple',
 }
 
+export const thresholds = {
+  simple: null,
+  '50': 1/2,
+  '2/3': 2/3,
+}
+
+
+// Remove
 export const percentages = {
   simple: 'votes_cast',
   '50_with_abs': 'votes_cast',
@@ -22,10 +28,11 @@ export const percentages = {
   '2/3_without_abs': 'votes_cast',
 }
 
-export const thresholds = {
-  simple: null,
-  '50_with_abs': 1/2,
-  '50_without_abs': 1/2,
-  '2/3_with_abs': 2/3,
-  '2/3_without_abs': 2/3,
+export const majorityName = (vote) => {
+  let name = majorityDictionary[vote.majority]
+  if (vote.majority !== 'simple') {
+    name += vote.relative_to === 'turnout' ? ' des personnes' : ' des voix'
+    name += vote.with_abstentions ? ' avec abstentions' : ' sans les abstentions'
+  }
+  return name
 }

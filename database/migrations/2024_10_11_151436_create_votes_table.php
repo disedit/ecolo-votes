@@ -16,8 +16,10 @@ return new class extends Migration
             $table->foreignId('edition_id')->constrained();
             $table->string('name');
             $table->string('subtitle')->nullable();
-            $table->enum('majority', ['simple', '50_with_abs', '50_without_abs', '2/3_with_abs', '2/3_without_abs'])->default('simple');
-            $table->enum('type', ['options', 'candidates'])->default('options');
+            $table->enum('type', ['yesno', 'options'])->default('yesno');
+            $table->enum('majority', ['simple', '50', '2/3'])->default('simple');
+            $table->boolean('with_abstentions')->default(0);
+            $table->enum('relative_to', ['turnout', 'votes_cast'])->default('turnout');
             $table->integer('max_votes')->default(1);
             $table->boolean('open')->default(0);
             $table->datetime('opened_at')->nullable();

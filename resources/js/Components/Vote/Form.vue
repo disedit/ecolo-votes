@@ -28,8 +28,13 @@ const { open, close, patchOptions } = useModal({
   }
 })
 
-const ballot = ref(null)
-const ballotHasOption = computed(() => !!ballot.value)
+const selected = ref(props.vote.max_votes > 1 ? [] : null)
+const ballot = computed(() => {
+  if (!selected.value) return []
+  return (props.vote.max_votes > 1) ? selected.value : [selected.value]
+})
+
+const ballotIsGoodToGo = computed(() => ballot.value && ballot.value.length === props.vote.max_votes)
 
 function openConfirmModal() {
   patchOptions({ attrs: { ballot }})
@@ -42,23 +47,29 @@ function openConfirmModal() {
     <h2 class="font-headline uppercase text-xl leading-tight mt-9">
       {{ vote.name }}
     </h2>
-    <p class="opacity-75" v-if="vote.subtitle">
+    <p class="opacity-75 mb-2" v-if="vote.subtitle">
       {{ vote.subtitle }}
+    </p>
+    <p class="opacity-75 mb-2" v-if="vote.max_votes > 1">
+      Select up to {{ vote.max_votes }} options
+    </p>
+    <p class="opacity-75 mb-2" v-else>
+      Select one option
     </p>
     <form @submit.prevent="openConfirmModal" class="flex flex-col">
       <VoteOptions
         :vote="vote"
-        v-model="ballot"
+        v-model="selected"
         class="my-10"
       />
-      <div :class="[{ 'sticky bottom-site shadow-mario': ballotHasOption }]">
+      <div :class="[{ 'sticky bottom-site shadow-mario': ballotIsGoodToGo }]">
         <InputButton type="submit" variant="yellow" block size="lg" class="mt-auto" flat>
           Vote <span v-if="vote.votes > 1">&times; {{ vote.votes }}</span>
         </InputButton>
       </div>
     </form>
 
-    <div v-if="vote.secret" class="mt-4 text-sm flex gap-1 items-center justify-center">
+    <div class="mt-4 text-sm flex gap-1 items-center justify-center">
       <Icon icon="ri:lock-line" />
       Your vote is secret
     </div>

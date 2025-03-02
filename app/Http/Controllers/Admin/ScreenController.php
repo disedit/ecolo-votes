@@ -35,7 +35,7 @@ class ScreenController extends Controller
         $vote = Vote::currentOrRecentlyClosed();
 
         if ($vote) {
-            $vote->append('abridgedResults', 'recentlyClosed');
+            $vote->append('results', 'recentlyClosed');
 
             if ($vote->recentlyClosed) {
                 $willHideIn = $resultsOnScreen * 1000;

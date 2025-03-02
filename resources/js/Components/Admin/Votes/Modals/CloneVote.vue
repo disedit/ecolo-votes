@@ -34,12 +34,12 @@ async function submit () {
           label="Select a vote to copy options from"
           required
           v-model="selectedVote"
-          :options="votes.map((vote) => ({ value: vote, label: vote.name + ' ' + vote.subtitle }))"
+          :options="votes.map((vote) => ({ value: vote, label: vote.name + ' ' + (vote.subtitle || '') }))"
         />
         <div v-if="selectedVote">
           <ul class="mt-4 list-disc ms-4">
             <template v-for="option in selectedVote.options" :key="option.id"> 
-              <li v-if="!option.is_abstain">
+              <li v-if="!option.is_abstain && !option.is_no">
                 {{ option.name }}
               </li>
             </template>

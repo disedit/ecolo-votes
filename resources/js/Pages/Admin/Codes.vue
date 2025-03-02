@@ -27,6 +27,7 @@ const columns = [
     type: 'date',
     dateInputFormat: 'yyyy-MM-dd HH:mm:ss',
     dateOutputFormat: 'EEE HH:mm',
+    width: '200px',
   },
   {
     label: 'Used at',
@@ -34,10 +35,12 @@ const columns = [
     type: 'date',
     dateInputFormat: 'yyyy-MM-dd HH:mm:ss',
     dateOutputFormat: 'EEE HH:mm',
+    width: '200px',
   },
   {
     label: 'Actions',
-    field: 'actions'
+    field: 'actions',
+    width: '100px',
   },
 ]
 
@@ -85,12 +88,15 @@ const { open, close, patchOptions } = useModal({
     <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
       <div class="container padded-x py-4 flex gap-4 items-center">  
         <QrScanner scanning="codes" @close="reload" />
-        <InputButton @click="open" icon="ri:add-large-fill">
-          Create codes
-        </InputButton>
         <span class="font-mono text-sm uppercase ms-auto md:ms-0">
           <strong>{{ codes.length }}</strong> total, <strong>{{ totalPickedUp }}</strong> picked up, <strong>{{ totalUsed }}</strong> used
         </span>
+        <InputButton @click="open" icon="ri:add-large-fill" class="ms-auto">
+          Create codes
+        </InputButton>
+        <InputButton @click="print" icon="ri:printer-line">
+          Print codes
+        </InputButton>
       </div>
     </div>
     
@@ -124,7 +130,13 @@ const { open, close, patchOptions } = useModal({
             class="whitespace-nowrap"
           />
         </span>
-        <span v-else-if="props.column.field == 'pickedup_at' && !!props.row.pickedup_at">
+        <span v-else-if="props.column.field == 'pickedup_at' && props.row.pickedup_at">
+          <span class="bg-gray-100 text-green-dark py-[0.5em] px-2 -m-1 text-sm font-mono uppercase flex gap-2 items-center justify-between font-bold whitespace-nowrap">
+            <Icon icon="ri:check-double-line" />
+            {{ props.formattedRow[props.column.field] }}
+          </span>
+        </span>
+        <span v-else-if="props.column.field == 'used_at' && props.row.used_at">
           <span class="bg-gray-100 text-green-dark py-[0.5em] px-2 -m-1 text-sm font-mono uppercase flex gap-2 items-center justify-between font-bold whitespace-nowrap">
             <Icon icon="ri:check-double-line" />
             {{ props.formattedRow[props.column.field] }}

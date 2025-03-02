@@ -13,6 +13,15 @@ class VoteBallot extends Model
     protected $fillable = ['vote_id', 'code_id', 'votes', 'checked_in'];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'vote_option_ids' => 'object'
+    ];
+
+    /**
      * Vote
      */
     public function vote(): BelongsTo {

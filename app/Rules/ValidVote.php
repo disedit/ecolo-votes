@@ -15,10 +15,12 @@ class ValidVote implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $option = VoteOption::findOrFail($value);
+        foreach($value as $option_id) {
+            $option = VoteOption::findOrFail($option_id);
 
-        if ($option->vote_id !== intval(request()->input('vote_id'))) {
-            $fail('You can\'t vote for this option.');
+            if ($option->vote_id !== intval(request()->input('vote_id'))) {
+                $fail('You can\'t vote for this option.');
+            }
         }
     }
 }

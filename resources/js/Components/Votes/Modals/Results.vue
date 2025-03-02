@@ -1,6 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { Icon } from '@iconify/vue'
+import { Link } from '@inertiajs/vue3'
+import { optionClasses } from '@/Composables/useColors.js'
 import VoteResults from '@/Components/Votes/Results.vue'
 import GlobalModal from '@/Components/Global/Modal.vue'
 
@@ -31,9 +33,14 @@ const emit = defineEmits(['close'])
       <Icon icon="line-md:loading-loop" />
       Loading...
     </div>
-    <div v-else-if="fullVote.open" class="text-lg text-green-dark flex gap-2 items-center">
-      <Icon icon="line-md:loading-loop" />
-      Vote ongoing...
+    <div v-else-if="fullVote.open">
+      <div class="text-lg text-green-dark flex gap-2 items-center">
+        <Icon icon="line-md:loading-loop" />
+        Vote ongoing...
+      </div>
+      <div>
+        <Link href="/vote">Cast your vote</Link>
+      </div>
     </div>
     <div v-else-if="!fullVote.closed_at">
       <p class="text-lg text-gray-500 flex gap-2 items-center">
@@ -44,13 +51,13 @@ const emit = defineEmits(['close'])
       Available options:
       </p>
       <div class="flex gap-2 flex-wrap">
-        <span v-for="option in fullVote.options" :key="option.id" :class="['flex items-center gap-2 bg-gray-100 py-1 px-2 font-bold', `option-${option.name.replaceAll(' ', '-')}`]">
+        <span v-for="option in fullVote.options" :key="option.id" :class="['flex items-center gap-2 bg-gray-100 py-1 px-2 font-bold', optionClasses(option, fullVote)]">
           <span class="circle block shrink-0 h-[1em] w-[1em] rounded-full" />
           {{ option.name }}
         </span>
       </div>
     </div>
-    <div v-else-if="fullVote.abridgedResults">
+    <div v-else-if="fullVote.results">
       <VoteResults :vote="fullVote" />
     </div>
   </GlobalModal>
