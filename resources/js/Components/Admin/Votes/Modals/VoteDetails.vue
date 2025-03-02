@@ -20,7 +20,7 @@ onMounted(async () => {
   <GlobalModal v-if="vote" :width="1200" @close="emit('close')" edge>
     <template #title>
       <h1 class="p-4">
-        Results
+        {{ $t('results.page.title') }}
       </h1>
     </template>
     <VoteResults :vote="vote" />

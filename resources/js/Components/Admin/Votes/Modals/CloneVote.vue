@@ -22,16 +22,16 @@ async function submit () {
 <template>
   <GlobalModal :width="650" @close="emit('close')">
     <template #title>
-      <h1>Load options form another vote</h1>
+      <h1>{{ $t('admin.votes.importer.title') }}</h1>
     </template>
     <form @submit.prevent="submit" class="flex flex-col gap-4 mt-6">
       <div v-if="loading">
-        Loading...
+        {{ $t('global.loading') }}
       </div>
       <div v-else-if="votes">
         <SelectInput
           name="votesToClone"
-          label="Select a vote to copy options from"
+          :label="$t('admin.votes.importer.fields.select_vote')"
           required
           v-model="selectedVote"
           :options="votes.map((vote) => ({ value: vote, label: vote.name + ' ' + (vote.subtitle || '') }))"
@@ -47,10 +47,10 @@ async function submit () {
         </div>
         <div class="flex mt-6 justify-between">
           <InputButton type="submit" variant="yellow" flat>
-            Import options
+            {{ $t('admin.votes.importer.button') }}
           </InputButton>
           <InputButton type="button" variant="gray" @click="emit('close')" flat>
-            Cancel
+            {{ $t('global.cancel') }}
           </InputButton>
         </div>
       </div>

@@ -92,7 +92,7 @@ function focusVoteNameInput () {
     <form @submit.prevent="createVote" class="flex flex-col gap-4 text-rbase">
       <TextInput
         name="name"
-        label="Title"
+        :label="$t('admin.votes.create.fields.title')"
         required
         v-model="form.name"
         input-class="text-lg"
@@ -100,24 +100,24 @@ function focusVoteNameInput () {
       />
       <TextInput
         name="subtitle"
-        label="Subtitle"
-        placeholder="For example, 2nd round"
+        :label="$t('admin.votes.create.fields.subtitle')"
+        :placeholder="$t('admin.votes.create.fields.subtitle_placeholder')"
         v-model="form.subtitle"
       />
       <div class="grid grid-cols-3 gap-4">
         <SelectInput
           name="voteType"
-          label="Type of vote"
+          :label="$t('admin.votes.create.fields.type')"
           required
           :options="[
-            { value: 'yesno', label: 'Oui / Non / Abstention' },
-            { value: 'options', label: 'Candidates / Custom options' },
+            { value: 'yesno', label: $t('admin.votes.create.fields.types.yesno') },
+            { value: 'options', label: $t('admin.votes.create.fields.types.options') },
           ]"
           v-model="form.type"
         />
         <SelectInput
           name="majority"
-          label="Threshold"
+          :label="$t('admin.votes.create.fields.majority')"
           required
           :options="majorityOptions"
           v-model="form.majority"
@@ -125,11 +125,11 @@ function focusVoteNameInput () {
         <SelectInput
           v-if="form.majority !== 'simple'"
           name="voteType"
-          label="Abstentions"
+          :label="$t('admin.votes.create.fields.abstentions')"
           required
           :options="[
-            { value: true, label: 'avec abstentions' },
-            { value: false, label: 'sans les abstentions' },
+            { value: true, label: $t('admin.votes.create.fields.abstention_options.with') },
+            { value: false, label: $t('admin.votes.create.fields.abstention_options.without') },
           ]"
           v-model="form.with_abstentions"
         />
@@ -137,7 +137,7 @@ function focusVoteNameInput () {
       <div v-if="form.type === 'options'" class="grid grid-cols-3 gap-4">
         <TextInput
           name="maxVotes"
-          label="Max. to select"
+          :label="$t('admin.votes.create.fields.max_votes')"
           type="number"
           min="1"
           v-model="form.max_votes"
@@ -146,11 +146,11 @@ function focusVoteNameInput () {
         <SelectInput
           v-if="form.majority !== 'simple'"
           name="voteType"
-          label="Majority relative to"
+          :label="$t('admin.votes.create.fields.relative_to')"
           required
           :options="[
-            { value: 'turnout', label: 'Personnes qui ont voté' },
-            { value: 'votes_cast', label: 'Voix reçues' },
+            { value: 'turnout', label: $t('admin.votes.create.fields.relative_to_options.turnout') },
+            { value: 'votes_cast', label: $t('admin.votes.create.fields.relative_to_options.votes_cast') },
           ]"
           v-model="form.relative_to"
           class="col-span-2"
@@ -166,19 +166,19 @@ function focusVoteNameInput () {
       />
       <CheckboxInput
         name="openVote"
-        label="Hide selected option"
+        :label="$t('admin.votes.create.fields.secret')"
         v-model="form.secret"
       />
       <CheckboxInput
         name="openVote"
-        label="Open vote immediately upon creation"
+        :label="$t('admin.votes.create.fields.open_immediately')"
         v-model="form.open_immediately"
       />
       <ul v-if="errors" class="text-red font-bold mb-4">
         <li v-for="error in errors.errors">{{ error[0] }}</li>
       </ul>
       <InputButton type="submit" flat>
-        Create vote
+        {{ $t('admin.votes.actions.create') }}
       </InputButton>
     </form>
   </GlobalModal>

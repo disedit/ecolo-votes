@@ -82,11 +82,13 @@ class VoteController extends Controller
     /**
      * Results
      */
-    public function results(Vote $vote) {
+    public function results(Vote $vote, Request $request) {
         $vote->load('options');
 
         if (!$vote->open && $vote->closed_at) {            
             $vote->append('results');
+            $votedFor = $vote->ballots()->where('code_id', $request->user()->code()->id)->first()->vote_option_ids;
+            $vote->voted_for = $vote->options->filter(fn ($option) => in_array($option->id, $votedFor));
         }
 
         return response()->json($vote);

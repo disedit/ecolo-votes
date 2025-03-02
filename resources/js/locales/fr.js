@@ -3,6 +3,7 @@ export default {
     loading: 'Loading...',
     close: 'Close',
     close_modal: 'Close modal',
+    cancel: 'Cancel',
   },
   nav: {
     user: 'User',
@@ -36,8 +37,8 @@ export default {
       unselect: 'Unselect an option to select this option'
     },
     standby: {
-      title: 'En attente, les solutions vertes sont en cours de préparation...',
-      message: 'Les votes apparaîtront sur cet écran au fur et à mesure de leur ouverture'
+      title: 'Attendez, pas de vote en cours...',
+      message: 'Votes will show up here as they open'
     },
     announcer: {
       new_vote: 'New vote just opened',
@@ -80,7 +81,8 @@ export default {
       votes_cast: 'Votes cast',
       majority_needed: 'Majority needed',
       to_select: 'To select' // Ex: To select: 5
-    }
+    },
+    your_vote: 'Your vote',
   },
   badge: {
     welcome: {
@@ -97,9 +99,15 @@ export default {
     show_ticket: 'Show this ticket at the entrance to check in'
   },
   code_login: {
-    label: 'Enter your code',
+    title: 'Access',
+    instructions: 'Enter the number shown on the piece of paper that you picked up to vote',
+    instructions_qr: 'Scan the QR on the piece of paper that you picked up to vote',
+    code: 'Code',
     button: 'Enter',
-    submitting: 'Submitting...'
+    scan_qr: 'Scan QR code',
+    submitting: 'Submitting...',
+    code_invalid: 'Invalid code',
+    or: 'or',
   },
   login: {
     instructions: 'If you have registered for the congress, enter your email below to access the platform.',
@@ -117,6 +125,18 @@ export default {
     yes: 'Yes',
     no: 'No',
     abstain: 'Abstain'
+  },
+  majorities: {
+    '50': '>50% absolue',
+    '2/3': '≥2/3 deux tiers',
+    simple: 'Simple'
+  },
+  print: {
+    codes: {
+      instructions: 'Please, scan the QR code above the access the voting application.',
+      alternative: 'Alternatively, you can go to {0} and enter your ballot reference: {1}',
+      do_not_share: 'Do not share this code with anybody'
+    }
   },
   admin: {
     title: 'Admin',
@@ -182,7 +202,46 @@ export default {
       },
       ongoing: {
         title: 'Ongoing vote'
-      }
+      },
+      importer: {
+        title: 'Load options form another vote',
+        fields: {
+          select_vote: 'Select a vote to copy options from',
+        },
+        button: 'Import options',
+      },
+      create: {
+        title: 'Create new vote',
+        fields: {
+          title: 'Title',
+          subtitle: 'Subtitle',
+          subtitle_placeholder: 'For example, 2nd round',
+          type: 'Type of vote',
+          types: {
+            yesno: 'Yes / No / Abstain',
+            options: 'Candidates / Custom options'
+          },
+          majority: 'Threshold',
+          abstentions: 'Abstentions',
+          abstention_options: {
+            with: 'avec abstentions',
+            without: 'sans les abstentions'
+          },
+          max_votes: 'Max. to select',
+          relative_to: 'Majority relative to',
+          relative_to_options: {
+            turnout: 'Personnes qui ont voté',
+            votes_cast: 'Voix reçues'
+          },
+          secret: 'Hide selected option',
+          open_immediately: 'Open vote immediately upon creation'
+        }
+      },
+      delete: {
+        title: 'Delete vote',
+        warning: 'Are you sure you want to delete this vote? All ballots cast will also be removed.',
+        button: 'Delete vote'
+      },
     },
     scanner: {
       badge_scanner: 'Badge scanner',

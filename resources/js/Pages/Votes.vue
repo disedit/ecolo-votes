@@ -49,7 +49,7 @@ function showVote (vote) {
           {{ $t('results.page.columns.vote') }}
         </div>
         <div>
-          {{ $t('results.page.columns.vote') }}
+          {{ $t('results.page.columns.result') }}
         </div>
         <div />
       </div>

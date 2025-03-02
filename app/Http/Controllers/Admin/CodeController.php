@@ -133,4 +133,15 @@ class CodeController extends Controller
 
         return response()->json(['message' => 'Codes generated']);
     }
+
+    /**
+     * Print codes
+     */
+    public function print(): Response {
+        $codes = Code::all();
+
+        return Inertia::render('Admin/CodesPrint', [
+            'codes' => $codes
+        ]);
+    }
 }

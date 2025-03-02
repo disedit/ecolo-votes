@@ -16,7 +16,9 @@ async function submit () {
 <template>
   <GlobalModal :width="600" @close="emit('close')">
     <template #title>
-      <h1 class="text-red">Delete vote</h1>
+      <h1 class="text-red">
+        {{ $t('admin.votes.delete.title') }}
+      </h1>
     </template>
     <form @submit.prevent="submit" class="flex flex-col gap-4 mt-6">
       <div class="bg-gray-200 p-4">
@@ -24,16 +26,15 @@ async function submit () {
       </div>
       <p>
         <strong>
-          Are you sure you want to delete this vote?
-          All ballots cast will also be removed.
+          {{ $t('admin.votes.delete.warning') }}
         </strong>
       </p>
       <div class="flex mt-6 justify-between">
         <InputButton type="submit" variant="red" flat>
-          Delete vote
+          {{ $t('admin.votes.delete.button') }}
         </InputButton>
         <InputButton type="button" variant="gray" @click="emit('close')" flat>
-          Cancel
+          {{ $t('global.cancel') }}
         </InputButton>
       </div>
     </form>

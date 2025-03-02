@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Icon } from '@iconify/vue'
+import { optionClasses } from '@/Composables/useColors.js'
 import TextInput from '@/Components/Inputs/TextInput.vue'
 import GlobalModal from '@/Components/Global/Modal.vue'
 import RevealSecret from '../RevealSecret.vue'

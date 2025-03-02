@@ -57,6 +57,9 @@ watch(y, () => {
         {{ $t('nav.user') }}
 
         <template #items>
+          <div class="font-mono text-gray-700 text-sm p-4">
+            {{ user.first_name }}
+          </div>
           <Link v-if="['admin', 'credentials'].includes(user.role)" href="/admin">
             <Icon icon="ri:lock-line" />
             {{ $t('admin.title') }}

@@ -102,7 +102,7 @@ const { open, close, patchOptions } = useModal({
         <InputButton @click="open" icon="ri:add-large-fill" class="ms-auto">
           {{ $t('admin.codes.actions.create') }}
         </InputButton>
-        <InputButton href="/admin/codes/print" icon="ri:printer-line">
+        <InputButton href="/admin/codes/print" target="_blank" icon="ri:printer-line">
           {{ $t('admin.codes.actions.print') }}
         </InputButton>
       </div>

@@ -61,12 +61,32 @@ const emit = defineEmits(['close'])
     </div>
     <div v-else-if="fullVote.results">
       <VoteResults :vote="fullVote" />
+
+      <div v-if="fullVote.voted_for">
+        <h3 class="uppercase font-headline text-md mt-6">{{ $t('results.your_vote') }}</h3>
+
+        <ul class="flex flex-wrap gap-4">
+          <li
+            v-for="option in fullVote.voted_for"
+            :key="option.id"
+            :class="['vote-option', optionClasses(option, fullVote)]"
+          >
+            {{ option.name }}
+          </li>
+        </ul>
+      </div>
     </div>
   </GlobalModal>
 </template>
 
 <style lang="scss" scoped>
 .circle {
+  background-color: var(--color, var(--egp-pink));
+}
+
+.vote-option {
+  padding: .25em .5em;
+  font-weight: bold;
   background-color: var(--color, var(--egp-pink));
 }
 </style>

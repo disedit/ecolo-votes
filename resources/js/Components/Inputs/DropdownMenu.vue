@@ -24,7 +24,7 @@ import { Icon } from '@iconify/vue';
     padding-top: 2.5rem;
     background-color: var(--egp-white);
     color: var(--egp-green-pine);
-    min-width: 120px;
+    min-width: 140px;
     width: 100%;
     right: 0;
     z-index: 5;

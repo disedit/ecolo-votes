@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/admin/credentials/{attendee}/check_out', [CredentialsController::class, 'checkOut'])->name('admin_check_out');
         Route::get('/admin/scanner', [CredentialsController::class, 'scanner'])->name('admin_scanner');
         Route::get('/admin/codes', [CodeController::class, 'codes'])->name('admin_codes');
+        Route::get('/admin/codes/print', [CodeController::class, 'print'])->name('admin_codes_print');
         Route::post('/admin/codes/{code}/pickup', [CodeController::class, 'pickUp'])->name('admin_code_pickup');
         Route::post('/admin/codes/{code}/leavedown', [CodeController::class, 'leaveDown'])->name('admin_code_leavedown');
         Route::get('/admin/votes', [AdminVoteController::class, 'votes'])->name('admin_votes');
