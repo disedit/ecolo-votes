@@ -120,10 +120,10 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
           label-sr-only
           v-model="option.gender"
           :options="[
-            { value: null, label: 'N/A' },
-            { value: 'F', label: 'Female' },
-            { value: 'M', label: 'Male' },
-            { value: 'O', label: 'Other' }
+            { value: null, label: $('genders.N') },
+            { value: 'F', label: $('genders.F') },
+            { value: 'M', label: $('genders.M') },
+            { value: 'O', label: $('genders.O') }
           ]"
           :disabled="!option.enabled"
         />
@@ -146,7 +146,7 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
       <div class="flex gap-2">
         <CheckboxInput
           :name="`voteOptionDisabled[No]`"
-          :label="`No is enabled`"
+          label="No is enabled"
           label-sr-only
           v-model="no"
           label-class="px-4 bg-gray-200"
@@ -158,7 +158,7 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
       <div class="flex gap-2">
         <CheckboxInput
           :name="`voteOptionDisabled[Abstain]`"
-          :label="`Abstain is enabled`"
+          label="Abstain is enabled"
           label-sr-only
           v-model="abstain"
           label-class="px-4 bg-gray-200"

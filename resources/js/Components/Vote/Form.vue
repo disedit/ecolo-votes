@@ -69,7 +69,7 @@ function openConfirmModal() {
 
     <div class="mt-4 text-sm flex gap-1 items-center justify-center">
       <Icon icon="ri:lock-line" />
-      Your vote is secret
+      {{ $t('voter.form.secret') }}
     </div>
   </div>
 </template>

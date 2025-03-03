@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('last_name')->after('first_name');
             $table->string('email')->after('last_name');
             $table->string('phone')->nullable()->after('email');
-            $table->string('token')->after('qr_code');
+            $table->string('token')->unique()->after('qr_code');
             $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
         });

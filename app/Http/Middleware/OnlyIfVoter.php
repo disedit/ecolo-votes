@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class OnlyIfVoter
@@ -18,7 +19,12 @@ class OnlyIfVoter
         $user = $request->user();
 
         if (!$user->canVote()) {
-            abort(403, 'This code is not enabled');
+            Auth::guard('web')->logout();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return to_route('code_login')->with('message', __('codes.not_enabled'));
         }
 
         return $next($request);

@@ -14,6 +14,8 @@ import Tooltip from '@/Components/Global/Tooltip.vue'
 import HoverButton from '@/Components/Inputs/HoverButton.vue'
 import LogModal from '@/Components/Admin/Credentials/Modals/Log.vue'
 import DetailsModal from '@/Components/Admin/Credentials/Modals/Details.vue'
+import ImportModal from '@/Components/Admin/Credentials/Modals/Import.vue'
+import NotifyModal from '@/Components/Admin/Credentials/Modals/Notify.vue'
 
 defineOptions({ layout: GrayLayout })
 
@@ -102,6 +104,16 @@ function openDetails (attendeeId) {
   open()
 }
 
+function openImportModal () {
+  patchOptions({ component: ImportModal })
+  open()
+}
+
+function openNotifyModal () {
+  patchOptions({ component: NotifyModal })
+  open()
+}
+
 function reload () {
   router.reload({ only: ['attendees'], preserveScroll: true })
 }
@@ -116,11 +128,19 @@ function reload () {
 
     <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
       <div class="container padded-x py-4 flex gap-4 items-center">  
-        <QrScanner :label="$t('admin.credentials.actions.scan')" scanning="credentials" @close="reload" />
+        <QrScanner :label="$t('admin.credentials.actions.scan')" @close="reload" />
         <span class="font-mono text-sm uppercase ms-auto md:ms-0">
           <strong>{{ rows.length }}</strong> {{ $t('admin.credentials.stats.total') }},
           <strong>{{ totalCheckedIn }}</strong> {{ $t('admin.credentials.stats.checked_in') }}
         </span>
+        <div class="ms-auto flex gap-4 items-center">
+          <InputButton @click="openImportModal" type="button" variant="white" icon="ri:folder-upload-line">
+            Import
+          </InputButton>
+          <InputButton @click="openNotifyModal" type="button" variant="white" icon="ri:send-plane-fill">
+            Notify
+          </InputButton>
+        </div>
       </div>
     </div>
     

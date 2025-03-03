@@ -1,11 +1,11 @@
 <script setup>
-import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { ref, watch, nextTick, computed, onMounted, onUnmounted } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 import QrScanner from 'qr-scanner'
 import { Icon } from '@iconify/vue'
 
 const props = defineProps({
-  label: { type: String, default: 'Scan QR codes' },
-  scanning: { type: String, default: 'credentials' }
+  label: { type: String, default: 'Scan QR codes' }
 })
 
 const emit = defineEmits(['close'])
@@ -21,6 +21,9 @@ const mode = ref('IN')
 const qrCode = ref('')
 const loading = ref(false)
 const card = ref(null)
+const scanning = ref('auto')
+const page = usePage()
+const baseUrl = computed(() => page.props.base_url)
 
 onMounted(async () => {
   hasCamera.value = await QrScanner.hasCamera()
@@ -61,20 +64,26 @@ async function updateStatus (code) {
   clearTimeout(timeout)
   clearTimeout(cardTimeout)
   loadingTimeout = setTimeout(() => loading.value = true, 500)
-  
+
+  const endpoints = {
+    credentials: '/api/credentials/scan',
+    codes: '/api/codes/scan'
+  }
+
   try {
-    const endpoint = props.scanning === 'credentials' ? '/api/credentials/scan' : '/api/codes/scan'
-    const { data } = await window.axios.post(endpoint, { mode: mode.value, qr_code: code })
+    const endpoint = ((scanning.value === 'auto' && code.startsWith(baseUrl.value)) || scanning.value === 'codes') ? 'codes' : 'credentials'
+    const { data } = await window.axios.post(endpoints[endpoint], { mode: mode.value, qr_code: code })
     card.value = data
 
-    if (mode.value === 'IN' && props.scanning === 'credentials') {
+    if (mode.value === 'IN' && endpoint === 'credentials') {
       window.Echo.private('Attendees.List').whisper('attendees_list_changed')
       window.Echo.private(`Attendee.Status.${data.attendee.id}`).whisper('checked_in', { checked_in: true })
     } else {
       window.Echo.private('Codes.List').whisper('codes_list_changed')
     }
   } catch (error) {
-    card.value = error.response.data
+    console.log(error)
+    card.value = error.response?.data
   } finally {
     loading.value = false
     clearTimeout(loadingTimeout)
@@ -99,7 +108,8 @@ function clearCard () {
     <Teleport to="#teleports">
       <div v-if="cameraOpen" class="scanner-window">
         <div class="scanner-tools bg-black/50">
-          <select class="scanner-mode bg-transparent text-white border-white focus:border-yellow focus:ring-yellow focus:ring-2 font-mono" disabled>
+          <select v-model="scanning" class="scanner-mode bg-transparent text-white border-white focus:border-yellow focus:ring-yellow focus:ring-2 font-mono">
+            <option value="auto" :selected="scanning === 'auto'">{{ $t('admin.scanner.auto') }}</option>
             <option value="credentials" :selected="scanning === 'credenials'">{{ $t('admin.scanner.badges') }}</option>
             <option value="codes" :selected="scanning === 'codes'">{{ $t('admin.scanner.codes') }}</option>
           </select>

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('edition_id')->constrained();
             $table->foreignId('user_id')->constrained();
-            $table->string('code');
+            $table->string('code')->unique();
             $table->datetime('pickedup_at')->nullable();
             $table->datetime('used_at')->nullable();
             $table->timestamps();

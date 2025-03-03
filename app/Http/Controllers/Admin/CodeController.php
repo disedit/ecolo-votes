@@ -54,7 +54,8 @@ class CodeController extends Controller
      */
     public function scan(Request $request): JsonResponse
     {
-        $qrCode = $request->input('qr_code');
+        $base = url('/code');
+        $qrCode = str_replace($base . '/', "", $request->input('qr_code'));
         $mode = $request->input('mode');
         $response = [
             'type' => '',
@@ -62,11 +63,11 @@ class CodeController extends Controller
             'attendee' => null
         ];
 
-        $code = Code::where('qr_code', strval($qrCode))->first();
+        $code = Code::where('code', strval($qrCode))->first();
 
         if (!$code) {
             $response['type'] = 'FAIL';
-            $response['message'] = 'Code not found';
+            $response['message'] = 'Code not found: ' . $qrCode;
             return response()->json($response, 422);
         }
 
@@ -78,14 +79,14 @@ class CodeController extends Controller
         // If deactivating
         if ($mode === 'OUT') {
             $code->leaveDown();
-            $response['type'] = 'OK';
-            $response['message'] = 'Code deactivated';
+            $response['type'] = 'WARNING';
+            $response['message'] = 'Code deactivated: ' . $qrCode;
             return response()->json($response);
         }
 
         // If attendee had checked in
-        if ($code->pickedup_dat !== null) {
-            $response['type'] = 'FAIL';
+        if ($code->pickedup_at !== null) {
+            $response['type'] = 'DOUBLE';
             $response['message'] = 'Code previously activated at ' . $code->pickedup_at;
             return response()->json($response, 422);
         }
@@ -93,7 +94,7 @@ class CodeController extends Controller
         // Pickup code
         $code->pickup();
         $response['type'] = 'OK';
-        $response['message'] = 'Code activated';
+        $response['message'] = 'Code activated: ' . $qrCode;
 
         return response()->json($response);
     }
@@ -112,6 +113,13 @@ class CodeController extends Controller
 
         for($i = 0; $i <= $amount; $i++) {
             $codeString = Str::random(12);
+
+            // Check if code already exists
+            $code = Code::withoutGlobalScopes()->where('code', $codeString)->first();
+            if ($code) {
+                $i--;
+                continue;
+            }
 
             // Generate a user for the code
             $user = new User;

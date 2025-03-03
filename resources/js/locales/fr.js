@@ -131,6 +131,12 @@ export default {
     '2/3': '≥2/3 deux tiers',
     simple: 'Simple'
   },
+  genders: {
+    F: 'Female',
+    M: 'Male',
+    O: 'Non-binary',
+    N: 'N/A'
+  },
   print: {
     codes: {
       instructions: 'Please, scan the QR code above the access the voting application.',
@@ -245,6 +251,7 @@ export default {
     },
     scanner: {
       badge_scanner: 'Badge scanner',
+      auto: 'Auto',
       badges: 'Badges',
       codes: 'Vote codes'
     },
@@ -254,6 +261,7 @@ export default {
         create: 'Create codes',
         print: 'Print codes',
         activate: 'Activate',
+        activated: 'Activated',
         deactivate: 'Deactivate',
       },
       search: {

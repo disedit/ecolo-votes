@@ -99,10 +99,10 @@ const { open, close, patchOptions } = useModal({
           <strong>{{ totalPickedUp }}</strong> {{ $t('admin.codes.stats.picked_up') }},
           <strong>{{ totalUsed }}</strong> {{ $t('admin.codes.stats.used') }}
         </span>
-        <InputButton @click="open" icon="ri:add-large-fill" class="ms-auto">
+        <InputButton @click="open" icon="ri:add-large-fill" variant="white" class="ms-auto">
           {{ $t('admin.codes.actions.create') }}
         </InputButton>
-        <InputButton href="/admin/codes/print" target="_blank" icon="ri:printer-line">
+        <InputButton href="/admin/codes/print" target="_blank" variant="white" icon="ri:printer-line">
           {{ $t('admin.codes.actions.print') }}
         </InputButton>
       </div>
@@ -134,7 +134,10 @@ const { open, close, patchOptions } = useModal({
             v-else
             @click="leavedown(props.row.id)"
             :variant="{ default: 'pine', hover: 'red' }"
-            :label="{ default: 'Activate', hover: $t('admin.codes.actions.deactivate') }"
+            :label="{
+              default: $t('admin.codes.actions.activated'),
+              hover: $t('admin.codes.actions.deactivate')
+            }"
             size="sm"
             flat
             block

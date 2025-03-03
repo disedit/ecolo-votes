@@ -75,11 +75,11 @@ class AuthenticatedSessionController extends Controller
         $code = Code::where('code', $request->code)->first();
     
         if (!$code) {
-            return to_route('code_login')->with('message', 'This is not a valid code.');
+            return to_route('code_login')->with('message', __('codes.not_valid'));
         }
 
         if (!$code->wasPickedUp()) {
-            return to_route('code_login')->with('message', 'This code has not been enabled.');
+            return to_route('code_login')->with('message', __('codes.not_enabled'));
         }
 
         // Register code as used
@@ -102,7 +102,7 @@ class AuthenticatedSessionController extends Controller
             ->first();
 
         if (!$loginToken) {
-            return to_route('login')->with('message', 'This link has expired. Please enter your email address below to receive a new one.');
+            return to_route('login')->with('message', __('codes.link_expired'));
         }
 
         Auth::login($loginToken->user, true);
@@ -119,11 +119,11 @@ class AuthenticatedSessionController extends Controller
         $code = Code::where('code', $token)->first();
 
         if (!$code) {
-            return to_route('code_login')->with('message', 'This code is not valid.');
+            return to_route('code_login')->with('message', __('codes.not_valid'));
         }
 
         if (!$code->wasPickedUp()) {
-            return to_route('code_login')->with('message', 'This code has not been enabled.');
+            return to_route('code_login')->with('message', __('codes.not_enabled'));
         }
 
         // Register code as used

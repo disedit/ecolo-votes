@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('edition_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('type_id')->constrained();
-            $table->string('qr_code');
+            $table->string('qr_code')->unique();
             $table->datetime('checked_in')->nullable();
             $table->boolean('notified')->default(0);
             $table->timestamps();

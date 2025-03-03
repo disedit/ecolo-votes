@@ -69,11 +69,10 @@ class CredentialsController extends Controller
         ];
 
         $attendee = Attendee::where('qr_code', strval($qrCode))->first();
-        $firstCheckIn = !$attendee->first_checked_in;
 
         if (!$attendee) {
             $response['type'] = 'FAIL';
-            $response['message'] = 'Code not found';
+            $response['message'] = 'Code not found: ' . $qrCode;
             return response()->json($response, 422);
         }
 

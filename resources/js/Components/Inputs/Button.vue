@@ -95,6 +95,12 @@ const tag = computed(() => props.href ? Link : 'button')
     --btn-text-color: var(--egp-white);
   }
 
+  &-white {
+    --btn-bg-color: var(--egp-white);
+    --focus-color: var(--egp-black);
+    --btn-text-color: var(--egp-green-pine);
+  }
+
   &-soft-red {
     --btn-bg-color: var(--egp-gray-200);
     --btn-text-color: var(--egp-red);
