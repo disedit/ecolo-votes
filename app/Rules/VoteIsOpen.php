@@ -18,13 +18,13 @@ class VoteIsOpen implements ValidationRule
         // Check vote is open
         $vote = Vote::findOrFail($value);
         if (!$vote->open) {
-            $fail('Vote is closed');
+            $fail(__('vote.closed'));
         }
-        
+
         // Check user hasn't voted yet
         $ballot = $vote->ballots()->where('code_id', request()->user()->code()->id)->first();
         if ($ballot->voted_at || $ballot->vote_option_id) {
-            $fail('Your vote has already been cast in this vote.');
+            $fail(__('vote.already_cast'));
         }
     }
 }

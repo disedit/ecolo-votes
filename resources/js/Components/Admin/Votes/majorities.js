@@ -29,7 +29,7 @@ export const percentages = {
 }
 
 export const majorityName = (vote) => {
-  let name = majorityDictionary[vote.majority]
+  let name = majoritiesOnScreen[vote.majority]
   if (vote.majority !== 'simple') {
     name += vote.relative_to === 'turnout' ? ' des personnes' : ' des voix'
     name += vote.with_abstentions ? ' avec abstentions' : ' sans les abstentions'

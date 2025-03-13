@@ -70,7 +70,7 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
 <template>
   <div>
     <label for="voteOptions" class="font-mono uppercase text-gray-900 flex gap-2 items-center">
-      {{ $t('admin.votes.create.options') }}
+      {{ $t('admin.votes.options.label') }}
       <span class="ms-auto text-gray-600">
         {{ $t('inputs.required') }}
       </span>
@@ -120,10 +120,10 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
           label-sr-only
           v-model="option.gender"
           :options="[
-            { value: null, label: $('genders.N') },
-            { value: 'F', label: $('genders.F') },
-            { value: 'M', label: $('genders.M') },
-            { value: 'O', label: $('genders.O') }
+            { value: null, label: $t('genders.N') },
+            { value: 'F', label: $t('genders.F') },
+            { value: 'M', label: $t('genders.M') },
+            { value: 'O', label: $t('genders.O') }
           ]"
           :disabled="!option.enabled"
         />

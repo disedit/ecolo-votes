@@ -144,6 +144,14 @@ export default {
       do_not_share: 'Do not share this code with anybody'
     }
   },
+  screen: {
+    votes_cast: 'Votes cast',
+    turnout: 'Turnout',
+    next_up: 'Next up',
+    ongoing: 'Vote ongoing',
+    results: 'Results',
+    required_votes: '(≥{required} votes)'
+  },
   admin: {
     title: 'Admin',
     dashboard: {
@@ -202,8 +210,8 @@ export default {
         debating: 'Debating...',
         ongoing: 'Ongoing...',
       },
-      create: {
-        options: 'Options',
+      options: {
+        label: 'Options',
         required: '(required)'
       },
       ongoing: {

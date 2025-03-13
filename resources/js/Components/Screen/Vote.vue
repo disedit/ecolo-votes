@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref, onMounted } from 'vue'
-import { majoritiesOnScreen, percentages, thresholds } from '@/Components/Admin/Votes/majorities.js'
+import { majorityName, percentages, thresholds } from '@/Components/Admin/Votes/majorities.js'
 import { Icon } from '@iconify/vue'
 import NumberFlow from '@number-flow/vue'
 import VoteName from './Vote/Name.vue'
@@ -34,14 +34,13 @@ const ongoing = computed(() => ['debate', 'voting'].includes(status.value))
 const showCode = ref(false)
 
 onMounted(() => setTimeout(() => showCode.value = true, 250))
-/*
+
 const requiredVotes = computed(() => {
-  const relativeTo = percentages[props.vote.majority]
-  const total = props.vote.abridgedResults[relativeTo]
+  const total = props.vote.results.totals[props.vote.relative_to]
   const minimum = Math.ceil(total * thresholds[props.vote.majority])
-  return (props.vote.majority === 'absolute' && total % 2 == 0) ? minimum + 1 : minimum
+  return (props.vote.majority === '50' && total % 2 == 0) ? minimum + 1 : minimum
 })
-*/
+
 </script>
 
 <template>
@@ -52,13 +51,13 @@ const requiredVotes = computed(() => {
         <div class="overflow-clip">
           <Transition name="interchange" mode="out-in">
             <span v-if="status === 'debate'" key="debate">
-              Next up
+              {{ $t('screen.next_up') }}
             </span>
             <span v-else-if="status === 'voting'" key="voting">
-              Vote ongoing
+              {{ $t('screen.ongoing') }}
             </span>
             <span v-else-if="status === 'results'" key="results">
-              Results
+              {{ $t('screen.results') }}
             </span>
           </Transition>
         </div>
@@ -67,12 +66,12 @@ const requiredVotes = computed(() => {
         <Transition name="interchange" mode="out-in">
           <span v-if="status === 'voting'" key="particiption" class="flex items-center gap-[.5em] tabular-nums">
             <Icon icon="ri:user-line" />
-            <!--<NumberFlow :value="vote.abridgedResults.turnout" continuous />-->
+            <NumberFlow :value="vote.results.totals.turnout" continuous />
           </span>
-          <!--<span v-else-if="status === 'results'" key="majority" class="flex">
-            {{ majoritiesOnScreen[vote.majority] }}
-            <span v-if="vote.majority !== 'simple'" class="ms-2">(≥{{ requiredVotes }} votes) </span>
-          </span>-->
+          <span v-else-if="status === 'results'" key="majority" class="flex">
+            {{ majorityName(vote) }}
+            <span v-if="vote.majority !== 'simple'" class="ms-2">{{ $t('screen.required_votes', { required: requiredVotes }) }}</span>
+          </span>
         </Transition>
       </div>
     </div>

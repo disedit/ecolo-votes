@@ -10,9 +10,8 @@ const props = defineProps({
   vote: { type: Object, required: true },
 })
 
-const options = computed(() => {
-  return props.vote.abridgedResults.results.filter(option => !option.is_abstain)
-})
+const options = computed(() => props.vote.results.options)
+const absKey = computed(() => props.vote.with_abstentions ? 'with_abstentions' : 'without_abstentions')
 
 function isWinner (option) {
   return props.vote.winner_id === option.id
@@ -63,7 +62,7 @@ onUnmounted(() => {
         <span class="ms-auto percentage result shrink-0 whitespace-nowrap number">
           <VueNumberAnimation
             :from="0"
-            :to="option.percentage[percentages[vote.majority]]"
+            :to="option.percentages[absKey][vote.relative_to]"
             :format="rounded"
             :duration="1"
             easing="easeOutSine"
@@ -73,14 +72,14 @@ onUnmounted(() => {
         <span class="number result shrink-0">
           <VueNumberAnimation
             :from="0"
-            :to="option.votes_cast"
+            :to="option.votes"
             :format="whole"
             :duration="1"
             easing="easeOutSine"
             autoplay
           />
         </span>
-        <div class="bar" :style="{ width: percentage(option.percentage[percentages[vote.majority]]) }" />
+        <div class="bar" :style="{ width: percentage(option.percentages[absKey][vote.relative_to]) }" />
       </div>
     </div>
     <div class="majority-line" />
@@ -93,15 +92,15 @@ onUnmounted(() => {
   flex-direction: column;
   gap: var(--screen-padding);
   justify-content: center;
-  height: 55vh;
+  height: 56vh;
 }
 
 .option {
   position: relative;
   background: var(--egp-white);
-  font-size: 4vw;
+  font-size: 3.5vw;
   font-weight: 600;
-  height: 20vh;
+  height: 16vh;
   border: .4vw var(--egp-white) solid;
   display: flex;
   align-items: center;
@@ -115,7 +114,7 @@ onUnmounted(() => {
     font-weight: 800;
     animation: blink 2.5s;
     
-    &:not(.option-No) .bar {
+    &:not(.option-no) .bar {
       background: var(--egp-green);
     }
   }
@@ -155,12 +154,16 @@ onUnmounted(() => {
   font-variant-numeric: tabular-nums;
 }
 
-.option-Yes .bar {
-  background: var(--egp-green);
+.option-yes .bar {
+  background: var(--egp-blue) !important;
 }
 
-.option-No .bar {
+.option-no .bar {
   background: var(--egp-red);
+}
+
+.option-abstain .bar {
+  background: var(--egp-orange);
 }
 
 .majority-line {
@@ -173,7 +176,7 @@ onUnmounted(() => {
   z-index: 100;
 }
 
-.majority-absolute .majority-line {
+.majority-50 .majority-line {
   left: 50%;
 }
 
@@ -181,14 +184,8 @@ onUnmounted(() => {
   display: none;
 }
 
-.majority-2\/3_all .majority-line,
-.majority-2\/3_cast .majority-line {
+.majority-2\/3 .majority-line {
   left: 66.66%;
-}
-
-.majority-3\/4_all .majority-line,
-.majority-3\/4_cast .majority-line {
-  left: 75%;
 }
 
 @keyframes blink {

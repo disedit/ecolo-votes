@@ -10,13 +10,9 @@ const props = defineProps({
   vote: { type: Object, required: true },
 })
 
-const options = computed(() => {
-  return props.vote.abridgedResults.results.filter(option => !option.is_abstain)
-})
-
-const highestPercentage = computed(() => {
-  return options.value[0].percentage[percentages[props.vote.majority]]
-})
+const options = computed(() => props.vote.results.options)
+const absKey = computed(() => props.vote.with_abstentions ? 'with_abstentions' : 'without_abstentions')
+const highestPercentage = computed(() => options.value[0].percentages[absKey.value][props.vote.relative_to])
 
 function isWinner (option) {
   return props.vote.winner_id === option.id
@@ -67,7 +63,7 @@ onUnmounted(() => {
         <span class="ms-auto percentage result shrink-0 whitespace-nowrap">
           <VueNumberAnimation
             :from="0"
-            :to="option.percentage[percentages[vote.majority]]"
+            :to="option.percentages[absKey][vote.relative_to]"
             :format="rounded"
             :duration="1"
             autoplay
@@ -76,13 +72,13 @@ onUnmounted(() => {
         <span class="number result shrink-0">
           <VueNumberAnimation
             :from="0"
-            :to="option.votes_cast"
+            :to="option.votes"
             :format="whole"
             :duration="1"
             autoplay
           />
         </span>
-        <div class="bar" :style="{ width: percentage(option.percentage[percentages[vote.majority]]) }" />
+        <div class="bar" :style="{ width: percentage(option.percentages[absKey][vote.relative_to]) }" />
       </div>
     </div>
   </div>
@@ -168,22 +164,6 @@ onUnmounted(() => {
       stroke: var(--egp-green-pine);
       stroke-width: 2px;
     }
-  }
-}
-
-.no-winner {
-  .option:first-child,
-  .option:nth-child(2) {
-    outline: .15em var(--egp-green-pine) solid;
-    font-weight: 700;
-
-    .bar {
-      --color: var(--egp-yellow);
-    }
-  }
-
-  .votes-0 {
-    outline: 0 !important;
   }
 }
 

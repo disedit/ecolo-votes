@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import ResultsTwoOptions from './ResultsTwoOptions.vue'
+import ResultsThreeOptions from './ResultsThreeOptions.vue'
 import ResultsMultipleOptions from './ResultsMultipleOptions.vue'
 
 const props = defineProps({
@@ -16,24 +16,34 @@ const results = computed(() => props.vote.results)
   <div class="results">
     <Transition name="reveal">
       <div v-if="showResults">
-        <!--<ResultsTwoOptions v-if="results.results.length === 3" :vote="vote" />-->
-        <!--<ResultsMultipleOptions v-else :vote="vote" />-->
+        <ResultsThreeOptions v-if="results.options.length === 3" :vote="vote" />
+        <ResultsMultipleOptions v-else :vote="vote" />
       </div>
     </Transition>
     <Transition name="swipe-bottom">
       <div v-if="showResults" class="vote-participation">
-        <div>
-          Votes submitted
-          <span></span>
-        </div>
-        <div>
-          Abstained
-          <span></span>
-        </div>
-        <div>
-          Votes not cast
-          <span></span>
-        </div>
+        <template v-if="vote.relative_to == 'turnout'">
+          <div>
+            {{ $t('screen.votes_cast') }}
+            <span>
+              {{ results.totals.votes_cast }}
+            </span>
+          </div>
+          <div>
+            {{ $t('screen.turnout') }}
+            <span>
+              {{ results.totals.turnout }}
+            </span>
+          </div>
+        </template>
+        <template v-else>
+          <div>
+            {{ $t('screen.votes_cast') }}
+            <span>
+              {{ results.totals.votes_cast }}
+            </span>
+          </div>
+        </template>
       </div>
     </Transition>
   </div>
