@@ -35,7 +35,7 @@ class LoginToken extends Model
         $loginToken = new Self;
         $loginToken->user_id = $user->id;
         $loginToken->token = Str::random(60);
-        $loginToken->expires_at = now()->addDays(30);
+        $loginToken->expires_at = now()->addDays(4);
         $loginToken->save();
 
         return $loginToken;
