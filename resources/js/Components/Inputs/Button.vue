@@ -2,15 +2,17 @@
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { Icon } from '@iconify/vue'
+import GlobalArrow from '@/Components/Global/Arrow.vue';
 
 const props = defineProps({
-  variant: { type: String, default: 'yellow' },
+  variant: { type: String, default: 'green-neon' },
   size: { type: String, default: 'md' },
   flat: { type: Boolean, default: false },
   block: { type: Boolean, default: false },
   loading: { type: Boolean, default: false },
   icon: { type: String, default: null },
-  href: { type: String, default: null }
+  href: { type: String, default: null },
+  arrow: { type: Boolean, default: false }
 })
 
 const tag = computed(() => props.href ? Link : 'button')
@@ -22,10 +24,10 @@ const tag = computed(() => props.href ? Link : 'button')
     :href="href"
     :class="[
     'button',
-    'font-mono uppercase',
+    'font-bold',
     `button-${variant}`,
     `button-${size}`,
-    { flat, block }
+    { flat, block, arrow }
   ]">
     <span v-if="loading" class="with-icon flex items-center justify-center gap-2">
       <Icon icon="line-md:loading-loop" />
@@ -36,6 +38,7 @@ const tag = computed(() => props.href ? Link : 'button')
       <slot />
     </span>
     <template v-else>
+      <GlobalArrow class="arrow-item" v-if="arrow" />
       <slot />
     </template>
   </Component>
@@ -50,6 +53,7 @@ const tag = computed(() => props.href ? Link : 'button')
   font-weight: bold;
   transition: .25s ease;
   text-decoration: none;
+  border-radius: .25em;
 
   &:hover:not(:disabled) {
     background: var(--btn-bg-color-hover, var(--btn-bg-color, var(--egp-gray-200)));
@@ -77,9 +81,24 @@ const tag = computed(() => props.href ? Link : 'button')
     }
   }
 
+  &-green-neon {
+    --btn-bg-color: var(--egp-green-neon);
+    --focus-color: var(--egp-purple);
+
+    &.flat:hover:not(:disabled) {
+      --btn-bg-color: var(--egp-orange);
+    }
+  }
+
   &-pink {
     --btn-bg-color: var(--egp-pink);
     --focus-color: var(--egp-black);
+  }
+
+  &-purple {
+    --btn-bg-color: var(--egp-purple);
+    --focus-color: var(--egp-green-neon);
+    --btn-text-color: var(--egp-white);
   }
 
   &-green {
@@ -123,12 +142,29 @@ const tag = computed(() => props.href ? Link : 'button')
     width: 100%;
   }
 
-  &:hover:not(.flat):not(:disabled) {
+  &.arrow {
+    position: relative;
+    padding-inline: 2.5em;
+
+    .arrow-item {
+      position: absolute;
+      left: -3em;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: .25s ease;
+    }
+
+    &:hover .arrow-item {
+      left: -2.5em;
+    }
+  }
+
+  &:hover:not(.flat):not(.arrow):not(:disabled) {
     box-shadow: .5em .5em 0 var(--egp-green-pine);
     translate: -.5em -.5em;
   }
 
-  &:active:not(.flat):not(:disabled) {
+  &:active:not(.flat):not(.arrow):not(:disabled) {
     box-shadow: .25em .25em 0 var(--egp-green-pine);
     translate: -.25em -.25em;
   }

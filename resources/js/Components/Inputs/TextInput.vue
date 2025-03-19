@@ -44,7 +44,7 @@ const fieldId = props.id || props.name
       :autocomplete="autocomplete"
       :pattern="pattern"
       v-model="value"
-      :class="['input-control focus:ring-green-pine focus:border-green-pine disabled:bg-gray-100', inputClass]"
+      :class="['input-control rounded-md focus:ring-green-pine focus:border-green-pine disabled:bg-gray-100', inputClass]"
       ref="input"
     />
     <div :id="`${fieldId}error`" v-if="error" class="text-red font-bold">
@@ -55,7 +55,7 @@ const fieldId = props.id || props.name
 
 <style lang="scss" scoped>
 .input-gray .input-control {
-  @apply bg-gray-100 border-gray-300 border-2 focus:border-green-pine;
+  @apply bg-gray-100 border-gray-500 border-2 focus:border-purple;
 }
 
 .input-lg .input-control {

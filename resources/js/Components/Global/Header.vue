@@ -10,9 +10,9 @@ const { y } = useWindowScroll()
 </script>
 
 <template>
-  <header :class="['congress-header text-white', { scrolled: y > 20 }]">
+  <header :class="['congress-header text-black', { scrolled: y > 20 }]">
     <div class="container padded relative">
-      <h1 class="congress-header-name hide-on-scroll font-headline uppercase relative z-10">
+      <h1 class="congress-header-name hide-on-scroll font-bold relative z-10">
         {{ edition.title }}
       </h1>
       <div class="flex flex-col md:flex-row font-mono uppercase font-bold md:gap-6 relative z-10 mt-4 md:mt-0">
@@ -25,7 +25,6 @@ const { y } = useWindowScroll()
           {{ edition.dates }}
         </div>
       </div>
-      <img src="../../../images/illustrations/shamrock.svg" alt="" class="congress-header-illustration pointer-events-none" />
     </div>
   </header>
 </template>

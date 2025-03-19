@@ -50,7 +50,7 @@ const inboxUrl = computed(() => {
             </p>
         </div>
         <form v-else @submit.prevent="login" class="flex flex-col gap-4">
-            <p v-if="flash.message" class="font-bold bg-yellow px-4 py-2">
+            <p v-if="flash.message" class="font-bold bg-pink px-4 py-2">
                 {{ flash.message }}
             </p>
             <p v-else class="text-base">
@@ -71,8 +71,8 @@ const inboxUrl = computed(() => {
             />
 
             <div class="flex justify-end">
-                <ButtonInput type="submit" size="md" :loading="form.processing" :disabled="form.processing">
-                    {{ $t('login.button') }} -&gt;
+                <ButtonInput type="submit" size="md" arrow :loading="form.processing" :disabled="form.processing">
+                    {{ $t('login.button') }}
 
                     <template #loading>
                         {{ $t('login.submitting') }}

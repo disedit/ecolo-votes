@@ -11,7 +11,7 @@ defineProps({
 <template>
   <section class="card container padded">
     <div class="flex items-center gap-2">
-      <h2 v-if="title" class="bg-pink font-mono inline-flex items-center gap-2 font-bold py-2 px-site">
+      <h2 v-if="title" class="bg-purple rounded-t-md text-white inline-flex items-center gap-2 font-bold py-2 px-site">
         <Icon v-if="icon" :icon="icon" />
         {{ title }}
       </h2>
@@ -19,7 +19,7 @@ defineProps({
         <slot name="toolbar" />
       </div>
     </div>
-    <div :class="['bg-white', {'p-site': !edge}]">
+    <div :class="['bg-white rounded rounded-tl-none shadow-lg', {'p-site': !edge}]">
       <slot />
     </div>
   </section>

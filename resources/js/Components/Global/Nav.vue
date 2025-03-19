@@ -3,7 +3,7 @@ import { computed, watch } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import { Icon } from '@iconify/vue'
 import { useWindowScroll } from '@vueuse/core'
-import EGPLogo from '@/Components/Global/EGPLogo.vue'
+import EcoloLogo from '@/Components/Global/EcoloLogo.vue'
 import DropdownMenu from '@/Components/Inputs/DropdownMenu.vue'
 import Language from './Language.vue'
 
@@ -33,7 +33,7 @@ watch(y, () => {
 <template>
   <nav :class="['nav flex items-center gap-4', { scrolled, solid, 'show-details': scrolled || details }]">
     <Link href="/">
-      <EGPLogo class="nav-logo text-white" />
+      <EcoloLogo class="nav-logo text-white" />
     </Link>
     <div class="reveal-on-scroll nav-title font-headline uppercase md:mx-6">
       <span class="hidden md:inline">{{ edition.title }}</span>

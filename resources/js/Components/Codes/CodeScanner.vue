@@ -53,7 +53,7 @@ function closeCamera () {
 <template>
   <div class="qr-scanner">
     <template v-if="hasCamera">
-      <ButtonInput @click="openCamera" size="lg" block icon="ri:qr-code-line">
+      <ButtonInput @click="openCamera" size="lg" variant="green-neon" block icon="ri:qr-code-line">
         {{ $t('code_login.scan_qr') }}
       </ButtonInput>
       <div class="divider">

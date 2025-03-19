@@ -14,31 +14,33 @@ export default {
         colors: {
             'transparent': 'transparent',
             'green': {
-                dark: '#0F8A54',
-                pine: '#0B3323',
-                DEFAULT: '#47B972'
+                dark: '#078656',
+                pine: '#3b2d3d',
+                neon: '#00f57c',
+                DEFAULT: '#09b876'
             },
             'gray': {
                 50: '#fafafa',
-                100: '#f4f2f5',
-                200: '#e9e6ea',
-                300: '#dbd6dc',
-                400: '#c3bbc5',
-                500: '#aa9fad',
-                600: '#938796',
-                700: '#7d717f',
-                800: '#685f6a',
-                900: '#544d56',
+                100: '#f5f5f5',
+                200: '#efefef',
+                300: '#e6e6e6',
+                400: '#cbd5e0',
+                500: '#cecece',
+                600: '#cecece',
+                700: '#aaa',
+                800: '#aaa',
+                900: '#868686',
                 950: '#38313a',
             },
             'white': '#fff',
-            'black': '#282828',
+            'black': '#3b2d3d',
             'yellow': '#FFDC2E',
-            'pink': '#F6ADCD',
-            'purple': '#6950A1',
-            'red': '#fc574a',
+            'pink': '#ffdbe5',
+            'purple': '#704572',
+            'red': '#DC2628',
             'orange': '#feae37',
-            'blue': '#00a5ec'
+            'blue': '#4659d1',
+            'sand': '#f8f6f2'
         },
         fontSize: {
             'xs': 'var(--text-xs)',
@@ -55,8 +57,8 @@ export default {
         },
         extend: {
             fontFamily: {
-                sans: ['Inter', ...defaultTheme.fontFamily.sans],
-                headline: ['Doumbar', 'sans-serif'],
+                sans: ['Klima', ...defaultTheme.fontFamily.sans],
+                headline: ['NewSpirit', 'sans-serif'],
                 mono: ['Space Mono', 'monospace']
             },
             height: {

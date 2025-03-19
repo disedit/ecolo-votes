@@ -56,8 +56,8 @@ function login() {
             />
 
             <div class="flex justify-end">
-                <ButtonInput type="submit" size="md" :loading="form.processing" :disabled="form.processing">
-                    {{ $t('code_login.button') }} -&gt;
+                <ButtonInput type="submit" size="md" arrow :loading="form.processing" :disabled="form.processing">
+                    {{ $t('code_login.button') }}
 
                     <template #loading>
                         {{ $t('code_login.submitting') }}

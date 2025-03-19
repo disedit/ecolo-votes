@@ -1,5 +1,5 @@
 <script setup>
-import EGPLogo from '@/Components/Global/EGPLogo.vue'
+import EcoloLogo from '@/Components/Global/EcoloLogo.vue'
 
 defineProps({
   active: { type: Boolean, default: false },
@@ -9,7 +9,7 @@ defineProps({
 <template>
   <div :class="['screen-cover', { active }]">
     <div class="topbar">
-      <EGPLogo class="topbar-logo" />
+      <EcoloLogo class="topbar-logo" />
       <h1 class="topbar-title">
         <span>{{ edition.title }}</span>
       </h1>
@@ -21,7 +21,6 @@ defineProps({
       <span class="dates">{{ edition.dates }}</span>
       <span class="location">{{ edition.location }}</span>
     </h2>
-    <img src="../../../images/illustrations/shamrock.svg" alt="" class="cover-illustration" />
   </div>
 </template>
 

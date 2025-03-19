@@ -152,6 +152,9 @@ export default {
     results: 'Results',
     required_votes: '(≥{required} votes)'
   },
+  footer: {
+    privacy_policy: 'Mentions légales et protection de la vie privée'
+  },
   admin: {
     title: 'Admin',
     dashboard: {
