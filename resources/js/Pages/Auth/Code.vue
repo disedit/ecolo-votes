@@ -53,6 +53,7 @@ function login() {
                 required
                 v-model="form.code"
                 :error="form.errors?.code"
+                class="font-mono"
             />
 
             <div class="flex justify-end">

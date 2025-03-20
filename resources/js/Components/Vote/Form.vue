@@ -59,8 +59,8 @@ function openConfirmModal() {
         v-model="selected"
         class="my-10"
       />
-      <div :class="[{ 'sticky bottom-site shadow-mario': ballotIsGoodToGo }]">
-        <InputButton type="submit" variant="yellow" block size="lg" class="mt-auto" flat>
+      <div :class="[{ 'sticky bottom-site': ballotIsGoodToGo }]">
+        <InputButton type="submit" variant="purple" block size="lg" class="mt-auto" flat>
           {{ $t('voter.form.button') }}
           <span v-if="vote.votes > 1">&times; {{ vote.votes }}</span>
         </InputButton>

@@ -5,7 +5,7 @@ body {
 }
 
 *:focus-visible {
-  outline: var(--focus-weight, 2px) var(--focus-color, var(--egp-yellow)) solid;
+  outline: var(--focus-weight, 2px) var(--focus-color, var(--egp-purple)) solid;
   outline-offset: 3px;
 }
 

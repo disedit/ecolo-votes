@@ -35,11 +35,11 @@ watch(y, () => {
     <Link href="/">
       <EcoloLogo class="nav-logo text-white" />
     </Link>
-    <div class="reveal-on-scroll nav-title font-headline uppercase md:mx-6">
+    <div class="reveal-on-scroll nav-title font-bold md:mx-6">
       <span class="hidden md:inline">{{ edition.title }}</span>
       <span class="md:hidden">{{ edition.title_short }}</span>
     </div>
-    <div class="nav-details font-headline uppercase font-bold gap-6">
+    <div class="nav-details font-bold gap-6">
       <div class="flex items-center gap-2 reveal-on-scroll" style="--delay: .15s">
         <Icon icon="ri:map-pin-2-line" />
         {{ edition.location }}
@@ -83,7 +83,7 @@ watch(y, () => {
   left: 0;
   right: 0;
   padding: var(--spacer-2) var(--spacer-4);
-  color: var(--egp-white);
+  color: var(--egp-black);
   z-index: 1000;
   transition: .25s ease;
 
@@ -103,11 +103,13 @@ watch(y, () => {
   }
 
   &.scrolled {
-    background-color: var(--egp-green-dark);
+    background-color: var(--egp-white);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   }
 
   &.solid:not(.scrolled) {
-    background-color: var(--egp-green);
+    background-color: var(--egp-white);
+    color: var(--egp-black);
   }
 
   &.show-details {

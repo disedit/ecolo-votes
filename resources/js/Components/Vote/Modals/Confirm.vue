@@ -62,7 +62,7 @@ function updateReveal (status) {
       <div
         v-if="ballot.length === 1"
         :class="[
-          'option-block py-6 flex flex-col items-center font-bold',
+          'option-block rounded py-6 flex flex-col items-center font-bold',
           { secret: vote.secret || !revealed, 'text-lg': vote.type !== 'yesno', 'text-xl': vote.type === 'yesno' },
           optionClasses(ballot[0], vote)
         ]"

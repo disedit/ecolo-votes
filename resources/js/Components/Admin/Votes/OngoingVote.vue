@@ -57,9 +57,9 @@ const { x, y, style } = useDraggable(draggable, {
 
 <template>
   <Teleport to="#teleports">
-    <div ref="draggable" :style="style" :class="['fixed z-[1000] w-[70vw] max-w-[1200px] bg-white border-4 shadow-window', { 'border-green-dark': vote.open, 'border-gray-700': !vote.open }]">
-      <div :class="['flex items-center text-white', { 'bg-green-dark': vote.open, 'bg-gray-700': !vote.open }]">
-        <h2 class="font-mono font-bold uppercase px-4 grow cursor-move">
+    <div ref="draggable" :style="style" :class="['fixed z-[1000] w-[70vw] max-w-[1200px] bg-white border-4 rounded-lg shadow-window', { 'border-green-dark': vote.open, 'border-purple': !vote.open }]">
+      <div :class="['flex items-center text-white', { 'bg-green-dark': vote.open, 'bg-purple': !vote.open }]">
+        <h2 class="font-bold px-4 grow cursor-move">
           <span v-if="vote.open" class="flex items-center gap-2">
             <Icon icon="svg-spinners:ring-resize" />
             {{ $t('admin.votes.ongoing.title') }}
@@ -68,7 +68,9 @@ const { x, y, style } = useDraggable(draggable, {
               {{ vote.name }}
             </span>
           </span>
-          <span v-else>Just closed</span>
+          <span v-else>
+            {{ $t('admin.votes.ongoing.just_closed') }}
+          </span>
         </h2>
         <div class="ms-auto flex gap-1">
           <button @click="minimized = !minimized" :title="minimized ? $t('admin.votes.actions.maximize') : $t('admin.votes.actions.minimize')" class="text-lg">
@@ -84,7 +86,7 @@ const { x, y, style } = useDraggable(draggable, {
         </div>
       </div>
 
-      <div v-if="!minimized" :class="['bg-white border-t-4', {'border-green-dark': vote.open, 'border-gray-700': !vote.open}]">
+      <div v-if="!minimized" :class="['bg-white border-t-4', {'border-green-dark': vote.open, 'border-purple': !vote.open}]">
         <VoteResults v-if="results" :vote="results" :open="!!vote.open" />
       </div>
     </div>

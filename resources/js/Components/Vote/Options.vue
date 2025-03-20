@@ -70,15 +70,19 @@ const isDisabled = (option) => {
     align-items: center;
     gap: .5em;
     border: 2.5px var(--egp-white) solid;
+    border-radius: .5em;
 
     &:hover {
       background: var(--egp-gray-50);
+    }
+
+    &:focus {
+      outline: 2.5px var(--egp-green-pine) solid !important;
     }
   }
 
   &.selected {
     label {
-      outline: 2.5px var(--egp-green-pine) solid;
       background: var(--color, var(--egp-pink));
     }
 

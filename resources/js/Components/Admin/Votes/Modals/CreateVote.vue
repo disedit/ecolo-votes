@@ -145,7 +145,7 @@ function focusVoteNameInput () {
         />
         <SelectInput
           v-if="form.majority !== 'simple'"
-          name="voteType"
+          name="relatieTo"
           :label="$t('admin.votes.create.fields.relative_to')"
           required
           :options="[

@@ -37,10 +37,7 @@ const columns = [
   {
     label: t('admin.credentials.columns.type'),
     field: 'type',
-  },
-  {
-    label: t('admin.credentials.columns.group'),
-    field: 'group',
+    width: '275px',
   },
   {
     label: t('admin.credentials.columns.checked_in'),
@@ -48,10 +45,12 @@ const columns = [
     type: 'date',
     dateInputFormat: 'yyyy-MM-dd HH:mm:ss',
     dateOutputFormat: 'EEE HH:mm',
+    width: '200px',
   },
   {
     label: t('admin.credentials.columns.actions'),
-    field: 'actions'
+    field: 'actions',
+    width: '175px',
   },
 ]
 
@@ -60,6 +59,7 @@ const rows = computed(() => props.attendees.map(attendee => ({
   first_name: attendee.first_name,
   last_name: attendee.last_name,
   type: attendee.type?.name,
+  color: attendee.type?.color,
   group: attendee.group?.name,
   checked_in: attendee.checked_in,
   first_checked_in: attendee.first_checked_in
@@ -126,7 +126,7 @@ function reload () {
       {{ $t('admin.credentials.title') }}
     </AdminNavigation>
 
-    <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
+    <div class="sticky top-navbar z-50 bg-sand border-b border-gray-300">
       <div class="container padded-x py-4 flex gap-4 items-center">  
         <QrScanner :label="$t('admin.credentials.actions.scan')" @close="reload" />
         <span class="font-mono text-sm uppercase ms-auto md:ms-0">
@@ -193,7 +193,7 @@ function reload () {
           {{ props.formattedRow[props.column.field] }}
         </span>
         <span v-else-if="props.column.field == 'checked_in' && !!props.row.checked_in">
-          <span class="bg-gray-100 text-green-dark py-[0.5em] px-2 -m-1 text-sm font-mono uppercase flex gap-2 items-center justify-between font-bold whitespace-nowrap">
+          <span class="bg-gray-100 text-green-dark py-[0.5em] px-2 -m-1 text-sm font-mono uppercase rounded flex gap-2 items-center justify-between font-bold whitespace-nowrap">
             <Icon icon="ri:check-double-line" />
             {{ props.formattedRow[props.column.field] }}
           </span>

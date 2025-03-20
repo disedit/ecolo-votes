@@ -86,7 +86,8 @@ const tag = computed(() => props.href ? Link : 'button')
     --focus-color: var(--egp-purple);
 
     &.flat:hover:not(:disabled) {
-      --btn-bg-color: var(--egp-orange);
+      --btn-bg-color: var(--egp-purple);
+      --btn-text-color: var(--egp-white);
     }
   }
 
@@ -97,7 +98,7 @@ const tag = computed(() => props.href ? Link : 'button')
 
   &-purple {
     --btn-bg-color: var(--egp-purple);
-    --focus-color: var(--egp-green-neon);
+    --focus-color: var(--egp-black);
     --btn-text-color: var(--egp-white);
   }
 
@@ -144,7 +145,8 @@ const tag = computed(() => props.href ? Link : 'button')
 
   &.arrow {
     position: relative;
-    padding-inline: 2.5em;
+    padding-inline-start: 2.5em;
+    padding-inline-end: 1.75em;
 
     .arrow-item {
       position: absolute;

@@ -15,6 +15,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "php-curl-class/php-curl-class": "^11.0",
+        "phpoffice/phpspreadsheet": "^4.1",
         "pragmarx/google2fa-laravel": "^2.2",
         "tightenco/ziggy": "^2.0"
     },

@@ -25,7 +25,7 @@ const fieldId = props.id || props.name
       :aria-invalid="!!error ? 'true' : null"
       :aria-describedby="!!error ? `${fieldId}error` : null"
       ref="input"
-      :class="['text-green-dark focus:ring-green-pine', inputClass]"
+      :class="['text-green-dark focus:ring-green-pine rounded', inputClass]"
     />
     <span v-if="!labelSrOnly">{{ label }}</span>
   </label>

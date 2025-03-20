@@ -12,7 +12,7 @@ defineProps({
 <template>
   <div>
     <GlobalNav details eager solid />
-    <div class="bg-gray-200 text-green-pine">
+    <div class="bg-sand text-green-pine">
       <main class="min-h-fill">
         <slot />
       </main>

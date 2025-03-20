@@ -182,7 +182,7 @@ function move(voteId, move) {
       {{ $t('admin.votes.nav.title') }}
     </AdminNavigation>
 
-    <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
+    <div class="sticky top-navbar z-50 bg-sand border-b border-gray-300">
       <div class="container padded-x py-4 flex items-center gap-2">  
         <InputButton @click="createVote" icon="ri:add-large-fill">
           {{ $t('admin.votes.actions.create') }}

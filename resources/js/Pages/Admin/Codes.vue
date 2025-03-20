@@ -91,7 +91,7 @@ const { open, close, patchOptions } = useModal({
       {{ $t('admin.codes.title') }}
     </AdminNavigation>
 
-    <div class="sticky top-navbar z-50 bg-gray-200 border-b border-gray-300">
+    <div class="sticky top-navbar z-50 bg-sand border-b border-gray-300">
       <div class="container padded-x py-4 flex gap-4 items-center">  
         <QrScanner scanning="codes" @close="reload" />
         <span class="font-mono text-sm uppercase ms-auto md:ms-0">

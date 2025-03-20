@@ -19,7 +19,9 @@ async function generateQrs () {
 
   const instance = getCurrentInstance()
   instance?.proxy?.$forceUpdate()
-  window.print()
+  setTimeout(() => {
+    window.print()
+  }, 1000)
 }
 
 const domain = computed(() => new URL(props.base_url).hostname)

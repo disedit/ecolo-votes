@@ -21,9 +21,9 @@ const fieldId = props.id || props.name
 
 <template>
   <div :class="['flex flex-col gap-1', `input-${variant}`, `input-${size}`, { error }]">
-    <label :for="id || name" :class="['font-mono uppercase text-gray-900 flex items-center gap-2', { 'sr-only': labelSrOnly }]">
+    <label :for="id || name" :class="['text-black flex items-center gap-2', { 'sr-only': labelSrOnly }]">
       {{ label }}
-      <span v-if="required" class="ms-auto text-gray-600">
+      <span v-if="required" class="ms-auto text-gray-800">
         {{ $t('inputs.required') }}
       </span>
     </label>
@@ -37,7 +37,7 @@ const fieldId = props.id || props.name
       :autofocus="autofocus"
       :disabled="disabled"
       v-model="value"
-      class="input-control focus:ring-green-pine focus:border-green-pine disabled:bg-gray-100"
+      class="input-control rounded-md focus:ring-green-pine focus:border-green-pine disabled:bg-gray-100"
       ref="input"
     >
       <option v-for="option in options" :key="option.value" :value="option.value">

@@ -63,13 +63,11 @@ function onBeforeClose() {
     max-width: var(--max-modal-width, 1000px);
 
     &:focus-visible {        
-        outline: 3px var(--egp-yellow) solid;
+        outline: 3px var(--egp-purple) solid;
     }
 
     h1 {
       font-size: var(--text-md);
-      font-family: var(--font-mono);
-      text-transform: uppercase;
       font-weight: bold;
     }
   }
@@ -81,6 +79,7 @@ function onBeforeClose() {
     color: var(--egp-green-pine);
     position: relative;
     padding: var(--site-padding);
+    border-radius: .5rem;
   }
 
   &-overlay {

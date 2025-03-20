@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Type;
 use Inertia\Inertia;
+use App\Models\Group;
 use Inertia\Response;
+use App\Models\Edition;
 use App\Models\Attendee;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class CredentialsController extends Controller
 {
@@ -124,6 +129,148 @@ class CredentialsController extends Controller
     public function credential(Attendee $attendee): JsonResponse
     {
         $attendee->load(['details', 'accessLog']);
+
+        if ($attendee->email) {
+            $attendee->details->push([
+                'field_key' => 'email',
+                'field_label' => 'Email',
+                'field_value' => $attendee->email,
+            ]);
+        }
+
+        if ($attendee->phone) {
+            $attendee->details->push([
+                'field_key' => 'phone',
+                'field_label' => 'Phone',
+                'field_value' => $attendee->phone,
+            ]);
+        }
+
         return response()->json($attendee);
+    }
+
+    /**
+     * Import credentials
+     */
+    public function import(Request $request): JsonResponse
+    {
+        $request->validate([
+            'file' => ['file', 'mimes:txt,csv,xls,xlsx,ods', 'required', 'max:2048'],
+            'wipe' => ['boolean']
+        ]);
+
+        $file = $request->file('file');
+        $spreadsheet = IOFactory::load($file->getPathName());
+        $lines = $spreadsheet->getSheet(0)->toArray();
+
+        // Validate rows
+        $errors = $this->errors($lines);
+        if (count($errors) > 0) {
+            return response()->json(['errors' => ['lines' => $errors]], 422);
+        }
+
+        // Empty table if replacing data
+        if ($request->input('wipe')) {
+            Attendee::query()->delete();
+        }
+
+        // Create attendees
+        $i = 0;
+        foreach($lines as $line) {
+            $i++;
+            if($i === 1) continue;
+
+            $attendee = new Attendee;
+            $attendee->edition_id = Edition::current()->first()->id;
+            $attendee->group_id = $this->group()->id;
+            $attendee->type_id = $this->type($line[0], $line[5] ?? '')->id;
+            $attendee->first_name = trim($line[1]);
+            $attendee->last_name = trim($line[1]);
+            $attendee->email = trim($line[3]);
+            $attendee->phone = $this->clean($line[4]);
+            $attendee->qr_code = Str::random(16);
+            $attendee->token = Str::random(60);
+            $attendee->save();
+        }
+
+        return response()->json(['imported' => true]);
+    }
+
+    /**
+     * Validate import file
+     */
+    private function errors($lines): array
+    {
+        $errors = [];
+        $i = 0;
+        if (count($lines) < 2) $errors[] = 'File is empty';
+
+        foreach($lines as $line) {
+            $i++;
+            if($i === 1) continue;
+            if (!$line[0]) $errors[] = 'Row ' . $i . ' is missing a type';
+            if (!$line[1]) $errors[] = 'Row ' . $i . ' is missing a first name';
+            if (!$line[2]) $errors[] = 'Row ' . $i . ' is missing a last name';
+            if ($line[3] && !filter_var($line[3], FILTER_VALIDATE_EMAIL)) $errors[] = 'Row ' . $i . ' has an invalid email (' . $line[3] . ')';
+        }
+
+        return $errors;
+    }
+
+    /**
+     * Clean phone input
+     */
+    private function clean(string $input): string
+    {
+        $input = str_replace('+', '', $input);
+        return trim($input);
+    }
+
+    /**
+     * Get or create type
+     */
+    private function type(string $name, string $color): Type
+    {
+        $type = Type::where('name', $name)->first();
+
+        if (!$type) {
+            $type = new Type;
+            $type->edition_id = Edition::current()->first()->id;
+            $type->name = $name;
+            $type->color = $this->color($color);
+            $type->save();
+        }
+
+        return $type;
+    }
+
+    /**
+     * Assign color
+     */
+    private function color(string $color): string
+    {
+        if ($color) return $color;
+
+        $colors = collect(['green', 'purple', 'pink', 'yellow', 'orange', 'red', 'blue']);
+        $usedColors = Type::all()->map(fn ($type) => $type->color);
+        $unusedColors = $colors->filter(fn ($color) => !$usedColors->contains(fn ($colorName) => $colorName === $color));
+        return $unusedColors->first();
+    }
+
+    /**
+     * Get or create the attendees group
+     */
+    private function group(): Group
+    {
+        $group = Group::where('name', 'Attendees')->first();
+
+        if (!$group) {
+            $group = new Group;
+            $group->name = 'Attendees';
+            $group->is_codes = 0;
+            $group->save();
+        }
+
+        return $group;
     }
 }

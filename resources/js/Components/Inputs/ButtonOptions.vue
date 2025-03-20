@@ -22,10 +22,10 @@ function toggleMenu() {
     <div class="button-options-main grow">
       <slot />
     </div>
-    <button @click="toggleMenu" class="shrink-0 button-options-handle">
+    <button @click="toggleMenu" class="shrink-0 button-options-handle rounded-r">
       <Icon icon="ri:arrow-down-s-line" />
     </button>
-    <div v-if="menuOpen" class="button-options-menu" @click="menuOpen = false">
+    <div v-if="menuOpen" class="button-options-menu rounded" @click="menuOpen = false">
       <slot name="options" />
     </div>
   </div>
@@ -35,6 +35,13 @@ function toggleMenu() {
 .button-options {
   display: flex;
   position: relative;
+
+  &-main {
+    button {
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+    }
+  }
 
   &-menu {
     position: absolute;

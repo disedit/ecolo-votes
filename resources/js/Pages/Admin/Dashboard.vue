@@ -14,7 +14,7 @@ defineProps({
   <Head :title="$t('admin.title')" />
 
   <div class="container container-lg padded">
-    <h1 class="font-headline uppercase text-2xl">
+    <h1 class="font-headline text-green text-2xl">
       {{ $t('admin.title') }}
     </h1>
     <div class="grid md:grid-cols-3 gap-4 mt-5" v-if="auth.user.role === 'admin'">
@@ -46,8 +46,7 @@ defineProps({
 
 <style lang="scss" scoped>
 .dashboard-link {
-  @apply bg-white flex flex-col p-4 text-lg font-mono no-underline
-          font-bold min-h-44 justify-between hover:bg-yellow hover:text-green-pine
-          hover:ring-2 focus:ring-2 ring-green-pine leading-tight;
+  @apply bg-white rounded-lg shadow-lg flex flex-col p-4 text-lg no-underline
+          font-bold min-h-44 justify-between transition hover:-translate-y-1 leading-tight;
 }
 </style>

@@ -46,7 +46,7 @@ async function submit () {
           </ul>
         </div>
         <div class="flex mt-6 justify-between">
-          <InputButton type="submit" variant="yellow" flat>
+          <InputButton type="submit" variant="purple" flat>
             {{ $t('admin.votes.importer.button') }}
           </InputButton>
           <InputButton type="button" variant="gray" @click="emit('close')" flat>

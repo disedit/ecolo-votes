@@ -110,7 +110,7 @@ export default {
     or: 'or',
   },
   login: {
-    instructions: 'If you have registered for the congress, enter your email below to access the platform.',
+    instructions: 'To log in, enter your email address below.',
     submitted: 'If the email address was on our database, you will receive an email with a link to access the platform.',
     check_inbox: 'Check your inbox',
     email: 'Email address',
@@ -218,7 +218,8 @@ export default {
         required: '(required)'
       },
       ongoing: {
-        title: 'Ongoing vote'
+        title: 'Ongoing vote',
+        just_closed: 'Just closed'
       },
       importer: {
         title: 'Load options form another vote',
@@ -305,7 +306,8 @@ export default {
         first_name: 'First Name',
         last_name: 'Last Name',
         type: 'Type',
-        group: 'Group',
+        email: 'Email',
+        phone: 'Phone',
         checked_in: 'Checked in',
         actions: 'Actions',
       },
@@ -318,6 +320,15 @@ export default {
         check_in: 'Check in',
         details: 'Details',
         access_log: 'Access log'
+      },
+      import: {
+        title: 'Import voters',
+        instructions: 'Download the sample file and enter the voter data. Then, upload it here to import the voters.',
+        formats: 'Accepted formats: .csv, .xls, .xlsx, .ods',
+        download_sample: 'Sample file (.xlsx)',
+        file: 'File',
+        wipe: 'Delete and replace current voters (if any)',
+        action: 'Upload',
       }
     }
   }
