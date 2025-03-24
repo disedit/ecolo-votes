@@ -44,7 +44,7 @@ function openConfirmModal() {
 
 <template>
   <div class="w-full">
-    <h2 class="font-headline uppercase text-xl leading-tight mt-9">
+    <h2 class="font-headline text-xl leading-tight mt-9">
       {{ vote.name }}
     </h2>
     <p class="opacity-75 mb-2" v-if="vote.subtitle">

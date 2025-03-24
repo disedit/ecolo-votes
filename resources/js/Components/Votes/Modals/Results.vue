@@ -24,7 +24,7 @@ const emit = defineEmits(['close'])
   <GlobalModal @close="emit('close')" swipe-to-close="down">
     <template #title>
       <div>
-        <h2 class="font-headline text-lg uppercase">{{ vote.name }}</h2>
+        <h2 class="font-headline text-lg">{{ vote.name }}</h2>
         <p v-if="vote.subtitle" class="opacity-75">{{ vote.subtitle }}</p>
       </div>
     </template>
@@ -38,8 +38,8 @@ const emit = defineEmits(['close'])
         <Icon icon="line-md:loading-loop" />
         {{ $t('voter.status.ongoing') }}
       </div>
-      <div>
-        <Link href="/vote">
+      <div class="mt-8">
+        <Link href="/vote" class="font-bold">
           {{ $t('voter.form.button_long') }}
         </Link>
       </div>

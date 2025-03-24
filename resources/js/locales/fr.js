@@ -32,7 +32,7 @@ export default {
     form: {
       select_max: 'Select one option | Select up to {max} options',
       button: 'Vote',
-      button_long: 'Cast your voe',
+      button_long: 'Cast your vote',
       secret: 'Your vote is secret',
       unselect: 'Unselect an option to select this option'
     },

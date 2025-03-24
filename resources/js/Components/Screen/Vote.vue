@@ -98,7 +98,7 @@ const requiredVotes = computed(() => {
   &-header {
     display: flex;
     align-items: center;
-    font-size: 2.4vw;
+    font-size: 2vw;
     justify-content: space-between;
     line-height: 1.1;
     padding: 0 var(--screen-padding);
@@ -108,8 +108,7 @@ const requiredVotes = computed(() => {
     display: flex;
     align-items: center;
     gap: .5em;
-    font-family: var(--font-headline);
-    text-transform: uppercase;
+    font-weight: bold;
 
     span {
       display: block;
@@ -123,7 +122,7 @@ const requiredVotes = computed(() => {
   }
 
   &-name {
-    font-size: 6.5vw;
+    font-size: 6vw;
     font-weight: bold;
     display: flex;
     flex-direction: column;

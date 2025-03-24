@@ -41,7 +41,7 @@ function showVote (vote) {
 <template>
     <Head title="Vote record" />
     <div class="container padded">
-      <h1 class="font-headline uppercase text-xl mb-12">
+      <h1 class="font-headline text-xl mb-12">
         {{ $t('results.page.title') }}
       </h1>
       <div class="votes-header uppercase">
@@ -119,6 +119,7 @@ function showVote (vote) {
   padding: var(--spacer-3);
   transition: .25s ease;
   border: 2px var(--egp-white) solid;
+  border-radius: .5rem;
   --focus-color: var(--egp-green-pine);
 
   &-name {
@@ -127,6 +128,7 @@ function showVote (vote) {
 
   &-more {
     font-size: var(--text-md);
+    border-radius: .25rem;
   }
 
   @media (hover: hover) {
@@ -149,6 +151,7 @@ function showVote (vote) {
   padding: var(--spacer-2);
   align-items: flex-start;
   line-height: 1.1;
+  border-radius: .25rem;
 
   &-circle {
     width: 1.25em;

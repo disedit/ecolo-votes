@@ -62,7 +62,7 @@ function updateReveal (status) {
       <div
         v-if="ballot.length === 1"
         :class="[
-          'option-block rounded py-6 flex flex-col items-center font-bold',
+          'option-block rounded-lg py-6 flex flex-col items-center font-bold',
           { secret: vote.secret || !revealed, 'text-lg': vote.type !== 'yesno', 'text-xl': vote.type === 'yesno' },
           optionClasses(ballot[0], vote)
         ]"
@@ -108,7 +108,7 @@ function updateReveal (status) {
           />
         </div>
       </div>
-      <InputButton v-if="ballot.length > 0" type="submit" size="lg" :loading="submitting" :disabled="submitting" flat>
+      <InputButton v-if="ballot.length > 0" variant="purple" type="submit" size="lg" :loading="submitting" :disabled="submitting" flat>
         {{ $t('voter.confirm.button') }} <span v-if="vote.votes > 1">&times; {{ vote.votes }}</span>
         <template #loading>
           {{ $t('voter.confirm.submitting') }}
@@ -120,7 +120,8 @@ function updateReveal (status) {
 
 <style lang="scss" scoped>
 .option-block {
-  background-color: var(--color, var(--egp-pink));
+  background-color: var(--color, var(--egp-green));
+  color: var(--text-color);
 }
 
 .secret.option-block {

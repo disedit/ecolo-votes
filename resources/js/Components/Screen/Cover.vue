@@ -1,5 +1,5 @@
 <script setup>
-import EcoloLogo from '@/Components/Global/EcoloLogo.vue'
+import EcoloLogoMono from '@/Components/Global/EcoloLogoMono.vue'
 
 defineProps({
   active: { type: Boolean, default: false },
@@ -9,7 +9,7 @@ defineProps({
 <template>
   <div :class="['screen-cover', { active }]">
     <div class="topbar">
-      <EcoloLogo class="topbar-logo" />
+      <EcoloLogoMono class="topbar-logo" />
       <h1 class="topbar-title">
         <span>{{ edition.title }}</span>
       </h1>
@@ -18,8 +18,8 @@ defineProps({
       <span>{{ edition.title }}</span>
     </h1>
     <h2 class="cover-info">
-      <span class="dates">{{ edition.dates }}</span>
-      <span class="location">{{ edition.location }}</span>
+      <span v-if="edition.dates" class="dates">{{ edition.dates }}</span>
+      <span v-if="edition.location" class="location">{{ edition.location }}</span>
     </h2>
   </div>
 </template>
@@ -53,17 +53,17 @@ defineProps({
     transition: 1s ease;
 
     &-logo {
-      height: 12vh;
+      height: 6vh;
       transition: 1s ease;
     }
 
     &-title {
       margin-left: auto;
-      font-family: var(--font-headline);
-      text-transform: uppercase;
+      font-family: var(--font-base);
       font-size: 4.25vh;
       line-height: 1.1;
       overflow: clip;
+      font-weight: bold;
 
       span {
         display: block;
@@ -76,14 +76,13 @@ defineProps({
   .cover-title {
     position: relative;
     font-size: 20vh;
-    font-family: var(--font-headline);
-    text-transform: uppercase;
     margin-top: auto;
     z-index: 10;
     line-height: 1;
     text-wrap: balance;
     transition: 1s ease;
     overflow: clip;
+    font-weight: bold;
 
     span {
       display: block;
@@ -95,8 +94,6 @@ defineProps({
   .cover-info {
     margin-bottom: auto;
     display: flex;
-    font-family: var(--font-mono);
-    text-transform: uppercase;
     font-weight: bold;
     font-size: 4vh;
     overflow: clip;
@@ -115,24 +112,15 @@ defineProps({
     }
   }
 
-  .cover-illustration {
-    position: absolute;
-    top: 50%;
-    right: -20%;
-    transform: translate(0, -50%);
-    z-index: 1;
-    width: 70vw;
-    transition: 1s ease;
-  }
-
   &.active {
     height: var(--screen-nav-height);
 
     .topbar {
       padding: 1vw var(--screen-padding);
+      height: var(--screen-nav-height);
 
       &-logo {
-        height: 8vh;
+        height: 5vh;
       }
 
       &-title span {
@@ -152,10 +140,6 @@ defineProps({
       span {
         transform: translateY(100%);
       }
-    }
-
-    .cover-illustration {
-      transform: translate(40%, -25%) scale(1) rotate(20deg);
     }
   }
 }

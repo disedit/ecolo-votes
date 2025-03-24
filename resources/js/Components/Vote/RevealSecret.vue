@@ -30,7 +30,7 @@ watch(hideIcon, () => emit('update', { revealed: reveal.value, hideIcon: hideIco
     <button
       @click="reveal = !reveal; hideIcon = false"
       type="button"
-      :class="['vote px-4 py-3 text-center font-bold leading-min flex items-center w-full gap-2', { secret, hide: !reveal, ...optionClasses }]">
+      :class="['vote px-4 py-3 text-center font-bold leading-min flex items-center w-full gap-2 rounded-md', { secret, hide: !reveal, ...optionClasses }]">
       <Icon icon="ri:eye-close-line" v-if="!reveal" class="shrink-0" />
       <Icon icon="ri:eye-line" v-else-if="!hideIcon" class="shrink-0" />
       <span v-if="reveal" class="mx-auto text-center min-w-0">
@@ -45,7 +45,7 @@ watch(hideIcon, () => emit('update', { revealed: reveal.value, hideIcon: hideIco
 
 <style lang="scss" scoped>
 .vote {
-  background-color: var(--color, var(--egp-pink));
+  background-color: var(--color, var(--egp-green));
 }
 
 .vote.secret,

@@ -31,10 +31,6 @@ const form = reactive({
   open_immediately: true
 })
 
-watch(() => form.type, (newType) => {
-  form.secret = newType !== 'yesno'
-})
-
 const errors = ref(null)
 const submitting = ref(false)
 async function createVote () {

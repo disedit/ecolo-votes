@@ -70,6 +70,6 @@ function refreshScreen() {
 <style lang="scss">
 .screen {
     --screen-padding: 1.5vw;
-    --screen-nav-height: 11.5vh;
+    --screen-nav-height: 9.5vh;
 }
 </style>

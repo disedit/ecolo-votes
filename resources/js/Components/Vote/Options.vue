@@ -69,21 +69,26 @@ const isDisabled = (option) => {
     font-size: var(--text-base);
     align-items: center;
     gap: .5em;
-    border: 2.5px var(--egp-white) solid;
+    border: 2.5px var(--border-color, var(--egp-white)) solid;
     border-radius: .5em;
 
     &:hover {
       background: var(--egp-gray-50);
     }
 
-    &:focus {
+    &:focus-within {
       outline: 2.5px var(--egp-green-pine) solid !important;
     }
   }
 
   &.selected {
     label {
-      background: var(--color, var(--egp-pink));
+      background: var(--color, var(--egp-green));
+      color: var(--text-color);
+      
+      &:not(:focus-within) {
+        --border-color: var(--color);
+      }
     }
 
     .option-handle {
@@ -105,7 +110,7 @@ const isDisabled = (option) => {
     height: 1em;
     flex-shrink: 0;
     border-radius: 100%;
-    background: var(--color, var(--egp-pink));
+    background: var(--color, var(--egp-green));
     justify-content: center;
     align-items: center;
   }
@@ -135,6 +140,7 @@ const isDisabled = (option) => {
 
 .secret .vote-option {
   --color: var(--egp-pink) !important;
+  --text-color: var(--egp-black) !important;
 }
 
 .vote-option.disabled {

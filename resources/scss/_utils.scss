@@ -48,12 +48,15 @@
 
 .option-yes {
   --color: var(--egp-green);
+  --text-color: var(--egp-black);
 }
 
 .option-no {
   --color: var(--egp-red);
+  --text-color: var(--egp-white);
 }
 
 .option-abstain {
   --color: var(--egp-orange);
+  --text-color: var(--egp-black);
 }

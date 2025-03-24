@@ -82,7 +82,7 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
           :label="`Vote option ${i + 1} is enabled`"
           label-sr-only
           v-model="option.enabled"
-          label-class="px-4 bg-gray-200"
+          label-class="px-4 bg-gray-200 rounded-md"
         />
         <TextInput
           :name="`voteOptionName[${i}]`"
@@ -149,9 +149,9 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
           label="No is enabled"
           label-sr-only
           v-model="no"
-          label-class="px-4 bg-gray-200"
+          label-class="px-4 bg-gray-200 rounded-md"
         />
-        <div class="border border-gray-500 p-2 bg-gray-100 grow">
+        <div class="border border-gray-500 p-2 bg-gray-100 grow rounded-md">
           {{ $t('options.no') }}
         </div>
       </div>
@@ -161,9 +161,9 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
           label="Abstain is enabled"
           label-sr-only
           v-model="abstain"
-          label-class="px-4 bg-gray-200"
+          label-class="px-4 bg-gray-200 rounded-md"
         />
-        <div class="border border-gray-500 p-2 bg-gray-100 grow">
+        <div class="border border-gray-500 p-2 bg-gray-100 grow rounded-md">
           {{ $t('options.abstain') }}
         </div>
       </div>

@@ -42,7 +42,7 @@ onUnmounted(() => {
   <div>
     <div aria-hidden="true">
       <Transition name="swipe" mode="out-in">
-        <Vue3Marquee v-if="showMessage" clone class="bg-pink font-bold">
+        <Vue3Marquee v-if="showMessage" clone class="bg-yellow font-bold">
           <div v-for="([icon, message], i) in messages" :key="i" class="flex gap-2 items-center p-2 lg:p-4">
             <Icon :icon="icon" />
             {{ message }}

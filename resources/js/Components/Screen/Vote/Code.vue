@@ -17,7 +17,8 @@ defineProps({
 .code {
   display: flex;
   position: fixed;
-  background: var(--egp-pink);
+  background: var(--egp-purple);
+  color: var(--egp-white);
   bottom: 0;
   left: 0;
   right: 0;
@@ -40,7 +41,7 @@ defineProps({
         background: var(--egp-orange);
     }
     50% {
-        background: var(--egp-pink);
+        background: var(--egp-purple);
     }
     100% {
         background: var(--egp-orange);
