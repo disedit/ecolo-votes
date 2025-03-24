@@ -15,12 +15,12 @@ const { y } = useWindowScroll()
       <h1 class="congress-header-name hide-on-scroll font-bold relative z-10">
         {{ edition.title }}
       </h1>
-      <div class="flex flex-col md:flex-row font-mono uppercase font-bold md:gap-6 relative z-10 mt-4 md:mt-0">
-        <div class="flex items-center gap-2 hide-on-scroll" style="--delay: .15s">
+      <div class="flex flex-col md:flex-row font-bold md:gap-6 relative z-10 mt-4 md:mt-0">
+        <div v-if="edition.location" class="flex items-center gap-2 hide-on-scroll" style="--delay: .15s">
           <Icon icon="ri:map-pin-2-line" />
           {{ edition.location }}
         </div>
-        <div class="flex items-center gap-2 hide-on-scroll" style="--delay: .25s">
+        <div v-if="edition.dates" class="flex items-center gap-2 hide-on-scroll" style="--delay: .25s">
           <Icon icon="ri:calendar-line" />
           {{ edition.dates }}
         </div>

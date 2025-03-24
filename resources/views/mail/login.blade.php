@@ -1,7 +1,7 @@
 <x-mail::message>
 Hi {{ $user->first_name }},
  
-Please, use the button below to log into the **EGP Congress Platform**.
+Please, use the button below to log into the **Ecolo Voting Platform**.
  
 <x-mail::button :url="$url">
 Log in as {{ $user->first_name }}

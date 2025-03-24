@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/credentials/scan', [CredentialsController::class, 'scan']);
         Route::post('/codes/scan', [CodeController::class, 'scan']);
         Route::post('/admin/credentials/import', [CredentialsController::class, 'import']);
+        Route::post('/admin/credentials/notify', [CredentialsController::class, 'notify']);
+        Route::get('/admin/credentials/notification', [CredentialsController::class, 'notification']);
         Route::post('/admin/codes/create', [CodeController::class, 'create']);
         Route::post('/admin/votes/create', [AdminVoteController::class, 'create']);
         Route::get('/admin/votes/{vote}', [AdminVoteController::class, 'vote']);

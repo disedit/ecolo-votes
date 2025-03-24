@@ -2,21 +2,24 @@
 
 namespace App\Notifications;
 
+use App\Models\Edition;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Notification;
 
-class LoginNotification extends Notification
+class BadgeNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
+    private $edition;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct($sms = false)
     {
-        //
+        $this->edition = Edition::current()->first();
     }
 
     /**
@@ -34,11 +37,17 @@ class LoginNotification extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $url = url('/auto/' . $notifiable->currentLoginToken()->token);
+        $url = url('/badge/' . $notifiable->token);
+        $subject = str_replace('[firstName]', $notifiable->first_name, $this->edition->mail_notification_subject);
+        $subject = str_replace('[lastName]', $notifiable->last_name, $subject);
+        $message = str_replace('[firstName]', $notifiable->first_name, $this->edition->mail_notification_body);
+        $message = str_replace('[lastName]', $notifiable->last_name, $message);
+
         return (new MailMessage)
-            ->subject('Your link to log in')
-            ->markdown('mail.login', [
+            ->subject($subject)
+            ->markdown('mail.badge', [
                 'user' => $notifiable,
+                'message' => $message,
                 'url' => $url
             ]);
     }

@@ -21,9 +21,7 @@ use App\Http\Controllers\Admin\VoteController as AdminVoteController;
 |
 */
 
-Route::middleware('guest')->group(function () {
-    Route::get('/badge/{token}', [BadgeController::class, 'badge'])->name('badge');
-});
+Route::get('/badge/{token}', [BadgeController::class, 'badge'])->name('badge');
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomeController::class, 'welcome'])->name('welcome');

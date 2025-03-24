@@ -58,7 +58,7 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Klima', ...defaultTheme.fontFamily.sans],
-                headline: ['NewSpirit', 'sans-serif'],
+                headline: ['new-spirit', 'sans-serif'],
                 mono: ['Space Mono', 'monospace']
             },
             height: {

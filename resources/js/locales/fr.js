@@ -91,9 +91,9 @@ export default {
       O: 'Welcome',
     },
     welcome_long: {
-      F: ' Welcome to the 39th Congress of the European Green Party',
-      M: '',
-      O: '',
+      F: 'Welcome to {name}',
+      M: 'Welcome to {name}',
+      O: 'Welcome to {name}',
     },
     checked_in: 'You have checked in',
     show_ticket: 'Show this ticket at the entrance to check in'
@@ -329,6 +329,22 @@ export default {
         file: 'File',
         wipe: 'Delete and replace current voters (if any)',
         action: 'Upload',
+      },
+      notify: {
+        title: 'Send badges to participants',
+        mail_notification_subject: 'E-mail notification subject',
+        mail_notification_body: 'E-mail notification body',
+        help: '',
+        sms: 'Also send an SMS',
+        only_unnotified: 'Exclude participants that have been notified before.',
+        sms_notification: 'SMS notification',
+        save: 'Save',
+        saving: 'Saving...',
+        send: 'Send',
+        sending: 'Sending...',
+        saved: 'Notification saved.',
+        sent: 'Notification being sent to all participants. This process may take a few minutes. You may close this window.',
+        close: 'Close'
       }
     }
   }

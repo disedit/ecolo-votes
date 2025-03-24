@@ -3,7 +3,6 @@ const props = defineProps({
   name: { type: String, required: true },
   id: { type: String, default: null },
   label: { type: String, required: true },
-  type: { type: String, default: 'text' },
   placeholder: { type: String, default: '' },
   pattern: { type: String, default: null },
   required: { type: Boolean, default: false },
@@ -31,8 +30,7 @@ const fieldId = props.id || props.name
         {{ $t('inputs.required') }}
       </span>
     </label>
-    <input
-      :type="type"
+    <textarea
       :id="fieldId"
       :name="name"
       :required="required"
@@ -59,7 +57,7 @@ const fieldId = props.id || props.name
 
 <style lang="scss" scoped>
 .input-gray .input-control {
-  @apply bg-gray-100 border-gray-500 border-2 focus:border-purple;
+  @apply bg-gray-100 border-gray-300 border-2 focus:border-green-pine;
 }
 
 .input-lg .input-control {
@@ -72,5 +70,10 @@ const fieldId = props.id || props.name
 
 .error .input-control {
   @apply border-red;
+}
+
+textarea {
+  field-sizing: content;
+  min-height: 4lh;
 }
 </style>

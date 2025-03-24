@@ -20,9 +20,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="badge bg-white px-6 py-0">
+  <section class="badge bg-white px-6 pt-6 rounded-2xl shadow-xl">
     <div class="badge-logo">
-      <img src="../../../images/logos/egp.svg" alt="European Greens" />
+      <img src="../../../images/logos/ecolo.svg" alt="Ecolo" />
     </div>
     <div class="badge-name leading-tight">
       <div class="text-xl font-bold">
@@ -31,15 +31,14 @@ onMounted(() => {
       <div class="text-xl font-bold">
         {{ attendee.last_name }}
       </div>
-      <div v-if="attendee.group" class="text-gray-700 mt-2">
-        {{ attendee.group.name }}
-      </div>
     </div>
     <div class="badge-qrcode" aria-hidden="true">
         <img :src="QrCode" alt="" />
     </div>
 
-    <div :class="['badge-color', `color-${attendee.type.color}`]" />
+    <div :class="['badge-color rounded-t-xl', `color-${attendee.type.color}`]">
+      {{ attendee.type.name }}
+    </div>
   </section>
 </template>
 
@@ -55,7 +54,7 @@ onMounted(() => {
 
   &-logo {
     img {
-      height: 5rem;
+      height: 2.5rem;
     }
   }
 
@@ -68,6 +67,11 @@ onMounted(() => {
     position: relative;
     background: var(--color);
     height: 3rem;
+    color: var(--egp-white);
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   &-delegate {

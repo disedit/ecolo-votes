@@ -40,11 +40,11 @@ watch(y, () => {
       <span class="md:hidden">{{ edition.title_short }}</span>
     </div>
     <div class="nav-details font-bold gap-6">
-      <div class="flex items-center gap-2 reveal-on-scroll" style="--delay: .15s">
+      <div v-if="edition.location" class="flex items-center gap-2 reveal-on-scroll" style="--delay: .15s">
         <Icon icon="ri:map-pin-2-line" />
         {{ edition.location }}
       </div>
-      <div class="flex items-center gap-2 reveal-on-scroll" style="--delay: .25s">
+      <div v-if="edition.dates" class="flex items-center gap-2 reveal-on-scroll" style="--delay: .25s">
         <Icon icon="ri:calendar-line" />
         {{ edition.dates }}
       </div>

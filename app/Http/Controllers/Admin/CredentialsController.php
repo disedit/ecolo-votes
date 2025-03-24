@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use App\Notifications\BadgeNotification;
 
 class CredentialsController extends Controller
 {
@@ -150,6 +151,58 @@ class CredentialsController extends Controller
     }
 
     /**
+     * Notify attendees
+     */
+    public function notify(Request $request): JsonResponse
+    {
+        $request->validate([
+            'mail_notification_subject' => ['required'],
+            'mail_notification_body' => ['required'],
+            'sms' => ['boolean'],
+            'only_unnotified' => ['boolean'],
+            'sms_notification' => ['required_if:sms,true']
+        ]);
+        $sent = false;
+
+        // Save
+        $edition = Edition::current()->first();
+        $edition->mail_notification_subject = $request->input('mail_notification_subject');
+        $edition->mail_notification_body = $request->input('mail_notification_body');
+        if ($request->input('sms')) {
+            $edition->sms_notification = $request->input('sms_notification');
+        }
+        $edition->save();
+
+        // Notify
+        if ($request->input('send')) {
+            if ($request->input('only_unnotified')) {
+                $attendees = Attendee::where('notified', 0)->get();
+            } else {
+                $attendees = Attendee::all();
+            }
+
+            foreach($attendees as $attendee) {
+                $attendee->notify(new BadgeNotification(sms: $request->input('sms')));
+                $attendee->notified = true;
+                $attendee->save();
+            }
+
+            $sent = true;
+        }
+
+        return response()->json(['saved' => true, 'sent' => $sent]);
+    }
+
+    /**
+     * Retreive the notification
+     */
+    public function notification(): JsonResponse
+    {
+        $edition = Edition::select('mail_notification_subject', 'mail_notification_body', 'sms_notification')->current()->first();
+        return response()->json($edition);
+    }
+
+    /**
      * Import credentials
      */
     public function import(Request $request): JsonResponse
@@ -185,11 +238,11 @@ class CredentialsController extends Controller
             $attendee->group_id = $this->group()->id;
             $attendee->type_id = $this->type($line[0], $line[5] ?? '')->id;
             $attendee->first_name = trim($line[1]);
-            $attendee->last_name = trim($line[1]);
+            $attendee->last_name = trim($line[2]);
             $attendee->email = trim($line[3]);
             $attendee->phone = $this->clean($line[4]);
             $attendee->qr_code = Str::random(16);
-            $attendee->token = Str::random(60);
+            $attendee->token = Str::random(48);
             $attendee->save();
         }
 
@@ -220,8 +273,9 @@ class CredentialsController extends Controller
     /**
      * Clean phone input
      */
-    private function clean(string $input): string
+    private function clean(?string $input): ?string
     {
+        if (!$input) return null;
         $input = str_replace('+', '', $input);
         return trim($input);
     }

@@ -72,7 +72,7 @@ class AuthenticatedSessionController extends Controller
     public function store_code(CodeRequest $request): RedirectResponse
     {
         $request->authenticate();
-        $code = Code::where('code', $request->code)->first();
+        $code = Code::whereRaw('BINARY code=?', $request->code)->first();
     
         if (!$code) {
             return to_route('code_login')->with('message', __('codes.not_valid'));
@@ -97,7 +97,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function autologin(Request $request, String $token): RedirectResponse
     {
-        $loginToken = LoginToken::where('token', $token)
+        $loginToken = LoginToken::whereRaw('BINARY token=?', $token)
             ->where('expires_at', '>', now())
             ->first();
 
@@ -116,7 +116,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function autocode(Request $request, String $token): RedirectResponse
     {
-        $code = Code::where('code', $token)->first();
+        $code = Code::whereRaw('BINARY code=?', $token)->first();
 
         if (!$code) {
             return to_route('code_login')->with('message', __('codes.not_valid'));

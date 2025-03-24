@@ -40,7 +40,7 @@ const inboxUrl = computed(() => {
     <GlobalCard title="Log in" class="container-sm">
         <div v-if="flash.status === 'sent'">
             <p>
-                {{ $t('login.submited') }}
+                {{ $t('login.submitted') }}
             </p>
             <p v-if="inboxUrl" class="mt-2 font-bold">
                 <a :href="inboxUrl" target="_blank" rel="noopener" class="flex items-center gap-2 underline text-green-pine">

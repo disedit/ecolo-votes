@@ -10,8 +10,8 @@ body *:not(html):not(style):not(br):not(tr):not(code) {
 
 body {
     -webkit-text-size-adjust: none;
-    background-color: #ffffff;
-    color: #0B3323;
+    background-color: #f8f6f2;
+    color: #3b2d3d;
     height: 100%;
     line-height: 1.25;
     margin: 0;
@@ -28,7 +28,7 @@ blockquote {
 }
 
 a {
-    color: #0F8A54;
+    color: #078656;
 }
 
 a img {
@@ -38,7 +38,7 @@ a img {
 /* Typography */
 
 h1 {
-    color: #0B3323;
+    color: #3b2d3d;
     font-size: 18px;
     font-weight: bold;
     margin-top: 0;
@@ -80,7 +80,7 @@ img {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
-    background-color: #f4f2f5;
+    background-color: #f8f6f2;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -103,7 +103,7 @@ img {
 
 .header a {
     display: block;
-    color: #0B3323;
+    color: #3b2d3d;
     font-size: 19px;
     font-weight: bold;
     text-decoration: none;
@@ -114,9 +114,10 @@ img {
 /* Logo */
 
 .logo {
-    height: 120px;
+    height: 36px;
     max-height: 75px;
     width: auto;
+    margin-top: 24px;
 }
 
 /* Body */
@@ -125,9 +126,9 @@ img {
     -premailer-cellpadding: 0;
     -premailer-cellspacing: 0;
     -premailer-width: 100%;
-    background-color: #f4f2f5;
-    border-bottom: 1px solid #f4f2f5;
-    border-top: 1px solid #f4f2f5;
+    background-color: #f8f6f2;
+    border-bottom: 1px solid #f8f6f2;
+    border-top: 1px solid #f8f6f2;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -141,6 +142,7 @@ img {
     margin: 0 auto;
     padding: 0;
     max-width: 570px;
+    border-radius: 16px;
 }
 
 /* Subcopy */
@@ -231,20 +233,22 @@ img {
 
 .button-blue,
 .button-primary {
-    background-color: #0F8A54;
-    border-bottom: 8px solid #0F8A54;
-    border-left: 18px solid #0F8A54;
-    border-right: 18px solid #0F8A54;
-    border-top: 8px solid #0F8A54;
+    background-color: #00f57c;
+    border-bottom: 8px solid #00f57c;
+    border-left: 18px solid #00f57c;
+    border-right: 18px solid #00f57c;
+    border-top: 8px solid #00f57c;
+    color: #3b2d3d;
 }
 
 .button-green,
 .button-success {
-    background-color: #47B972;
-    border-bottom: 8px solid #47B972;
-    border-left: 18px solid #47B972;
-    border-right: 18px solid #47B972;
-    border-top: 8px solid #47B972;
+    background-color: #00f57c;
+    border-bottom: 8px solid #00f57c;
+    border-left: 18px solid #00f57c;
+    border-right: 18px solid #00f57c;
+    border-top: 8px solid #00f57c;
+    color: #3b2d3d;
 }
 
 .button-red,
@@ -283,8 +287,8 @@ img {
 }
 
 .edition {
-    background-color: #F6ADCD;
-    color: #0B3323;
+    background-color: #704572;
+    color: #fff;
     font-weight: bold;
     max-width: 570px;
     margin: 0 auto;
