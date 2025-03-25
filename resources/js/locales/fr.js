@@ -295,6 +295,8 @@ export default {
         amount: 'Amount of codes to generate',
         generating: 'Generating codes...',
         generate: 'Generate codes',
+        preactivate: 'Preactivate codes',
+        visually_impaired: 'Codes for visually impaired users'
       }
     },
     credentials: {

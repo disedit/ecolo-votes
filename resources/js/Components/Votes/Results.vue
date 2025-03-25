@@ -40,11 +40,11 @@ const percentage = computed(() => {
       <tbody>
         <tr>
           <th width="20%">{{ $t('results.stats.codes_in_use') }}</th>
-          <td width="20%">{{ vote.results.in_use }}</td>
+          <td width="13%">{{ vote.results.in_use }}</td>
           <th width="20%">{{ $t('results.stats.codes_voted') }}</th>
-          <td width="20%">{{ vote.results.totals.turnout }} ({{ formatPercentage(percentage) }})</td>
+          <td width="13%">{{ vote.results.totals.turnout }} ({{ formatPercentage(percentage) }})</td>
           <th width="20%">{{ $t('results.stats.votes_cast') }}</th>
-          <td width="20%">{{ vote.results.totals.votes_cast }}</td>
+          <td width="13%">{{ vote.results.totals.votes_cast }}</td>
         </tr>
       </tbody>
     </table>

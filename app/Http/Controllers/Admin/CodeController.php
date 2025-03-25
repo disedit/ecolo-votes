@@ -105,14 +105,19 @@ class CodeController extends Controller
     public function create(Request $request): JsonResponse {
         $request->validate([
             'amount' => 'required',
+            'preactivate' => 'boolean',
+            'visually_impaired' => 'boolean'
         ]);
 
         $amount = $request->input('amount');
+        $preactivate = $request->input('preactivate');
+        $visuallyImpaired = $request->input('visually_impaired');
         $group = Group::where('is_codes', 1)->firstOrFail();
         $password = Hash::make(Str::random(40));
 
-        for($i = 0; $i <= $amount; $i++) {
+        for($i = 0; $i < $amount; $i++) {
             $codeString = Str::random(12);
+            if ($visuallyImpaired) $codeString = 'E-' . $codeString;
 
             // Check if code already exists
             $code = Code::withoutGlobalScopes()->where('code', $codeString)->first();
@@ -129,6 +134,7 @@ class CodeController extends Controller
             $user->email = $codeString . '@codes.ecolo.be';
             $user->password = $password;
             $user->role = 'code';
+            $user->code_exception = ($visuallyImpaired) ? 1 : 0;
             $user->save();
 
             // Generate code entries
@@ -136,6 +142,7 @@ class CodeController extends Controller
             $code->edition_id = Edition::current()->first()->id;
             $code->user_id = $user->id;
             $code->code = $codeString;
+            $code->pickedup_at = ($preactivate) ? now() : null;
             $code->save();
         }
 

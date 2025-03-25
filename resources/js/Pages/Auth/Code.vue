@@ -35,7 +35,7 @@ function login() {
     <GlobalCard :title="$t('code_login.title')" class="container-sm">
         <CodeScanner />
         <form @submit.prevent="login" class="flex flex-col gap-4">
-            <p v-if="flash.message" class="font-bold bg-yellow px-4 py-2">
+            <p v-if="flash.message" class="font-bold bg-pink px-4 py-2 rounded">
                 {{ flash.message }}
             </p>
             <p v-else class="text-base">

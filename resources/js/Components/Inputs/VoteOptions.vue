@@ -69,9 +69,9 @@ const regionDropdown = props.regions.map(region => ({ value: region.id, label: r
 
 <template>
   <div>
-    <label for="voteOptions" class="font-mono uppercase text-gray-900 flex gap-2 items-center">
+    <label for="voteOptions" class="flex gap-2 items-center">
       {{ $t('admin.votes.options.label') }}
-      <span class="ms-auto text-gray-600">
+      <span class="ms-auto text-gray-800">
         {{ $t('inputs.required') }}
       </span>
     </label>

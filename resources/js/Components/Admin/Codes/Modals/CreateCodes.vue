@@ -2,11 +2,14 @@
 import { reactive, ref, watch, onMounted } from 'vue'
 import GlobalModal from '@/Components/Global/Modal.vue'
 import TextInput from '@/Components/Inputs/TextInput.vue'
+import CheckboxInput from '@/Components/Inputs/CheckboxInput.vue'
 
 const emit = defineEmits(['close', 'refresh'])
 
 const form = reactive({
   amount: 300,
+  preactivate: false,
+  visually_impaired: false
 })
 
 const errors = ref(null)
@@ -43,6 +46,16 @@ function focusNumberInput () {
         v-model="form.amount"
         input-class="text-lg"
         ref="numberInput"
+      />
+      <CheckboxInput
+        name="preactivate"
+        :label="$t('admin.codes.create.visually_impaired')"
+        v-model="form.visually_impaired"
+      />
+      <CheckboxInput
+        name="preactivate"
+        :label="$t('admin.codes.create.preactivate')"
+        v-model="form.preactivate"
       />
       <ul v-if="errors" class="text-red font-bold mb-4">
         <li v-for="error in errors.errors">{{ error[0] }}</li>

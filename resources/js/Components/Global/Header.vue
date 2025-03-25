@@ -11,7 +11,7 @@ const { y } = useWindowScroll()
 
 <template>
   <header :class="['congress-header text-black', { scrolled: y > 20 }]">
-    <div class="container padded relative">
+    <div class="p-site relative">
       <h1 class="congress-header-name hide-on-scroll font-bold relative z-10">
         {{ edition.title }}
       </h1>

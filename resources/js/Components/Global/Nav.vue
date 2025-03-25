@@ -57,7 +57,7 @@ watch(y, () => {
         {{ $t('nav.user') }}
 
         <template #items>
-          <div class="font-mono text-gray-700 text-sm p-4">
+          <div class="font-mono text-gray-700 text-sm px-4 py-3">
             {{ user.first_name }}
           </div>
           <Link v-if="['admin', 'credentials'].includes(user.role)" href="/admin">
@@ -86,6 +86,8 @@ watch(y, () => {
   color: var(--egp-black);
   z-index: 1000;
   transition: .25s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  background-color: var(--egp-white);
 
   &-logo {
     height: 3.25rem;
@@ -100,11 +102,6 @@ watch(y, () => {
     transition: .25s ease;
     transition-delay: var(--delay, 0);
     translate: 10% 0;
-  }
-
-  &.scrolled {
-    background-color: var(--egp-white);
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   }
 
   &.solid:not(.scrolled) {

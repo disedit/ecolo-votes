@@ -91,7 +91,7 @@ async function send() {
         help="Placeholers: [firstName] [lastName]. Accepts Markdown."
       />
 
-      <div class="my-6">
+      <div class="mt-4 mb-2">
         <CheckboxInput
           name="sms"
           :label="$t('admin.credentials.notify.sms')"
@@ -106,11 +106,11 @@ async function send() {
         :label="$t('admin.credentials.notify.sms_notification')"
         required
         v-model="form.sms_notification"
-        :maxlength="100"
-        :help="`Placeholers: [firstName] [lastName]. Characters: ${form.sms_notification.length}/100`"
+        :maxlength="70"
+        :help="`Placeholers: [firstName] [lastName]. Characters: ${form.sms_notification ? form.sms_notification.length : 0}/70`"
       />
 
-      <div class="my-6">
+      <div class="my-2">
         <CheckboxInput
           name="only_unnotified"
           :label="$t('admin.credentials.notify.only_unnotified')"
@@ -118,7 +118,7 @@ async function send() {
         />
       </div>
 
-      <div class="flex items-center gap-2 mt-6">  
+      <div class="flex items-center gap-2 mt-4">  
         <InputButton type="submit" icon="ri:save-3-fill" variant="gray" flat :loading="saving">
           {{ $t('admin.credentials.notify.save') }}
 

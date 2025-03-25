@@ -26,7 +26,7 @@ const fieldId = props.id || props.name
   <div :class="['flex flex-col gap-1', `input-${variant}`, `input-${size}`, { error }]">
     <label :for="id || name" :class="['text-black flex gap-2 items-center', { 'sr-only': labelSrOnly }]">
       {{ label }}
-      <span v-if="required" class="ms-auto text-gray-600">
+      <span v-if="required" class="ms-auto text-gray-800">
         {{ $t('inputs.required') }}
       </span>
     </label>

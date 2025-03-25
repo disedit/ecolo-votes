@@ -159,7 +159,7 @@ function reload () {
         }"
       >
       <template #table-row="props">
-        <span v-if="props.column.field == 'actions'" class="-m-1 block w-32">
+        <span v-if="props.column.field == 'actions'" class="-m-1 block">
           <ButtonOptions>
             <Tooltip v-if="!props.row.checked_in" :text="props.row.votes > 0 && !props.row.first_checked_in ? 'Will be notified' : null">
               <InputButton @click="checkIn(props.row.id)" size="sm" variant="green" flat block class="whitespace-nowrap">

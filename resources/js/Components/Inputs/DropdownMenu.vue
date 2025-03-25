@@ -9,7 +9,8 @@ import { Icon } from '@iconify/vue';
       <Icon icon="ri:arrow-drop-down-line" />
     </button>
 
-    <div class="dropdown-menu">
+    <div class="dropdown-menu shadow-md overflow-clip border">
+      <hr />
       <slot name="items" />
     </div>
   </div>
@@ -28,7 +29,7 @@ import { Icon } from '@iconify/vue';
     width: 100%;
     right: 0;
     z-index: 5;
-    border: 2px var(--egp-green-dark) solid;
+    border-radius: .5rem;
 
     & > :deep(a),
     & > :deep(button) {

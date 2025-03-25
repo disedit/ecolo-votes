@@ -19,7 +19,7 @@ class CodeCorrect implements ValidationRule
         if ($user->code_exception) return;
 
         if (empty($value)) {
-            $fail('You need to enter the code shown on screen to confim your vote.');
+            $fail(__('codes.missing'));
         }
 
         $secret = config('google2fa.secret');
@@ -29,7 +29,7 @@ class CodeCorrect implements ValidationRule
         $verified = $google2fa->verifyKey($secret, $value, 1);
 
         if (!$verified) {
-            $fail('The code entered is not correct. The code shown on the screen may have changed. Please, check again.');
+            $fail(__('codes.incorrect'));
         }
     }
 }
