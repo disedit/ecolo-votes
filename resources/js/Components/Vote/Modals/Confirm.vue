@@ -125,7 +125,8 @@ function updateReveal (status) {
 }
 
 .secret.option-block {
-  background-color: var(--egp-pink);
+  background-color: var(--egp-blue);
+  color: var(--egp-white);
 }
 
 .option-name {

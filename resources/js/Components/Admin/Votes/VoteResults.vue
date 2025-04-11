@@ -80,7 +80,7 @@ const percentage = computed(() => {
     background: var(--egp-gray-200);
 
     &.voted {
-      background: var(--egp-pink);
+      background: var(--egp-blue);
     }
 
     &.disabled {
@@ -105,7 +105,7 @@ const percentage = computed(() => {
     padding: .25rem 1rem;
 
     &.voted {
-      background-color: var(--egp-pink);
+      background-color: var(--egp-blue);
       font-weight: bold;
     }
 

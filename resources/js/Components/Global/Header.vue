@@ -11,11 +11,11 @@ const { y } = useWindowScroll()
 
 <template>
   <header :class="['congress-header text-black', { scrolled: y > 20 }]">
-    <div class="p-site relative">
-      <h1 class="congress-header-name hide-on-scroll font-bold relative z-10">
+    <div class="p-site relative text-center">
+      <h1 class="congress-header-name hide-on-scroll font-bold relative z-10 mt-8">
         {{ edition.title }}
       </h1>
-      <div class="flex flex-col md:flex-row font-bold md:gap-6 relative z-10 mt-4 md:mt-0">
+      <div class="flex flex-col justify-center md:flex-row font-bold md:gap-6 relative z-10 mt-4 md:mt-0">
         <div v-if="edition.location" class="flex items-center gap-2 hide-on-scroll" style="--delay: .15s">
           <Icon icon="ri:map-pin-2-line" />
           {{ edition.location }}

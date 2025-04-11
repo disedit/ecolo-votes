@@ -60,14 +60,20 @@ onUnmounted(() => {
           <Icon icon="ri:check-line" v-if="isWinner(option)" class="tick min-w-0 shrink-0" />
         </span>
         <span class="ms-auto percentage result shrink-0 whitespace-nowrap number">
-          <VueNumberAnimation
-            :from="0"
-            :to="option.percentages[absKey][vote.relative_to]"
-            :format="rounded"
-            :duration="1"
-            easing="easeOutSine"
-            autoplay
-          />%
+          <template v-if="!option.is_abstain || vote.with_abstentions">
+            <VueNumberAnimation
+              v-if="!option.is_abstain || vote.with_abstentions"
+              :from="0"
+              :to="option.percentages[absKey][vote.relative_to]"
+              :format="rounded"
+              :duration="1"
+              easing="easeOutSine"
+              autoplay
+            />%
+          </template>
+          <template v-else>
+            --
+          </template>
         </span>
         <span class="number result shrink-0">
           <VueNumberAnimation
@@ -79,7 +85,7 @@ onUnmounted(() => {
             autoplay
           />
         </span>
-        <div class="bar" :style="{ width: percentage(option.percentages[absKey][vote.relative_to]) }" />
+        <div v-if="!option.is_abstain || vote.with_abstentions" class="bar" :style="{ width: percentage(option.percentages[absKey][vote.relative_to]) }" />
       </div>
     </div>
     <div class="majority-line" />

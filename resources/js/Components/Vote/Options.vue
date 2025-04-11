@@ -139,8 +139,8 @@ const isDisabled = (option) => {
 }
 
 .secret .vote-option {
-  --color: var(--egp-pink) !important;
-  --text-color: var(--egp-black) !important;
+  --color: var(--egp-blue) !important;
+  --text-color: var(--egp-white) !important;
 }
 
 .vote-option.disabled {

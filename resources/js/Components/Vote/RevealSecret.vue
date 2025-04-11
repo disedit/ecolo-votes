@@ -50,6 +50,7 @@ watch(hideIcon, () => emit('update', { revealed: reveal.value, hideIcon: hideIco
 
 .vote.secret,
 .vote.hide {
-  background-color: var(--egp-pink);
+  background-color: var(--egp-blue);
+  color: var(--egp-white);
 }
 </style>

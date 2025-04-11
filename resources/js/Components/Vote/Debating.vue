@@ -36,6 +36,6 @@ defineProps({
 
 <style lang="scss" scoped>
 .circle {
-  background-color: var(--color, var(--egp-pink));
+  background-color: var(--color, var(--egp-blue));
 }
 </style>

@@ -82,12 +82,16 @@ function relativePercentage(percentage) {
 
   .result-bar {
     position: absolute;
-    inset: .5rem;
+    left: .5rem;
+    bottom: .5rem;
+    right: .5rem;
+    height: .5rem;
     z-index: 1;
 
     &-fill {
-      background-color: var(--egp-gray-200);
+      background-color: var(--egp-gray-400);
       height: 100%;
+      border-radius: .25rem;
     }
   }
 
@@ -106,7 +110,7 @@ function relativePercentage(percentage) {
 
 .vote-options {
   .winner .result-bar-fill {
-    background-color: var(--egp-green);
+    background-color: var(--egp-green-neon);
   }
 
   .winner.option-no .result-bar-fill {
@@ -117,7 +121,7 @@ function relativePercentage(percentage) {
 .vote-yesno {
   .table-results {
     tr:first-child .result-bar-fill {
-      background-color: var(--egp-green);
+      background-color: var(--egp-blue);
     }
 
     tr:nth-child(2) .result-bar-fill {

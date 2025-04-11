@@ -70,7 +70,7 @@ const percentage = computed(() => {
           <td class="relative align-middle">
             <div class="relative z-10 flex items-center gap-2">
               <span>
-                {{ option.name }}
+                <strong>{{ option.name }}</strong>
                 <span v-if="option.gender" class="gender">
                   {{ option.gender }}
                 </span>
@@ -107,12 +107,16 @@ const percentage = computed(() => {
 
   .result-bar {
     position: absolute;
-    inset: .5rem;
+    left: .5rem;
+    bottom: .5rem;
+    right: .5rem;
+    height: .5rem;
     z-index: 1;
 
     &-fill {
       background-color: var(--egp-gray-200);
       height: 100%;
+      border-radius: .25rem;
     }
   }
 
@@ -131,7 +135,7 @@ const percentage = computed(() => {
 
 .vote-options {
   .winner .result-bar-fill {
-    background-color: var(--egp-green);
+    background-color: var(--egp-green-neon);
   }
 
   .winner.option-no .result-bar-fill {
@@ -142,7 +146,7 @@ const percentage = computed(() => {
 .vote-yesno {
   .table-results {
     tr:first-child .result-bar-fill {
-      background-color: var(--egp-green);
+      background-color: var(--egp-blue);
     }
 
     tr:nth-child(2) .result-bar-fill {

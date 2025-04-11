@@ -114,6 +114,7 @@ onUnmounted(() => {
   min-width: 0;
   transform: translateY(30%);
   opacity: 0;
+  border-radius: .25em;
 
   & > span {
     position: relative;
@@ -130,6 +131,7 @@ onUnmounted(() => {
     z-index: 1;
     transform: scaleX(0);
     transform-origin: left;
+    border-radius: .2em;
   }
 
   .number {
@@ -157,7 +159,7 @@ onUnmounted(() => {
     animation: blink 2.5s;
 
     .bar {
-      --color: var(--egp-green);
+      --color: var(--egp-green-neon);
     }
 
     :deep(path) {

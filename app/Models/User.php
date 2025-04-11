@@ -2,19 +2,16 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Group;
 use App\Models\Attendee;
 use App\Models\LoginToken;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Collection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable
 {
@@ -131,7 +128,8 @@ class User extends Authenticatable
      * Has any admin role
      */
     public function hasAdminRole(): bool {
-        return $this->role !== 'user';
+        $adminRoles = ['credentials', 'admin'];
+        return in_array($this->role, $adminRoles);
     }
 
     /**

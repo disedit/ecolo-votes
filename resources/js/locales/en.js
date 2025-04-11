@@ -176,7 +176,7 @@ export default {
         open: 'Open',
         reopen: 'Reopen',
         open_vote: 'Open vote',
-        close: 'Vote',
+        close: 'Close',
         highlight: 'Highlight',
         stop_highlighting: 'Stop highlighting',
         close_debate: 'Close debate',

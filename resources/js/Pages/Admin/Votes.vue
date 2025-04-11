@@ -107,7 +107,7 @@ async function closeVote(id) {
 }
 
 function createVote() {
-  patchOptions({ component: CreateVote })
+  patchOptions({ component: CreateVote, attrs: { cloneVote: null } })
   open()
 }
 
@@ -132,6 +132,7 @@ async function cloneVote(voteId) {
         with_abstentions: !!data.with_abstentions,
         relative_to: data.relative_to,
         max_votes: data.max_votes,
+        secret: data.secret,
         options
       }
     }
@@ -319,7 +320,7 @@ function move(voteId, move) {
   height: 1.5em;
   width: 1.5em;
   border-radius: 100%;
-  background-color: var(--color, var(--egp-pink));
+  background-color: var(--color, var(--egp-blue));
   flex-shrink: 0;
 }
 </style>

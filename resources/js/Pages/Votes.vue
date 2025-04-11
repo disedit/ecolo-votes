@@ -156,7 +156,7 @@ function showVote (vote) {
   &-circle {
     width: 1.25em;
     height: 1.25em;
-    background: var(--color, var(--egp-pink));
+    background: var(--color, var(--egp-blue));
     border-radius: 100%;
     flex-shrink: 0;
     margin-block-start: -.1em;
@@ -165,7 +165,7 @@ function showVote (vote) {
 }
 
 .vote.secret .vote-ballot .option:not(.not-voted) {
-  --color: var(--egp-pink);
+  --color: var(--egp-blue);
 }
 
 .vote-result .option.winner {
@@ -173,7 +173,8 @@ function showVote (vote) {
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  background-color: var(--color, var(--egp-pink));
+  background-color: var(--color, var(--egp-blue));
+  color: var(--egp-white);
 
   span {
     flex-grow: 1;
@@ -181,7 +182,7 @@ function showVote (vote) {
   }
 
   :deep(path) {
-    stroke: var(--egp-green-pine);
+    stroke: var(--egp-white);
     stroke-width: 1.5px;
   }
 }
